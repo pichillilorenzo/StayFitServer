@@ -1,0 +1,16 @@
+com/stayfit/userservice/UserService.class
+com/stayfit/app/model/Privilege.class
+com/stayfit/app/configuration/UserConfiguration.class
+com/stayfit/app/exception/ResourceNotFoundException.class
+com/stayfit/userservice/UserServicePortType.class
+com/stayfit/app/service/UserDetailsServiceImpl.class
+com/stayfit/userservice/GetUserByIdResponse.class
+com/stayfit/app/configuration/ResourceServerConfiguration.class
+com/stayfit/app/model/User.class
+com/stayfit/userservice/GetUserByIdRequest.class
+com/stayfit/userservice/package-info.class
+com/stayfit/app/web/controller/api/UserController.class
+com/stayfit/userservice/User.class
+com/stayfit/app/model/Role.class
+com/stayfit/app/StayFitApplication.class
+com/stayfit/userservice/ObjectFactory.class

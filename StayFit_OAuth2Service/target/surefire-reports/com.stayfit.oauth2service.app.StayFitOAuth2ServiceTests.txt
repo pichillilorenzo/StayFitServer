@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.stayfit.oauth2service.app.StayFitOAuth2ServiceTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 28.714 s - in com.stayfit.oauth2service.app.StayFitOAuth2ServiceTests

@@ -1,0 +1,8 @@
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/repository/UserRepository.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/configuration/Encoders.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/model/User.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/exception/ResourceNotFoundException.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/StayFitOAuth2Service.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/service/UserDetailsServiceImpl.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/configuration/WebSecurityConfig.java
+/Users/lorenzo/eclipse-2018-12/StayFit_OAuth2Service/src/main/java/com/stayfit/oauth2service/app/configuration/OAuth2Config.java

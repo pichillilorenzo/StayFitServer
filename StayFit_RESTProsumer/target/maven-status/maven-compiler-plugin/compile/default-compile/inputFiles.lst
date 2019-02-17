@@ -1,0 +1,16 @@
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/StayFitApplication.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/exception/ResourceNotFoundException.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/UserServicePortType.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/package-info.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/configuration/UserConfiguration.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/GetUserByIdRequest.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/GetUserByIdResponse.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/configuration/ResourceServerConfiguration.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/service/UserDetailsServiceImpl.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/web/controller/api/UserController.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/User.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/model/Privilege.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/UserService.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/model/User.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/src/main/java/com/stayfit/app/model/Role.java
+/Users/lorenzo/eclipse-2018-12/StayFit_RESTProsumer/target/generated-sources/cxf/com/stayfit/userservice/ObjectFactory.java

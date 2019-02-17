@@ -1,0 +1,8 @@
+com/stayfit/oauth2service/app/configuration/OAuth2Config.class
+com/stayfit/oauth2service/app/configuration/Encoders.class
+com/stayfit/oauth2service/app/StayFitOAuth2Service.class
+com/stayfit/oauth2service/app/repository/UserRepository.class
+com/stayfit/oauth2service/app/model/User.class
+com/stayfit/oauth2service/app/exception/ResourceNotFoundException.class
+com/stayfit/oauth2service/app/configuration/WebSecurityConfig.class
+com/stayfit/oauth2service/app/service/UserDetailsServiceImpl.class

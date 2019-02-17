@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: StayFit User Service
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: lorenzo
+Implementation-Vendor-Id: com.stayfit.userservice
+Build-Jdk: 1.8.0_65
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/StayFitUserService
+Created-By: Maven Integration for Eclipse
+
