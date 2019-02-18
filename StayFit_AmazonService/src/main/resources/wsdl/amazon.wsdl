@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<wsdl:definitions name="UserService"
+  targetNamespace="http://stayfit.com/amazonservice"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsp="http://www.w3.org/ns/ws-policy"
+  xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy"
+  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+  xmlns:tns="http://stayfit.com/amazonservice"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://stayfit.com/amazonservice" version="1.0">
+
+      <xsd:complexType name="GetProductByNameRequest">
+         <xsd:sequence>
+         	<xsd:element name="name" type="xsd:string" nillable="false" />
+         </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="GetProductByNameResponse">
+         <xsd:sequence>
+         	<xsd:element name="product" type="tns:Products" nillable="false" />
+         </xsd:sequence>
+      </xsd:complexType>
+            
+            
+      <xsd:complexType name="Products">
+        <xsd:sequence>
+          <xsd:element name="Product" type="tns:Product" minOccurs="0" maxOccurs="unbounded" nillable="false" />
+        </xsd:sequence>
+      </xsd:complexType>
+      
+     
+      <xsd:complexType name="Product">
+        <xsd:sequence>
+          <xsd:element name="DetailPageURL" type="xsd:string" minOccurs="0" nillable="false" />
+          <xsd:element name="ItemAttributes" type="tns:ItemAttributes" minOccurs="0" nillable="false" />
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      
+      
+     <xsd:complexType name="ItemAttributes">
+        <xsd:sequence>
+          <xsd:element name="Title" type="xsd:string" minOccurs="0" nillable="false" />
+          <xsd:element name="Brand" type="xsd:string" minOccurs="0" nillable="false" />
+          <xsd:element name="Img" type="xsd:string" minOccurs="0" nillable="false" />
+          <xsd:element name="ListPrice" type="tns:ListPrice" minOccurs="0" nillable="false" />
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:complexType name="ListPrice">
+        <xsd:sequence>
+          <xsd:element name="Amount" type="xsd:string" minOccurs="0" nillable="false" />
+          <xsd:element name="Currency" type="xsd:string" minOccurs="0" nillable="false" />
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      
+      <xsd:element name="GetProductByNameRequest" type="tns:GetProductByNameRequest"/>
+      <xsd:element name="GetProductByNameResponse" type="tns:GetProductByNameResponse"/>
+      
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="GetProductByNameRequest">
+    <wsdl:part name="parameters" element="tns:GetProductByNameRequest" />
+  </wsdl:message>
+  
+  <wsdl:message name="GetProductByNameResponse">
+    <wsdl:part name="parameters" element="tns:GetProductByNameResponse" />
+  </wsdl:message>
+
+  <wsdl:portType name="AmazonServicePortType">
+    <wsdl:operation name="getProductByName">
+      <wsdl:input message="tns:GetProductByNameRequest" wsam:Action="http://stayfit.com/amazonservice/GetProductByNameRequest" />
+      <wsdl:output message="tns:GetProductByNameResponse" wsam:Action="http://stayfit.com/amazonservice/GetProductByNameResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="AmazonServiceSoapBinding" type="tns:AmazonServicePortType">
+    <soap:binding style="document"
+      transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getProductByName">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="AmazonService">
+    <wsdl:documentation>Amazon Service</wsdl:documentation>
+    <wsdl:port name="AmazonPort" binding="tns:AmazonServiceSoapBinding">
+      <soap:address location="http://localhost:8084/amazon/services/amazon" />
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>
