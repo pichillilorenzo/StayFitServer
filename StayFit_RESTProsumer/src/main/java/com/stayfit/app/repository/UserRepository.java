@@ -1,18 +1,16 @@
 /**
  * 
  */
-package com.stayfit.userservice.app.repository;
-
-import java.util.Optional;
+package com.stayfit.app.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.stayfit.userservice.app.model.User;
+import com.stayfit.app.model.User;
 
 /**
  * @author lorenzo
  *
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByUsername(String username);
+	User findByUsername(String username);
 }

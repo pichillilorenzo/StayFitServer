@@ -1,79 +1,403 @@
 <?xml version="1.0"?>
 <wsdl:definitions name="UserService"
-  targetNamespace="http://stayfit.com/userservice"
-  xmlns="http://schemas.xmlsoap.org/wsdl/"
-  xmlns:wsp="http://www.w3.org/ns/ws-policy"
-  xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy"
-  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
-  xmlns:tns="http://stayfit.com/userservice"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+	targetNamespace="http://stayfit.com/userservice"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsp="http://www.w3.org/ns/ws-policy"
+	xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:tns="http://stayfit.com/userservice"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
 
-  <wsdl:types>
-    <xsd:schema targetNamespace="http://stayfit.com/userservice" version="1.0">
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="http://stayfit.com/userservice" version="1.0">
 
-      <xsd:complexType name="GetUserByIdRequest">
-         <xsd:sequence>
-         	<xsd:element name="id" type="xsd:long" nillable="false" />
-         </xsd:sequence>
-      </xsd:complexType>
-      
-      <xsd:complexType name="GetUserByIdResponse">
-         <xsd:sequence>
-         	<xsd:element name="user" type="tns:User" minOccurs="0" maxOccurs="1" nillable="false" />
-         </xsd:sequence>
-      </xsd:complexType>
-            
-      <xsd:complexType name="User">
-        <xsd:sequence>
-          <xsd:element name="id" type="xsd:long" minOccurs="0" nillable="false" />
-          <xsd:element name="username" type="xsd:string" minOccurs="0" nillable="false" />
-          <xsd:element name="email" type="xsd:string" minOccurs="0" nillable="false" />
-        </xsd:sequence>
-      </xsd:complexType>
-      
-      <xsd:element name="GetUserByIdRequest" type="tns:GetUserByIdRequest"/>
-      <xsd:element name="GetUserByIdResponse" type="tns:GetUserByIdResponse"/>
+			<xsd:complexType name="GetUserByIdRequest">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:long" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
-    </xsd:schema>
-  </wsdl:types>
+			<xsd:complexType name="GetUserByIdResponse">
+				<xsd:sequence>
+					<xsd:element name="user" type="tns:User" minOccurs="0"
+						maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
-  <wsdl:message name="GetUserByIdRequest">
-    <wsdl:part name="parameters" element="tns:GetUserByIdRequest" />
-  </wsdl:message>
-  
-  <wsdl:message name="GetUserByIdResponse">
-    <wsdl:part name="parameters" element="tns:GetUserByIdResponse" />
-  </wsdl:message>
+			<xsd:complexType name="RegistrationRequest">
+				<xsd:sequence>
+					<xsd:element name="username" type="xsd:string" nillable="false" />
+					<xsd:element name="password" type="xsd:string" nillable="false" />
+					<xsd:element name="email" type="xsd:string" nillable="false" />
+					<xsd:element name="gender" type="xsd:boolean" nillable="false" />
+					<xsd:element name="height" type="xsd:int" nillable="false" />
+					<xsd:element name="weight" type="xsd:float" nillable="false" />
+					<xsd:element name="nutritionist" type="xsd:boolean" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
-  <wsdl:portType name="UserServicePortType">
-    <wsdl:operation name="getUserById">
-      <wsdl:input message="tns:GetUserByIdRequest" wsam:Action="http://stayfit.com/userservice/GetUserByIdRequest" />
-      <wsdl:output message="tns:GetUserByIdResponse" wsam:Action="http://stayfit.com/userservice/GetUserByIdResponse" />
-    </wsdl:operation>
-  </wsdl:portType>
+			<xsd:complexType name="RegistrationResponse">
+				<xsd:sequence>
+					<xsd:element name="user" type="tns:User" minOccurs="0"
+						maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="UpdateUserRequest">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:long" nillable="false" />
+					<xsd:element name="username" type="xsd:string" nillable="false" />
+					<xsd:element name="password" type="xsd:string" minOccurs="0" nillable="false" />
+					<xsd:element name="email" type="xsd:string" nillable="false" />
+					<xsd:element name="gender" type="xsd:boolean" nillable="false" />
+					<xsd:element name="height" type="xsd:int" nillable="false" />
+					<xsd:element name="weight" type="xsd:float" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
-  <wsdl:binding name="UserServiceSoapBinding" type="tns:UserServicePortType">
-    <soap:binding style="document"
-      transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="getUserById">
-      <soap:operation soapAction="" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
+			<xsd:complexType name="UpdateUserResponse">
+				<xsd:sequence>
+					<xsd:element name="user" type="tns:User" minOccurs="0"
+						maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserHistoryByUserIdRequest">
+				<xsd:sequence>
+					<xsd:element name="userId" type="xsd:long" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
-  <wsdl:service name="UserService">
-    <wsdl:documentation>User Service</wsdl:documentation>
-    <wsdl:port name="UserPort" binding="tns:UserServiceSoapBinding">
-      <soap:address location="http://localhost:8082/user/services/user" />
-    </wsdl:port>
-  </wsdl:service>
+			<xsd:complexType name="GetUserHistoryByUserIdResponse">
+				<xsd:sequence>
+					<xsd:element name="userHistories" type="tns:UserHistory" minOccurs="0"
+						maxOccurs="unbounded" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserHistoryByDateRequest">
+				<xsd:sequence>
+					<xsd:element name="userId" type="xsd:long" nillable="false" />
+					<xsd:element name="date" type="xsd:date" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetUserHistoryByDateResponse">
+				<xsd:sequence>
+					<xsd:element name="userHistory" type="tns:UserHistory" minOccurs="0"
+						nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="SaveUserHistoryRequest">
+				<xsd:sequence>
+					<xsd:element name="userHistory" type="tns:UserHistory" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="SaveUserHistoryResponse">
+				<xsd:sequence>
+					<xsd:element name="userHistory" type="tns:UserHistory" minOccurs="0"
+						nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="User">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:long" minOccurs="0"
+						nillable="false" />
+					<xsd:element name="username" type="xsd:string"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="email" type="xsd:string"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="enabled" type="xsd:boolean"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="gender" type="xsd:boolean"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="height" type="xsd:int" minOccurs="0"
+						nillable="false" />
+					<xsd:element name="weight" type="xsd:float"
+						minOccurs="0" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="UserHistory">
+				<xsd:sequence>
+					<xsd:element name="userId" type="xsd:long"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="date" type="xsd:date"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="breakfast" type="tns:Breakfast"
+						minOccurs="0" maxOccurs="unbounded" nillable="false" />
+					<xsd:element name="lunch" type="tns:Lunch"
+						minOccurs="0" maxOccurs="unbounded" nillable="false" />
+					<xsd:element name="dinner" type="tns:Dinner" minOccurs="0"
+						maxOccurs="unbounded" nillable="false" />
+					<xsd:element name="other" type="tns:Other"
+						minOccurs="0" maxOccurs="unbounded" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="Meal">
+				<xsd:sequence>
+					<xsd:element name="foodId" type="xsd:long" minOccurs="0"
+						nillable="false" />
+					<xsd:element name="amount" type="xsd:float"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="unit" type="xsd:string"
+						minOccurs="0" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="Breakfast">
+				<xsd:complexContent>
+					<xsd:extension base="tns:Meal">
+						<xsd:sequence>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			
+			<xsd:complexType name="Lunch">
+				<xsd:complexContent>
+					<xsd:extension base="tns:Meal">
+						<xsd:sequence>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			
+			<xsd:complexType name="Dinner">
+				<xsd:complexContent>
+					<xsd:extension base="tns:Meal">
+						<xsd:sequence>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			
+			<xsd:complexType name="Other">
+				<xsd:complexContent>
+					<xsd:extension base="tns:Meal">
+						<xsd:sequence>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:element name="GetUserByIdRequest"
+				type="tns:GetUserByIdRequest" />
+			<xsd:element name="GetUserByIdResponse"
+				type="tns:GetUserByIdResponse" />
+				
+			<xsd:element name="RegistrationRequest"
+				type="tns:RegistrationRequest" />
+			<xsd:element name="RegistrationResponse"
+				type="tns:RegistrationResponse" />
+				
+			<xsd:element name="GetUserHistoryByUserIdRequest"
+				type="tns:GetUserHistoryByUserIdRequest" />
+			<xsd:element name="GetUserHistoryByUserIdResponse"
+				type="tns:GetUserHistoryByUserIdResponse" />
+				
+			<xsd:element name="GetUserHistoryByDateRequest"
+				type="tns:GetUserHistoryByDateRequest" />
+			<xsd:element name="GetUserHistoryByDateResponse"
+				type="tns:GetUserHistoryByDateResponse" />
+			
+			<xsd:element name="SaveUserHistoryRequest"
+				type="tns:SaveUserHistoryRequest" />
+			<xsd:element name="SaveUserHistoryResponse"
+				type="tns:SaveUserHistoryResponse" />
+				
+			<xsd:element name="UpdateUserRequest"
+				type="tns:UpdateUserRequest" />
+			<xsd:element name="UpdateUserResponse"
+				type="tns:UpdateUserResponse" />
+			
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="GetUserByIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetUserByIdRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetUserByIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetUserByIdResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="RegistrationRequest">
+		<wsdl:part name="parameters"
+			element="tns:RegistrationRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="RegistrationResponse">
+		<wsdl:part name="parameters"
+			element="tns:RegistrationResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="GetUserHistoryByUserIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetUserHistoryByUserIdRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetUserHistoryByUserIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetUserHistoryByUserIdResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="GetUserHistoryByDateRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetUserHistoryByDateRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetUserHistoryByDateResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetUserHistoryByDateResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="SaveUserHistoryRequest">
+		<wsdl:part name="parameters"
+			element="tns:SaveUserHistoryRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="SaveUserHistoryResponse">
+		<wsdl:part name="parameters"
+			element="tns:SaveUserHistoryResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="UpdateUserRequest">
+		<wsdl:part name="parameters"
+			element="tns:UpdateUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="UpdateUserResponse">
+		<wsdl:part name="parameters"
+			element="tns:UpdateUserResponse" />
+	</wsdl:message>
+	
+	<wsdl:portType name="UserServicePortType">
+		<wsdl:operation name="getUserById">
+			<wsdl:input message="tns:GetUserByIdRequest"
+				wsam:Action="http://stayfit.com/userservice/GetUserByIdRequest" />
+			<wsdl:output message="tns:GetUserByIdResponse"
+				wsam:Action="http://stayfit.com/userservice/GetUserByIdResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="register">
+			<wsdl:input message="tns:RegistrationRequest"
+				wsam:Action="http://stayfit.com/userservice/RegistrationRequest" />
+			<wsdl:output message="tns:RegistrationResponse"
+				wsam:Action="http://stayfit.com/userservice/RegistrationResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserHistoryByUserId">
+			<wsdl:input message="tns:GetUserHistoryByUserIdRequest"
+				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByUserIdRequest" />
+			<wsdl:output message="tns:GetUserHistoryByUserIdResponse"
+				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByUserIdResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserHistoryByDate">
+			<wsdl:input message="tns:GetUserHistoryByDateRequest"
+				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByDateRequest" />
+			<wsdl:output message="tns:GetUserHistoryByDateResponse"
+				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByDateResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="saveUserHistory">
+			<wsdl:input message="tns:SaveUserHistoryRequest"
+				wsam:Action="http://stayfit.com/userservice/SaveUserHistoryRequest" />
+			<wsdl:output message="tns:SaveUserHistoryResponse"
+				wsam:Action="http://stayfit.com/userservice/SaveUserHistoryResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="updateUser">
+			<wsdl:input message="tns:UpdateUserRequest"
+				wsam:Action="http://stayfit.com/userservice/UpdateUserRequest" />
+			<wsdl:output message="tns:UpdateUserResponse"
+				wsam:Action="http://stayfit.com/userservice/UpdateUserResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="UserServiceSoapBinding"
+		type="tns:UserServicePortType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getUserById">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="register">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserHistoryByUserId">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserHistoryByDate">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="saveUserHistory">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="updateUser">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="UserService">
+		<wsdl:documentation>User Service</wsdl:documentation>
+		<wsdl:port name="UserPort"
+			binding="tns:UserServiceSoapBinding">
+			<soap:address
+				location="http://localhost:8082/user/services/user" />
+		</wsdl:port>
+	</wsdl:service>
 
 </wsdl:definitions>
