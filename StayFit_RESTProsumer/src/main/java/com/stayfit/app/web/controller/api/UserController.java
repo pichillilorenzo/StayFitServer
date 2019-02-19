@@ -47,4 +47,10 @@ public class UserController {
     public @ResponseBody User registerUser(@RequestBody Map<String, Object> payload) {
         return userService.registerUser(payload);
     }
+	
+	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody User updateUser(@RequestBody Map<String, Object> payload) {
+        return userService.updateUser(payload);
+    }
 }

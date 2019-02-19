@@ -20,6 +20,8 @@ import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
 import com.stayfit.userservice.RegistrationRequest;
 import com.stayfit.userservice.RegistrationResponse;
+import com.stayfit.userservice.UpdateUserRequest;
+import com.stayfit.userservice.UpdateUserResponse;
 
 /**
  * @author lorenzo
@@ -48,7 +50,6 @@ public class UserService implements UserDetailsService {
     	throw new ResourceNotFoundException("User", "id", id);
     }
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
     public com.stayfit.userservice.User registerUser(Map<String, Object> payload) throws ResourceNotFoundException {
 
 		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
@@ -71,6 +72,31 @@ public class UserService implements UserDetailsService {
     	}
     	
     	throw new ResourceNotFoundException("User", "id", null);
+    }
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+    public com.stayfit.userservice.User updateUser(Map<String, Object> payload) throws ResourceNotFoundException {
+
+		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
+    	UserServicePortType userPort = userService.getUserPort();
+
+    	UpdateUserRequest request = new UpdateUserRequest();
+    	request.setId((long) payload.get("id"));
+    	request.setUsername(payload.get("username").toString());
+    	request.setPassword(payload.get("password").toString());
+    	request.setEmail(payload.get("email").toString());
+    	request.setGender((boolean) payload.get("gender"));
+    	request.setHeight(Integer.parseInt(payload.get("height").toString()));
+    	request.setWeight(Float.parseFloat(payload.get("weight").toString()));
+
+    	UpdateUserResponse response = userPort.updateUser(request);
+    	com.stayfit.userservice.User userResponse = response.getUser();
+    	
+    	if (userResponse != null) {
+    		return userResponse;
+    	}
+    	
+    	throw new ResourceNotFoundException("User", "id", payload.get("id"));
     }
 
 	@Override
