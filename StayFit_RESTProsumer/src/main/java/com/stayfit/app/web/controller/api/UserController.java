@@ -20,9 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stayfit.app.service.UserService;
+import com.stayfit.app.service.UserServiceImpl;
 
 import com.stayfit.userservice.User;
+import com.stayfit.userservice.UserHistory;
 
 /**
  * @author lorenzo
@@ -33,7 +34,7 @@ import com.stayfit.userservice.User;
 public class UserController {
 	
 	@Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -48,9 +49,22 @@ public class UserController {
         return userService.registerUser(payload);
     }
 	
-	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody User updateUser(@RequestBody Map<String, Object> payload) {
-        return userService.updateUser(payload);
+    public @ResponseBody User updateUser(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
+        return userService.updateUser(id, payload);
     }
+	
+	@RequestMapping(value = "/{id}/history/{date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody UserHistory getUserHistoryByDate(@PathVariable("id") Long id, @PathVariable("date") String date) {
+        return userService.getUserHistoryByDate(id, date);
+    }
+	
+	@RequestMapping(value = "/{id}/history", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody UserHistory saveUserHistory(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
+        return userService.saveUserHistory(id, payload);
+    }
+	
 }
