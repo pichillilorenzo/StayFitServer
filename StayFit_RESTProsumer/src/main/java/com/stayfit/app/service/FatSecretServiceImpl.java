@@ -4,8 +4,6 @@
 package com.stayfit.app.service;
 
 import com.stayfit.app.exception.ResourceNotFoundException;
-import com.stayfit.app.model.Role;
-import com.stayfit.app.model.User;
 import com.stayfit.fatsecretservice.FatSecretService;
 import com.stayfit.fatsecretservice.FatSecretServicePortType;
 import com.stayfit.fatsecretservice.GetfoodByIdRequest;
@@ -13,29 +11,15 @@ import com.stayfit.fatsecretservice.GetfoodByIdResponse;
 import com.stayfit.fatsecretservice.GetfoodByNameRequest;
 import com.stayfit.fatsecretservice.GetfoodByNameResponse;
 
-import org.springframework.ws.client.core.WebServiceTemplate;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
-import org.springframework.ws.soap.client.core.SoapActionCallback;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import com.stayfit.userservice.UserService;
-import com.stayfit.userservice.UserServicePortType;
-import com.stayfit.userservice.GetUserByIdRequest;
-import com.stayfit.userservice.GetUserByIdResponse;
-
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  * @author Matteo;
  *
@@ -65,7 +49,11 @@ public class FatSecretServiceImpl  {
     }
     
     
-   public com.stayfit.fatsecretservice.Foods getFoodByname(String name) throws ResourceNotFoundException {
+    public com.stayfit.fatsecretservice.Foods search(@RequestBody Map<String, Object> payload) throws ResourceNotFoundException{
+    	
+    	String name = payload.get("name").toString();
+    	Integer kcal = Integer.parseInt(payload.get("kcal").toString());
+    	String barcode = payload.get("barcode").toString();
     	
     	FatSecretService Service = new FatSecretService();
     	FatSecretServicePortType fatsecretPort = Service.getFatSecretPort();
@@ -75,12 +63,35 @@ public class FatSecretServiceImpl  {
     	
     	GetfoodByNameResponse response = fatsecretPort.getFoodByName(request);
     	
-    	com.stayfit.fatsecretservice.Foods foods = response.getFoods();
-    	if (foods != null) {
-    		return foods;
+    	com.stayfit.fatsecretservice.Foods foods = new com.stayfit.fatsecretservice.Foods();
+    	
+    	List<com.stayfit.fatsecretservice.Item> items = new ArrayList<>();
+    	
+    	if (kcal != 0) {
+    		response.getFoods().getFood().forEach(listItem-> {
+    			Pattern pattern = Pattern.compile("Calories: ([\\d]+)kcal");
+    			Matcher matcher = pattern.matcher(listItem.getDescription().toString());
+    			if (matcher.find())
+    			{	
+    				Integer kilocalories =Integer.parseInt(matcher.group(1).toString());
+    			    if (kilocalories <= kcal) {
+    			    	items.add(listItem);
+    			    	
+    			    }
+    			   
+    			}
+	        });	
+    		
+    		foods.getFood().addAll(items);
+    		
+
+    	}else{
+  
+    		foods = response.getFoods();
     	}
     	
-    	throw new ResourceNotFoundException("Foods", "name", name);
-    } 
-    
+    	return foods;
+
+    }
+ 
 }

@@ -3,20 +3,15 @@
  */
 package com.stayfit.fatsecretservice.app.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fatsecret.platform.services.FatsecretService;
 import com.fatsecret.platform.services.Response;
-import com.stayfit.fatsecretservice.app.exception.ResourceNotFoundException;
 import com.fatsecret.platform.model.CompactFood;
 import com.fatsecret.platform.model.Food;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 /**
  * @author Matteo
  *

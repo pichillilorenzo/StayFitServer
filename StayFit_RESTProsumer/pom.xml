@@ -124,6 +124,12 @@
 									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/fatsecret.wsdl</wsdl>
 									<wsdlLocation>classpath:wsdl/clients/fatsecret.wsdl</wsdlLocation>
 								</wsdlOption>
+								
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/amazon.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/amazon.wsdl</wsdlLocation>
+								</wsdlOption>
+								
 							</wsdlOptions>
 						</configuration>
 						<goals>
