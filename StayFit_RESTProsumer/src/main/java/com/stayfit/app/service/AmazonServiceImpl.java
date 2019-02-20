@@ -18,8 +18,9 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class AmazonServiceImpl {
+public class AmazonServiceImpl implements com.stayfit.app.service.AmazonService {
 	
+	@Override
 	@PreAuthorize("hasAuthority('AMAZON_SEARCH')")
 	public com.stayfit.amazonservice.Products getListFood(String name) throws ResourceNotFoundException {
 

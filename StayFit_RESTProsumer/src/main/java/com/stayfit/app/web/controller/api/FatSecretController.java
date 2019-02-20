@@ -30,7 +30,6 @@ public class FatSecretController {
 	@Autowired
     private FatSecretServiceImpl fatsecret;
 	
-	
 	@RequestMapping(value = "/getfoodbyid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
@@ -38,8 +37,6 @@ public class FatSecretController {
 		System.out.println(id);
         return fatsecret.getFoodById(id);
     }
-	
-	
 	
 	@RequestMapping(value= "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

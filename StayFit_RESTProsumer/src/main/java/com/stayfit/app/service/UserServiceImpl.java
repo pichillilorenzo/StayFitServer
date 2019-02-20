@@ -61,11 +61,12 @@ import javax.xml.ws.soap.SOAPFaultException;
  */
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	private com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
 	private UserServicePortType userPort = userService.getUserPort();
     
+	@Override
 	@PreAuthorize("hasAuthority('USER_READ')")
     public com.stayfit.userservice.User getUserById(Long id) throws ResourceNotFoundException {
 	
@@ -83,7 +84,8 @@ public class UserServiceImpl implements UserDetailsService {
 		}
     }
 	
-    public com.stayfit.userservice.User registerUser(Map<String, Object> payload) {
+    @Override
+	public com.stayfit.userservice.User registerUser(Map<String, Object> payload) {
 
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     	GregorianCalendar gregDate = new GregorianCalendar();
@@ -114,7 +116,8 @@ public class UserServiceImpl implements UserDetailsService {
     	return userResponse;
     }
 	
-    @PreAuthorize("hasAuthority('USER_UPDATE')")
+    @Override
+	@PreAuthorize("hasAuthority('USER_UPDATE')")
     public com.stayfit.userservice.User updateUser(Long id, Map<String, Object> payload) throws ResourceNotFoundException {
 
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -157,6 +160,7 @@ public class UserServiceImpl implements UserDetailsService {
 		return null;
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('USER_HISTORY_READ')")
 	public com.stayfit.userservice.UserHistory getUserHistoryByDate(Long id, String date) throws ResourceNotFoundException {
 		
@@ -188,6 +192,7 @@ public class UserServiceImpl implements UserDetailsService {
     	
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('USER_HISTORY_CREATE')")
 	public UserHistory saveUserHistory(Long id, String date, Map<String, Object> payload) {
 		
@@ -263,6 +268,7 @@ public class UserServiceImpl implements UserDetailsService {
     	
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
 	public List<UserDietRequest> getAllUserDietRequestNotCompleted() {
 		
@@ -272,6 +278,7 @@ public class UserServiceImpl implements UserDetailsService {
 		return response.getUserDietRequest();
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
 	public UserDietRequest getUserDietRequestNotCompletedByUserId(Long id) {
 		
@@ -285,6 +292,7 @@ public class UserServiceImpl implements UserDetailsService {
 		
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_CREATE')")
 	public UserDietRequest saveUserDietRequest(Long id, Map<String, Object> payload) {
 		
@@ -305,6 +313,7 @@ public class UserServiceImpl implements UserDetailsService {
 		return response.getUserDietRequest();
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('DIET_READ')")
 	public UserDiet getUserDiet(Long id) {
 		
@@ -317,6 +326,7 @@ public class UserServiceImpl implements UserDetailsService {
 		return response.getUserDiet();
 	}
 	
+	@Override
 	@PreAuthorize("hasAuthority('DIET_CREATE')")
 	public UserDiet saveUserDiet(Long id, Map<String, Object> payload) {
 		

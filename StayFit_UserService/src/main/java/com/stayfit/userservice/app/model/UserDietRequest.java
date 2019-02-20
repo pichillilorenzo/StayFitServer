@@ -3,22 +3,16 @@
  */
 package com.stayfit.userservice.app.model;
 
-import java.util.Collection;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stayfit.userservice.app.util.JobKind;
 
 import lombok.AllArgsConstructor;
@@ -53,18 +47,6 @@ public class UserDietRequest {
 	private Long userId;
 	@Field("nutritionist_id")
 	private Long nutritionistId;
-	
-	/*
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id")
-	@JsonIgnore
-    private Collection<User> user;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "nutritionist_id")
-	@JsonIgnore
-    private Collection<User> nutritionist;
-    */
 	
 }
 

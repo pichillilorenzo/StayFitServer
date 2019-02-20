@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stayfit.app.service.UserServiceImpl;
-
+import com.stayfit.app.service.UserService;
 import com.stayfit.userservice.User;
 import com.stayfit.userservice.UserDiet;
 import com.stayfit.userservice.UserDietRequest;
@@ -37,7 +36,7 @@ import com.stayfit.userservice.UserHistory;
 public class UserController {
 
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)

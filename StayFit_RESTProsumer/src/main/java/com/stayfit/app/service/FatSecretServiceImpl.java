@@ -14,6 +14,8 @@ import com.stayfit.fatsecretservice.GetfoodByIdRequest;
 import com.stayfit.fatsecretservice.GetfoodByIdResponse;
 import com.stayfit.fatsecretservice.GetfoodByNameRequest;
 import com.stayfit.fatsecretservice.GetfoodByNameResponse;
+import com.stayfit.fatsecretservice.Food;
+import com.stayfit.fatsecretservice.Foods;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -31,10 +33,11 @@ import java.util.regex.Pattern;
  */
 
 @Service
-public class FatSecretServiceImpl {
+public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretService {
 	
+	@Override
 	@PreAuthorize("hasAuthority('FOOD_READ')")
-    public com.stayfit.fatsecretservice.Food getFoodById(Long id) throws ResourceNotFoundException {
+    public Food getFoodById(Long id) throws ResourceNotFoundException {
 
         FatSecretService Service = new FatSecretService();
         FatSecretServicePortType fatsecretPort = Service.getFatSecretPort();
@@ -44,7 +47,7 @@ public class FatSecretServiceImpl {
 
         GetfoodByIdResponse response = fatsecretPort.getFoodById(request);
 
-        com.stayfit.fatsecretservice.Food food = response.getFood();
+        Food food = response.getFood();
         if (food != null) {
             return food;
         }
@@ -52,8 +55,9 @@ public class FatSecretServiceImpl {
         throw new ResourceNotFoundException("Food", "id", id);
     }
 	
+	@Override
 	@PreAuthorize("hasAuthority('FOOD_SEARCH')")
-    public com.stayfit.fatsecretservice.Foods search(@RequestBody Map<String, Object> payload)
+    public Foods search(@RequestBody Map<String, Object> payload)
             throws ResourceNotFoundException {
 
         String name = payload.get("name").toString();
@@ -80,7 +84,7 @@ public class FatSecretServiceImpl {
 
         GetfoodByNameResponse response = fatsecretPort.getFoodByName(request);
 
-        com.stayfit.fatsecretservice.Foods foods = new com.stayfit.fatsecretservice.Foods();
+        Foods foods = new Foods();
 
         List<com.stayfit.fatsecretservice.Item> items = new ArrayList<>();
 
