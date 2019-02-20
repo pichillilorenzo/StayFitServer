@@ -12,7 +12,7 @@ async function api(browser, find) {
     for( var i = 0 ; i < li.length; i++){
          
         let title = li[i].querySelector(".s-access-detail-page")
-        if (title && title.getAttribute("title")){
+        if (title){
             var item = doc.createElement("Item")
             var url = doc.createElement("DetailPageURL")
             let link =  "https://www.amazon.it" + li[i].querySelector(".s-access-detail-page").getAttribute("href")

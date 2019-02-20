@@ -18,9 +18,7 @@ import com.stayfit.Amazon.app.util.AmazonUtils;
 import com.stayfit.amazonservice.GetProductByNameRequest;
 import com.stayfit.amazonservice.GetProductByNameResponse;
 import com.stayfit.amazonservice.ObjectFactory;
-
-
-
+import com.stayfit.amazonservice.Products;
 
 /**
  * @author Matteo
@@ -42,7 +40,7 @@ public class AmazonEndpoint {
 	public JAXBElement<GetProductByNameResponse> GetProductByName(@RequestPayload JAXBElement<GetProductByNameRequest> request) throws Exception{
 		ObjectFactory factory = new ObjectFactory();
 		GetProductByNameResponse response = factory.createGetProductByNameResponse();
-		com.stayfit.amazonservice.Products product = amazontransformer.convert(amazon.getFoodByName(request.getValue().getName()));
+		Products product = amazontransformer.convert(amazon.getFoodByName(request.getValue().getName()));
 		response.setProduct(product);
 		return factory.createGetProductByNameResponse(response);
 	}

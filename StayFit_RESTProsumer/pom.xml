@@ -130,6 +130,11 @@
 									<wsdlLocation>classpath:wsdl/clients/amazon.wsdl</wsdlLocation>
 								</wsdlOption>
 								
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/barcode.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/barcode.wsdl</wsdlLocation>
+								</wsdlOption>
+								
 							</wsdlOptions>
 						</configuration>
 						<goals>

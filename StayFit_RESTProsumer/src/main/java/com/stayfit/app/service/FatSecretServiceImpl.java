@@ -15,6 +15,7 @@ import com.stayfit.fatsecretservice.GetfoodByIdResponse;
 import com.stayfit.fatsecretservice.GetfoodByNameRequest;
 import com.stayfit.fatsecretservice.GetfoodByNameResponse;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -31,7 +32,8 @@ import java.util.regex.Pattern;
 
 @Service
 public class FatSecretServiceImpl {
-
+	
+	@PreAuthorize("hasAuthority('FOOD_READ')")
     public com.stayfit.fatsecretservice.Food getFoodById(Long id) throws ResourceNotFoundException {
 
         FatSecretService Service = new FatSecretService();
@@ -49,7 +51,8 @@ public class FatSecretServiceImpl {
 
         throw new ResourceNotFoundException("Food", "id", id);
     }
-
+	
+	@PreAuthorize("hasAuthority('FOOD_SEARCH')")
     public com.stayfit.fatsecretservice.Foods search(@RequestBody Map<String, Object> payload)
             throws ResourceNotFoundException {
 

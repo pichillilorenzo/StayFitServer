@@ -1,0 +1,96 @@
+{ 
+    "_id" : ObjectId("5c6c9c4dc7d5823f695d7c15"), 
+    "user_id" : NumberLong(1), 
+    "nutritionist_id" : NumberLong(2), 
+    "week" : [
+        {
+            "breakfast" : [
+                {
+                    "food_id" : NumberLong(908), 
+                    "amount" : 45.0, 
+                    "unit" : "g"
+                }
+            ], 
+            "lunch" : [
+                {
+                    "food_id" : NumberLong(765), 
+                    "amount" : 55.0, 
+                    "unit" : "ml"
+                }
+            ], 
+            "dinner" : [
+
+            ], 
+            "other" : [
+
+            ]
+        }, 
+        {
+            "breakfast" : [
+
+            ], 
+            "lunch" : [
+                {
+                    "food_id" : NumberLong(222), 
+                    "amount" : 100.0, 
+                    "unit" : "ml"
+                }
+            ], 
+            "dinner" : [
+
+            ], 
+            "other" : [
+
+            ]
+        }
+    ], 
+    "_class" : "com.stayfit.userservice.app.model.UserDiet"
+}
+{ 
+    "_id" : ObjectId("5c6d6edac7d5825e16bf73b7"), 
+    "user_id" : NumberLong(10), 
+    "nutritionist_id" : NumberLong(2), 
+    "week" : [
+        {
+            "breakfast" : [
+                {
+                    "food_id" : NumberLong(908), 
+                    "amount" : 45.0, 
+                    "unit" : "g"
+                }
+            ], 
+            "lunch" : [
+                {
+                    "food_id" : NumberLong(765), 
+                    "amount" : 55.0, 
+                    "unit" : "ml"
+                }
+            ], 
+            "dinner" : [
+
+            ], 
+            "other" : [
+
+            ]
+        }, 
+        {
+            "breakfast" : [
+
+            ], 
+            "lunch" : [
+                {
+                    "food_id" : NumberLong(222), 
+                    "amount" : 100.0, 
+                    "unit" : "ml"
+                }
+            ], 
+            "dinner" : [
+
+            ], 
+            "other" : [
+
+            ]
+        }
+    ], 
+    "_class" : "com.stayfit.userservice.app.model.UserDiet"
+}

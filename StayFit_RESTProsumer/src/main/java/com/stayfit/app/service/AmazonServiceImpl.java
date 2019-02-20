@@ -9,8 +9,8 @@ import com.stayfit.amazonservice.GetProductByNameRequest;
 import com.stayfit.amazonservice.GetProductByNameResponse;
 import com.stayfit.app.exception.ResourceNotFoundException;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
 
 /**
  * @author Matteo;
@@ -18,27 +18,25 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class AmazonServiceImpl  {
+public class AmazonServiceImpl {
 	
-	
-   
-    
-   public com.stayfit.amazonservice.Products getListFood(String name) throws ResourceNotFoundException {
-    	
-    	AmazonService Service = new AmazonService();
-    	AmazonServicePortType fatsecretPort = Service.getAmazonPort();
-    	
-    	GetProductByNameRequest request = new GetProductByNameRequest();
-    	request.setName(name);
-    	
-    	GetProductByNameResponse response = fatsecretPort.getProductByName(request);
-    	
-    	com.stayfit.amazonservice.Products foods = response.getProduct();
-    	if (foods != null) {
-    		return foods;
-    	}
-    	
-    	throw new ResourceNotFoundException("Foods", "name", name);
-    } 
-    
+	@PreAuthorize("hasAuthority('AMAZON_SEARCH')")
+	public com.stayfit.amazonservice.Products getListFood(String name) throws ResourceNotFoundException {
+
+		AmazonService Service = new AmazonService();
+		AmazonServicePortType fatsecretPort = Service.getAmazonPort();
+
+		GetProductByNameRequest request = new GetProductByNameRequest();
+		request.setName(name);
+		
+		GetProductByNameResponse response = fatsecretPort.getProductByName(request);
+
+		com.stayfit.amazonservice.Products foods = response.getProduct();
+		if (foods != null) {
+			return foods;
+		}
+
+		throw new ResourceNotFoundException("Foods", "name", name);
+	}
+
 }

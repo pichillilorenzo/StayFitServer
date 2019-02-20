@@ -10,6 +10,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.stereotype.Component;
 
+import com.stayfit.amazonservice.ItemAttributes;
+import com.stayfit.amazonservice.ListPrice;
+import com.stayfit.amazonservice.Product;
 import com.stayfit.amazonservice.Products;
 
 
@@ -27,8 +30,6 @@ import org.w3c.dom.Element;
 @Component
 public class AmazonUtils {
 	
-	
-	
 	public Products convert( Document doc) {
 		Products prod = new Products();
 		
@@ -37,9 +38,9 @@ public class AmazonUtils {
 		NodeList nList = doc.getElementsByTagName("Item");
 
 		for (int temp = 0; temp < nList.getLength(); temp++) {
-			com.stayfit.amazonservice.Product productWsdl = new com.stayfit.amazonservice.Product();
-			com.stayfit.amazonservice.ItemAttributes ItemAttributesWsdl = new com.stayfit.amazonservice.ItemAttributes();
-			com.stayfit.amazonservice.ListPrice ListPrice = new com.stayfit.amazonservice.ListPrice();
+			Product productWsdl = new Product();
+			ItemAttributes ItemAttributesWsdl = new ItemAttributes();
+			ListPrice ListPrice = new ListPrice();
 			Node nNode = nList.item(temp);
 			
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -60,7 +61,6 @@ public class AmazonUtils {
 			
 		}
 		
-		
 		return prod;
 	}
 	
@@ -69,7 +69,8 @@ public class AmazonUtils {
 
 		
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
-        DocumentBuilder builder;  
+        DocumentBuilder builder; 
+        
         try  
         {  
             builder = factory.newDocumentBuilder();  

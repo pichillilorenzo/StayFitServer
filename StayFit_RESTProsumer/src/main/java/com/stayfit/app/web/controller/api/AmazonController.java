@@ -28,12 +28,10 @@ public class AmazonController {
 	@Autowired
     private AmazonServiceImpl amazon;
 	
-
-	
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Products getFoodName(@PathVariable("name") String name) {
+    Products getListFood(@PathVariable("name") String name) {
         return amazon.getListFood(name);
     }
 	

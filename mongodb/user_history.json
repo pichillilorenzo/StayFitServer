@@ -1,0 +1,119 @@
+{ 
+    "_id" : ObjectId("5c69d9e2b4d60cc322cb515c"), 
+    "user_id" : 1.0, 
+    "date" : ISODate("2019-02-17T22:02:10.579+0000"), 
+    "breakfast" : [
+        {
+            "food_id" : 901.0, 
+            "amount" : 100.0, 
+            "unit" : "g"
+        }, 
+        {
+            "food_id" : 902.0, 
+            "amount" : 150.0, 
+            "unit" : "g"
+        }
+    ], 
+    "lunch" : [
+        {
+            "food_id" : 903.0, 
+            "amount" : 120.0, 
+            "unit" : "g"
+        }, 
+        {
+            "food_id" : 904.0, 
+            "amount" : 50.0, 
+            "unit" : "g"
+        }
+    ], 
+    "dinner" : [
+        {
+            "food_id" : 905.0, 
+            "amount" : 100.0, 
+            "unit" : "g"
+        }, 
+        {
+            "food_id" : 906.0, 
+            "amount" : 150.0, 
+            "unit" : "g"
+        }
+    ], 
+    "other" : [
+        {
+            "food_id" : 907.0, 
+            "amount" : 100.0, 
+            "unit" : "g"
+        }, 
+        {
+            "food_id" : 908.0, 
+            "amount" : 150.0, 
+            "unit" : "g"
+        }, 
+        {
+            "food_id" : 909.0, 
+            "amount" : 200.0, 
+            "unit" : "g"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5c6a98adc7d582475f9a294f"), 
+    "user_id" : NumberLong(1), 
+    "date" : ISODate("2019-02-18T11:36:13.313+0000"), 
+    "breakfast" : [
+
+    ], 
+    "_class" : "com.stayfit.userservice.app.model.UserHistory"
+}
+{ 
+    "_id" : ObjectId("5c6b0a9fc7d5825a79fec3cc"), 
+    "user_id" : NumberLong(1), 
+    "date" : ISODate("2019-02-19T23:00:00.000+0000"), 
+    "breakfast" : [
+        {
+            "food_id" : NumberLong(90), 
+            "amount" : 190.0, 
+            "unit" : "g"
+        }
+    ], 
+    "lunch" : [
+        {
+            "food_id" : NumberLong(90), 
+            "amount" : 9.0, 
+            "unit" : "g"
+        }
+    ], 
+    "dinner" : [
+
+    ], 
+    "other" : [
+
+    ], 
+    "_class" : "com.stayfit.userservice.app.model.UserHistory"
+}
+{ 
+    "_id" : ObjectId("5c6c2cb7c7d5822f294a07b5"), 
+    "user_id" : NumberLong(1), 
+    "date" : ISODate("2019-02-20T23:00:00.000+0000"), 
+    "breakfast" : [
+        {
+            "food_id" : NumberLong(90), 
+            "amount" : 100.0, 
+            "unit" : "g"
+        }
+    ], 
+    "lunch" : [
+        {
+            "food_id" : NumberLong(95), 
+            "amount" : 75.0, 
+            "unit" : "g"
+        }
+    ], 
+    "dinner" : [
+
+    ], 
+    "other" : [
+
+    ], 
+    "_class" : "com.stayfit.userservice.app.model.UserHistory"
+}

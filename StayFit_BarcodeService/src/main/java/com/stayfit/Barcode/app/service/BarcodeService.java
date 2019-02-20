@@ -7,13 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
-
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.InputStreamReader;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONObject;
-
 
 /**
  * @author Matteo
@@ -25,23 +26,45 @@ public class BarcodeService {
 
 	@Transactional(readOnly = true)
 	public String getNameByBarcode(String barcode) throws Exception {
+
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+
+			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+				// No need to implement.
+			}
+
+			public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+				// No need to implement.
+			}
+		} };
+
+		// Install the all-trusting trust manager
+		try {
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new Exception(e);
+		}
+
 		try {
 
 			// build the url
 			String url = "https://www.datakick.org/api/items/" + barcode;
 
 			// connect to url
-			HttpURLConnection c = null;
+			HttpsURLConnection c = null;
 			URL u = new URL(url);
-			c = (HttpURLConnection) u.openConnection();
+			c = (HttpsURLConnection) u.openConnection();
 			c.setRequestMethod("GET");
-			// c.setRequestProperty("Content-length", "0");
-			c.setRequestProperty("Access-Control-Request-Method", "POST, GET, OPTIONS, HEAD");
-			c.setRequestProperty("User-Agent",
-					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36");
-			c.setRequestProperty("Upgrade-Insecure-Requests", "1");
-			// c.setUseCaches(false);
-			// c.setAllowUserInteraction(false);
+			c.setRequestProperty("Content-length", "0");
+			c.setUseCaches(false);
+			c.setAllowUserInteraction(false);
 			c.connect();
 			int status = c.getResponseCode();
 			switch (status) {
@@ -66,9 +89,11 @@ public class BarcodeService {
 				if (c != null) {
 					c.disconnect();
 				}
+				System.out.println("Http Error: " + status);
 				throw new Exception("Http Error: " + status);
 			}
 		} catch (Exception e) {
+			e.printStackTrace(); 
 			throw new Exception(e);
 		}
 	}
