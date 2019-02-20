@@ -8,9 +8,7 @@ import com.stayfit.app.exception.ResourceNotFoundException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +16,6 @@ import java.util.Map;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.stayfit.userservice.UserServicePortType;
 import com.stayfit.userservice.Breakfast;
+import com.stayfit.userservice.DietDay;
 import com.stayfit.userservice.Dinner;
 import com.stayfit.userservice.GetAllUserDietRequestNotCompletedRequest;
 import com.stayfit.userservice.GetAllUserDietRequestNotCompletedResponse;
@@ -35,19 +32,23 @@ import com.stayfit.userservice.Lunch;
 import com.stayfit.userservice.Other;
 import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
+import com.stayfit.userservice.GetUserDietByUserIdRequest;
+import com.stayfit.userservice.GetUserDietByUserIdResponse;
 import com.stayfit.userservice.GetUserDietRequestNotCompletedByUserIdRequest;
 import com.stayfit.userservice.GetUserDietRequestNotCompletedByUserIdResponse;
 import com.stayfit.userservice.GetUserHistoryByDateRequest;
 import com.stayfit.userservice.GetUserHistoryByDateResponse;
+import com.stayfit.userservice.JobKind;
 import com.stayfit.userservice.RegistrationRequest;
 import com.stayfit.userservice.RegistrationResponse;
+import com.stayfit.userservice.SaveUserDietRequest;
 import com.stayfit.userservice.SaveUserDietRequestRequest;
 import com.stayfit.userservice.SaveUserDietRequestResponse;
+import com.stayfit.userservice.SaveUserDietResponse;
 import com.stayfit.userservice.SaveUserHistoryRequest;
 import com.stayfit.userservice.SaveUserHistoryResponse;
 import com.stayfit.userservice.UpdateUserRequest;
 import com.stayfit.userservice.UpdateUserResponse;
-import com.stayfit.userservice.User;
 import com.stayfit.userservice.UserDiet;
 import com.stayfit.userservice.UserDietRequest;
 import com.stayfit.userservice.UserHistory;
@@ -65,6 +66,7 @@ public class UserServiceImpl implements UserDetailsService {
 	private com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
 	private UserServicePortType userPort = userService.getUserPort();
     
+	@PreAuthorize("hasAuthority('USER_READ')")
     public com.stayfit.userservice.User getUserById(Long id) throws ResourceNotFoundException {
 	
     	GetUserByIdRequest request = new GetUserByIdRequest();
@@ -112,6 +114,7 @@ public class UserServiceImpl implements UserDetailsService {
     	return userResponse;
     }
 	
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public com.stayfit.userservice.User updateUser(Long id, Map<String, Object> payload) throws ResourceNotFoundException {
 
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -154,6 +157,7 @@ public class UserServiceImpl implements UserDetailsService {
 		return null;
 	}
 	
+	@PreAuthorize("hasAuthority('USER_HISTORY_READ')")
 	public com.stayfit.userservice.UserHistory getUserHistoryByDate(Long id, String date) throws ResourceNotFoundException {
 		
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -184,6 +188,7 @@ public class UserServiceImpl implements UserDetailsService {
     	
 	}
 	
+	@PreAuthorize("hasAuthority('USER_HISTORY_CREATE')")
 	public UserHistory saveUserHistory(Long id, String date, Map<String, Object> payload) {
 		
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -257,7 +262,8 @@ public class UserServiceImpl implements UserDetailsService {
     	return userHistoryResponse;
     	
 	}
-
+	
+	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
 	public List<UserDietRequest> getAllUserDietRequestNotCompleted() {
 		
 		GetAllUserDietRequestNotCompletedRequest request = new GetAllUserDietRequestNotCompletedRequest();
@@ -265,7 +271,8 @@ public class UserServiceImpl implements UserDetailsService {
 		
 		return response.getUserDietRequest();
 	}
-
+	
+	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
 	public UserDietRequest getUserDietRequestNotCompletedByUserId(Long id) {
 		
 		GetUserDietRequestNotCompletedByUserIdRequest request = new GetUserDietRequestNotCompletedByUserIdRequest();
@@ -277,7 +284,8 @@ public class UserServiceImpl implements UserDetailsService {
 		return response.getUserDietRequest();
 		
 	}
-
+	
+	@PreAuthorize("hasAuthority('DIET_REQUEST_CREATE')")
 	public UserDietRequest saveUserDietRequest(Long id, Map<String, Object> payload) {
 		
 		SaveUserDietRequestRequest request = new SaveUserDietRequestRequest();
@@ -287,22 +295,94 @@ public class UserServiceImpl implements UserDetailsService {
 		userDietRequest.setBodyFatPerc(Float.parseFloat(payload.get("bodyFatPerc").toString()));
 		userDietRequest.setTargetWeight(Float.parseFloat(payload.get("targetWeight").toString()));
 		userDietRequest.setNumTrainingDays(Integer.parseInt(payload.get("numTrainingDays").toString()));
-		
+		userDietRequest.setJobKind(JobKind.fromValue(payload.get("jobKind").toString()));
+		userDietRequest.setNote(payload.getOrDefault("note", "").toString());
+		userDietRequest.setCompleted(false);
 		request.setUserDietRequest(userDietRequest);
 		
 		SaveUserDietRequestResponse response = userPort.saveUserDietRequest(request);
 		
 		return response.getUserDietRequest();
 	}
-
+	
+	@PreAuthorize("hasAuthority('DIET_READ')")
 	public UserDiet getUserDiet(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		GetUserDietByUserIdRequest request = new GetUserDietByUserIdRequest(); 
+		
+		request.setUserId(id);
+		
+		GetUserDietByUserIdResponse response = userPort.getUserDietByUserId(request);
+		
+		return response.getUserDiet();
 	}
-
-	public UserDiet saveUserDiet(Long nutritionistId, Long userId, Map<String, Object> payload) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	@PreAuthorize("hasAuthority('DIET_CREATE')")
+	public UserDiet saveUserDiet(Long id, Map<String, Object> payload) {
+		
+		SaveUserDietRequest request = new SaveUserDietRequest();
+		
+		UserDiet userDiet = new UserDiet();
+		userDiet.setNutritionistId(Long.parseLong(payload.get("nutritionistId").toString()));
+		userDiet.setUserId(id);
+		
+		List<DietDay> week = new ArrayList<DietDay>(7);
+		
+		((ArrayList<Map<String, Object>>) payload.get("week")).forEach(dietDayMap -> {
+			List<Breakfast> breakfastList = new ArrayList<Breakfast>();
+	        List<Lunch> lunchList = new ArrayList<Lunch>();
+	        List<Dinner> dinnerList = new ArrayList<Dinner>();
+	        List<Other> otherList = new ArrayList<Other>();
+	        
+	        DietDay dietDay = new DietDay();
+	        
+	        ((ArrayList<Map<String, Object>>) dietDayMap.get("breakfast")).forEach(breakfastMap -> {
+	        	Breakfast breakfast = new Breakfast();
+	        	breakfast.setFoodId(Long.parseLong(breakfastMap.get("foodId").toString()));
+	        	breakfast.setAmount(Float.parseFloat(breakfastMap.get("amount").toString()));
+	        	breakfast.setUnit(breakfastMap.get("unit").toString());
+	        	breakfastList.add(breakfast);
+	        });
+	        dietDay.getBreakfast().addAll(breakfastList);
+	        
+	        ((ArrayList<Map<String, Object>>) dietDayMap.get("lunch")).forEach(lunchMap -> {
+	        	Lunch lunch = new Lunch();
+	        	lunch.setFoodId(Long.parseLong(lunchMap.get("foodId").toString()));
+	        	lunch.setAmount(Float.parseFloat(lunchMap.get("amount").toString()));
+	        	lunch.setUnit(lunchMap.get("unit").toString());
+	        	lunchList.add(lunch);
+	        });
+	        dietDay.getLunch().addAll(lunchList);
+	        
+	        ((ArrayList<Map<String, Object>>) dietDayMap.get("dinner")).forEach(dinnerMap -> {
+	        	Dinner dinner = new Dinner();
+	        	dinner.setFoodId(Long.parseLong(dinnerMap.get("foodId").toString()));
+	        	dinner.setAmount(Float.parseFloat(dinnerMap.get("amount").toString()));
+	        	dinner.setUnit(dinnerMap.get("unit").toString());
+	        	dinnerList.add(dinner);
+	        });
+	        dietDay.getDinner().addAll(dinnerList);
+	        
+	        ((ArrayList<Map<String, Object>>) dietDayMap.get("other")).forEach(otherMap -> {
+	        	Other other = new Other();
+	        	other.setFoodId(Long.parseLong(otherMap.get("foodId").toString()));
+	        	other.setAmount(Float.parseFloat(otherMap.get("amount").toString()));
+	        	other.setUnit(otherMap.get("unit").toString());
+	        	otherList.add(other);
+	        });
+	        dietDay.getOther().addAll(otherList);
+	        
+	        week.add(dietDay);
+	    });
+		
+        userDiet.getWeek().clear();
+    	userDiet.getWeek().addAll(week);
+	    	
+		request.setUserDiet(userDiet);
+		
+		SaveUserDietResponse response = userPort.saveUserDiet(request);
+		
+		return response.getUserDiet();
 	}
 	
 }

@@ -95,10 +95,9 @@ public class UserController {
 		return userService.getUserDiet(id);
 	}
 
-	@RequestMapping(value = "/{nutritionistId}/diet/{userId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{id}/diet", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody UserDiet saveUserDiet(@PathVariable("nutritionistId") Long nutritionistId,
-			@PathVariable("userId") Long userId, @RequestBody Map<String, Object> payload) {
-		return userService.saveUserDiet(nutritionistId, userId, payload);
+	public @ResponseBody UserDiet saveUserDiet(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
+		return userService.saveUserDiet(id, payload);
 	}
 }

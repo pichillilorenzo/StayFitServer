@@ -4,6 +4,7 @@
 package com.stayfit.app.configuration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -31,6 +33,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.stayfit.app.model.Role;
 import com.stayfit.app.model.User;
 import com.stayfit.app.repository.UserRepository;
 
@@ -122,8 +125,15 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     	        User user = userRepository.findByUsername(map.get("user_name").toString());
     	        
+    	        Collection<GrantedAuthority> userAuthorities = new ArrayList<GrantedAuthority>();
+    	        Collection<Role> roles = user.getAuthorities();
+    	        userAuthorities.addAll(roles);
+    	        roles.forEach(role -> {
+    	        	userAuthorities.addAll(role.getPrivileges());
+    	        });
+    	        
     	        return new UsernamePasswordAuthenticationToken(user,
-    	                authentication.getCredentials(), user.getAuthorities());
+    	                authentication.getCredentials(), userAuthorities);
     	    }
 
     	});
