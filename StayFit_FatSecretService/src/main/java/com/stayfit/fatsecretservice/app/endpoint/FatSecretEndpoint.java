@@ -11,7 +11,6 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import javax.xml.bind.JAXBElement;
 
-import com.stayfit.fatsecretservice.Food;
 import com.stayfit.fatsecretservice.GetfoodByIdRequest;
 import com.stayfit.fatsecretservice.GetfoodByIdResponse;
 import com.stayfit.fatsecretservice.GetfoodByNameRequest;
