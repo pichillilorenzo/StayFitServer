@@ -29,19 +29,27 @@ import org.springframework.stereotype.Service;
 import com.stayfit.userservice.UserServicePortType;
 import com.stayfit.userservice.Breakfast;
 import com.stayfit.userservice.Dinner;
+import com.stayfit.userservice.GetAllUserDietRequestNotCompletedRequest;
+import com.stayfit.userservice.GetAllUserDietRequestNotCompletedResponse;
 import com.stayfit.userservice.Lunch;
 import com.stayfit.userservice.Other;
 import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
+import com.stayfit.userservice.GetUserDietRequestNotCompletedByUserIdRequest;
+import com.stayfit.userservice.GetUserDietRequestNotCompletedByUserIdResponse;
 import com.stayfit.userservice.GetUserHistoryByDateRequest;
 import com.stayfit.userservice.GetUserHistoryByDateResponse;
 import com.stayfit.userservice.RegistrationRequest;
 import com.stayfit.userservice.RegistrationResponse;
+import com.stayfit.userservice.SaveUserDietRequestRequest;
+import com.stayfit.userservice.SaveUserDietRequestResponse;
 import com.stayfit.userservice.SaveUserHistoryRequest;
 import com.stayfit.userservice.SaveUserHistoryResponse;
 import com.stayfit.userservice.UpdateUserRequest;
 import com.stayfit.userservice.UpdateUserResponse;
 import com.stayfit.userservice.User;
+import com.stayfit.userservice.UserDiet;
+import com.stayfit.userservice.UserDietRequest;
 import com.stayfit.userservice.UserHistory;
 
 import javax.xml.ws.soap.SOAPFaultException;
@@ -53,12 +61,12 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
+	
+	private com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
+	private UserServicePortType userPort = userService.getUserPort();
     
     public com.stayfit.userservice.User getUserById(Long id) throws ResourceNotFoundException {
-    	
-		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
-    	UserServicePortType userPort = userService.getUserPort();
-    	
+	
     	GetUserByIdRequest request = new GetUserByIdRequest();
     	request.setId(id);
     	
@@ -75,9 +83,6 @@ public class UserServiceImpl implements UserDetailsService {
 	
     public com.stayfit.userservice.User registerUser(Map<String, Object> payload) {
 
-		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
-    	UserServicePortType userPort = userService.getUserPort();
-    	
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     	GregorianCalendar gregDate = new GregorianCalendar();
     	
@@ -109,9 +114,6 @@ public class UserServiceImpl implements UserDetailsService {
 	
     public com.stayfit.userservice.User updateUser(Long id, Map<String, Object> payload) throws ResourceNotFoundException {
 
-		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
-    	UserServicePortType userPort = userService.getUserPort();
-    	
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     	GregorianCalendar gregDate = new GregorianCalendar();
     	
@@ -154,9 +156,6 @@ public class UserServiceImpl implements UserDetailsService {
 	
 	public com.stayfit.userservice.UserHistory getUserHistoryByDate(Long id, String date) throws ResourceNotFoundException {
 		
-		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
-    	UserServicePortType userPort = userService.getUserPort();
-    	
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     	GregorianCalendar gregDate = new GregorianCalendar();
     	
@@ -187,9 +186,6 @@ public class UserServiceImpl implements UserDetailsService {
 	
 	public UserHistory saveUserHistory(Long id, String date, Map<String, Object> payload) {
 		
-		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
-    	UserServicePortType userPort = userService.getUserPort();
-    	
     	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     	GregorianCalendar gregDate = new GregorianCalendar();
     	
@@ -260,6 +256,53 @@ public class UserServiceImpl implements UserDetailsService {
     	com.stayfit.userservice.UserHistory userHistoryResponse = response.getUserHistory();
     	return userHistoryResponse;
     	
+	}
+
+	public List<UserDietRequest> getAllUserDietRequestNotCompleted() {
+		
+		GetAllUserDietRequestNotCompletedRequest request = new GetAllUserDietRequestNotCompletedRequest();
+		GetAllUserDietRequestNotCompletedResponse response = userPort.getAllUserDietRequestNotCompleted(request);
+		
+		return response.getUserDietRequest();
+	}
+
+	public UserDietRequest getUserDietRequestNotCompletedByUserId(Long id) {
+		
+		GetUserDietRequestNotCompletedByUserIdRequest request = new GetUserDietRequestNotCompletedByUserIdRequest();
+		
+		request.setUserId(id);
+		
+		GetUserDietRequestNotCompletedByUserIdResponse response = userPort.getUserDietRequestNotCompletedByUserId(request);
+		
+		return response.getUserDietRequest();
+		
+	}
+
+	public UserDietRequest saveUserDietRequest(Long id, Map<String, Object> payload) {
+		
+		SaveUserDietRequestRequest request = new SaveUserDietRequestRequest();
+		
+		UserDietRequest userDietRequest = new UserDietRequest();
+		userDietRequest.setUserId(id);
+		userDietRequest.setBodyFatPerc(Float.parseFloat(payload.get("bodyFatPerc").toString()));
+		userDietRequest.setTargetWeight(Float.parseFloat(payload.get("targetWeight").toString()));
+		userDietRequest.setNumTrainingDays(Integer.parseInt(payload.get("numTrainingDays").toString()));
+		
+		request.setUserDietRequest(userDietRequest);
+		
+		SaveUserDietRequestResponse response = userPort.saveUserDietRequest(request);
+		
+		return response.getUserDietRequest();
+	}
+
+	public UserDiet getUserDiet(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public UserDiet saveUserDiet(Long nutritionistId, Long userId, Map<String, Object> payload) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
