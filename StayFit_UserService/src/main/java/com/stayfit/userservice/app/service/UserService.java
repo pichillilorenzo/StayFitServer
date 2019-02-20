@@ -6,7 +6,11 @@ package com.stayfit.userservice.app.service;
 import com.stayfit.userservice.app.exception.ResourceNotFoundException;
 import com.stayfit.userservice.app.model.Role;
 import com.stayfit.userservice.app.model.User;
+import com.stayfit.userservice.app.model.UserDiet;
 import com.stayfit.userservice.app.model.UserHistory;
+import com.stayfit.userservice.app.model.UserDietRequest;
+import com.stayfit.userservice.app.repository.UserDietRepository;
+import com.stayfit.userservice.app.repository.UserDietRequestRepository;
 import com.stayfit.userservice.app.repository.UserHistoryRepository;
 import com.stayfit.userservice.app.repository.UserRepository;
 import com.stayfit.userservice.app.util.DateUtil;
@@ -33,6 +37,12 @@ public class UserService {
     
     @Autowired
 	private UserHistoryRepository userHistoryRepository;
+    
+    @Autowired
+	private UserDietRepository userDietRepository;
+    
+    @Autowired
+	private UserDietRequestRepository userDietRequestRepository;
 
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) throws ResourceNotFoundException {
@@ -64,7 +74,29 @@ public class UserService {
     }
     
     @Transactional
-    public UserHistory saveHistory(UserHistory userHistory) {
+    public UserHistory saveUserHistory(UserHistory userHistory) {
         return userHistoryRepository.save(userHistory);
+    }
+    
+    @Transactional(readOnly = true)
+    public UserDiet getUserDietByUserId(Long userId) throws ResourceNotFoundException {
+        return userDietRepository.findByUserId(userId)
+        		.orElseThrow(() -> new ResourceNotFoundException("UserDiet", "userId", userId));
+    }
+    
+    @Transactional
+    public UserDiet saveUserDiet(UserDiet userDiet) {
+        return userDietRepository.save(userDiet);
+    }
+    
+    @Transactional(readOnly = true)
+    public UserDietRequest getUserDietRequestNotCompletedByUserId(Long userId) throws ResourceNotFoundException {
+        return userDietRequestRepository.findNotCompletedByUserId(userId)
+        		.orElseThrow(() -> new ResourceNotFoundException("UserDietRequest", "userId", userId));
+    }
+    
+    @Transactional
+    public UserDietRequest saveUserDietRequest(UserDietRequest userDietRequest) {
+        return userDietRequestRepository.save(userDietRequest);
     }
 }

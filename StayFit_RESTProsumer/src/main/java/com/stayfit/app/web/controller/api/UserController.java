@@ -32,39 +32,40 @@ import com.stayfit.userservice.UserHistory;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-	
+
 	@Autowired
-    private UserServiceImpl userService;
-	
+	private UserServiceImpl userService;
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    User getUserById(@PathVariable("id") Long id) {
-        return userService.getUserById(id);
-    }
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody User getUserById(@PathVariable("id") Long id) {
+		return userService.getUserById(id);
+	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody User registerUser(@RequestBody Map<String, Object> payload) {
-        return userService.registerUser(payload);
-    }
-	
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody User registerUser(@RequestBody Map<String, Object> payload) {
+		return userService.registerUser(payload);
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody User updateUser(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
-        return userService.updateUser(id, payload);
-    }
-	
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody User updateUser(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
+		return userService.updateUser(id, payload);
+	}
+
 	@RequestMapping(value = "/{id}/history/{date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody UserHistory getUserHistoryByDate(@PathVariable("id") Long id, @PathVariable("date") String date) {
-        return userService.getUserHistoryByDate(id, date);
-    }
-	
-	@RequestMapping(value = "/{id}/history", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody UserHistory saveUserHistory(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
-        return userService.saveUserHistory(id, payload);
-    }
-	
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody UserHistory getUserHistoryByDate(@PathVariable("id") Long id,
+			@PathVariable("date") String date) {
+		return userService.getUserHistoryByDate(id, date);
+	}
+
+	@RequestMapping(value = "/{id}/history/{date}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody UserHistory saveUserHistory(@PathVariable("id") Long id, @PathVariable("date") String date,
+			@RequestBody Map<String, Object> payload) {
+		return userService.saveUserHistory(id, date, payload);
+	}
+
 }

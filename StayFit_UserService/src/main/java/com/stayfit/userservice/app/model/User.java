@@ -4,6 +4,7 @@
 package com.stayfit.userservice.app.model;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,10 +43,12 @@ public class User {
 	private String password;
 	@Email
 	private String email;
-	private boolean enabled;
-	private boolean gender;
-	private int height;
-	private float weight;
+	private Boolean enabled;
+	private Boolean gender;
+	private Integer height;
+	private Float weight;
+	@Field("birth_date")
+	private Date birthDate;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( 

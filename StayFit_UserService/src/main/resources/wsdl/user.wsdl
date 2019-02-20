@@ -14,7 +14,15 @@
 	<wsdl:types>
 		<xsd:schema
 			targetNamespace="http://stayfit.com/userservice" version="1.0">
-
+			
+			<xsd:simpleType name="JobKind">
+			    <xsd:restriction base="xsd:string">
+			      <xsd:enumeration value="SEDENTARY"/>
+			      <xsd:enumeration value="NORMAL"/>
+			      <xsd:enumeration value="HARD"/>
+			    </xsd:restriction>
+			  </xsd:simpleType>
+			  
 			<xsd:complexType name="GetUserByIdRequest">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:long" nillable="false" />
@@ -37,6 +45,7 @@
 					<xsd:element name="height" type="xsd:int" nillable="false" />
 					<xsd:element name="weight" type="xsd:float" nillable="false" />
 					<xsd:element name="nutritionist" type="xsd:boolean" nillable="false" />
+					<xsd:element name="birthDate" type="xsd:date" nillable="false" />
 				</xsd:sequence>
 			</xsd:complexType>
 
@@ -56,6 +65,7 @@
 					<xsd:element name="gender" type="xsd:boolean" nillable="false" />
 					<xsd:element name="height" type="xsd:int" nillable="false" />
 					<xsd:element name="weight" type="xsd:float" nillable="false" />
+					<xsd:element name="birthDate" type="xsd:date" nillable="false" />
 				</xsd:sequence>
 			</xsd:complexType>
 
@@ -105,6 +115,57 @@
 						nillable="false" />
 				</xsd:sequence>
 			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserDietByUserIdRequest">
+				<xsd:sequence>
+					<xsd:element name="userId" type="xsd:long" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetUserDietByUserIdResponse">
+				<xsd:sequence>
+					<xsd:element name="userDiet" type="tns:UserDiet" minOccurs="0"
+						nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="SaveUserDietRequest">
+				<xsd:sequence>
+					<xsd:element name="userDiet" type="tns:UserDiet" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="SaveUserDietResponse">
+				<xsd:sequence>
+					<xsd:element name="userDiet" type="tns:UserDiet" minOccurs="0"
+						nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserDietRequestNotCompletedByUserIdRequest">
+				<xsd:sequence>
+					<xsd:element name="userId" type="xsd:long" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetUserDietRequestNotCompletedByUserIdResponse">
+				<xsd:sequence>
+					<xsd:element name="userDietRequest" type="tns:UserDietRequest" minOccurs="0" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="SaveUserDietRequestRequest">
+				<xsd:sequence>
+					<xsd:element name="userDietRequest" type="tns:UserDietRequest" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="SaveUserDietRequestResponse">
+				<xsd:sequence>
+					<xsd:element name="userDietRequest" type="tns:UserDietRequest" minOccurs="0"
+						nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
 			<xsd:complexType name="User">
 				<xsd:sequence>
@@ -122,6 +183,8 @@
 						nillable="false" />
 					<xsd:element name="weight" type="xsd:float"
 						minOccurs="0" nillable="false" />
+					<xsd:element name="birthDate" type="xsd:date"
+						minOccurs="0" nillable="false" />
 				</xsd:sequence>
 			</xsd:complexType>
 			
@@ -131,6 +194,49 @@
 						minOccurs="0" nillable="false" />
 					<xsd:element name="date" type="xsd:date"
 						minOccurs="0" nillable="false" />
+					<xsd:element name="breakfast" type="tns:Breakfast"
+						minOccurs="0" maxOccurs="unbounded" nillable="false" />
+					<xsd:element name="lunch" type="tns:Lunch"
+						minOccurs="0" maxOccurs="unbounded" nillable="false" />
+					<xsd:element name="dinner" type="tns:Dinner" minOccurs="0"
+						maxOccurs="unbounded" nillable="false" />
+					<xsd:element name="other" type="tns:Other"
+						minOccurs="0" maxOccurs="unbounded" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="UserDiet">
+				<xsd:sequence>
+					<xsd:element name="userId" type="xsd:long"
+						nillable="false" />
+					<xsd:element name="nutritionistId" type="xsd:long"
+						nillable="false" />
+					<xsd:element name="week" type="tns:DietDay"
+						minOccurs="0" maxOccurs="7" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="UserDietRequest">
+				<xsd:sequence>
+					<xsd:element name="bodyFatPerc" type="xsd:float"
+						nillable="false" />
+					<xsd:element name="targetWeight" type="xsd:float"
+						nillable="false" />
+					<xsd:element name="numTrainingDays" type="xsd:int"
+						nillable="false" />
+					<xsd:element name="jobKind" type="tns:JobKind"
+						nillable="false" />
+					<xsd:element name="note" type="xsd:string" minOccurs="0" />
+					<xsd:element name="completed" type="xsd:boolean"
+						nillable="false" />
+					<xsd:element name="userId" type="xsd:long"
+						nillable="false" />
+					<xsd:element name="nutritionistId" type="xsd:long" minOccurs="0" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="DietDay">
+				<xsd:sequence>
 					<xsd:element name="breakfast" type="tns:Breakfast"
 						minOccurs="0" maxOccurs="unbounded" nillable="false" />
 					<xsd:element name="lunch" type="tns:Lunch"
@@ -218,6 +324,26 @@
 				type="tns:UpdateUserRequest" />
 			<xsd:element name="UpdateUserResponse"
 				type="tns:UpdateUserResponse" />
+				
+			<xsd:element name="GetUserDietByUserIdRequest"
+				type="tns:GetUserDietByUserIdRequest" />
+			<xsd:element name="GetUserDietByUserIdResponse"
+				type="tns:GetUserDietByUserIdResponse" />
+			
+			<xsd:element name="SaveUserDietRequest"
+				type="tns:SaveUserDietRequest" />
+			<xsd:element name="SaveUserDietResponse"
+				type="tns:SaveUserDietResponse" />
+			
+			<xsd:element name="GetUserDietRequestNotCompletedByUserIdRequest"
+				type="tns:GetUserDietRequestNotCompletedByUserIdRequest" />
+			<xsd:element name="GetUserDietRequestNotCompletedByUserIdResponse"
+				type="tns:GetUserDietRequestNotCompletedByUserIdResponse" />
+			
+			<xsd:element name="SaveUserDietRequestRequest"
+				type="tns:SaveUserDietRequestRequest" />
+			<xsd:element name="SaveUserDietRequestResponse"
+				type="tns:SaveUserDietRequestResponse" />
 			
 		</xsd:schema>
 	</wsdl:types>
@@ -282,6 +408,46 @@
 			element="tns:UpdateUserResponse" />
 	</wsdl:message>
 	
+	<wsdl:message name="GetUserDietByUserIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetUserDietByUserIdRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetUserDietByUserIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetUserDietByUserIdResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="SaveUserDietRequest">
+		<wsdl:part name="parameters"
+			element="tns:SaveUserDietRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="SaveUserDietResponse">
+		<wsdl:part name="parameters"
+			element="tns:SaveUserDietResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="GetUserDietRequestNotCompletedByUserIdRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetUserDietRequestNotCompletedByUserIdRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetUserDietRequestNotCompletedByUserIdResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetUserDietRequestNotCompletedByUserIdResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="SaveUserDietRequestRequest">
+		<wsdl:part name="parameters"
+			element="tns:SaveUserDietRequestRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="SaveUserDietRequestResponse">
+		<wsdl:part name="parameters"
+			element="tns:SaveUserDietRequestResponse" />
+	</wsdl:message>
+	
 	<wsdl:portType name="UserServicePortType">
 		<wsdl:operation name="getUserById">
 			<wsdl:input message="tns:GetUserByIdRequest"
@@ -323,6 +489,34 @@
 				wsam:Action="http://stayfit.com/userservice/UpdateUserRequest" />
 			<wsdl:output message="tns:UpdateUserResponse"
 				wsam:Action="http://stayfit.com/userservice/UpdateUserResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserDietByUserId">
+			<wsdl:input message="tns:GetUserDietByUserIdRequest"
+				wsam:Action="http://stayfit.com/userservice/GetUserDietByUserIdRequest" />
+			<wsdl:output message="tns:GetUserDietByUserIdResponse"
+				wsam:Action="http://stayfit.com/userservice/GetUserDietByUserIdResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="saveUserDiet">
+			<wsdl:input message="tns:SaveUserDietRequest"
+				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequest" />
+			<wsdl:output message="tns:SaveUserDietResponse"
+				wsam:Action="http://stayfit.com/userservice/SaveUserDietResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserDietRequestNotCompletedByUserId">
+			<wsdl:input message="tns:GetUserDietRequestNotCompletedByUserIdRequest"
+				wsam:Action="http://stayfit.com/userservice/GetUserDietRequestNotCompletedByUserIdRequest" />
+			<wsdl:output message="tns:GetUserDietRequestNotCompletedByUserIdResponse"
+				wsam:Action="http://stayfit.com/userservice/GetUserDietRequestNotCompletedByUserIdResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="saveUserDietRequest">
+			<wsdl:input message="tns:SaveUserDietRequestRequest"
+				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequestRequest" />
+			<wsdl:output message="tns:SaveUserDietRequestResponse"
+				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequestResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -381,6 +575,46 @@
 		</wsdl:operation>
 		
 		<wsdl:operation name="updateUser">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserDietByUserId">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="saveUserDiet">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserDietRequestNotCompletedByUserId">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="saveUserDietRequest">
 			<soap:operation soapAction="" />
 			<wsdl:input>
 				<soap:body use="literal" />
