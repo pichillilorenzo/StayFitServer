@@ -9,7 +9,7 @@ import com.stayfit.oauth2service.app.model.User;
 
 /**
  * @author lorenzo
- *
+ * 
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 	User findByUsername(String username);

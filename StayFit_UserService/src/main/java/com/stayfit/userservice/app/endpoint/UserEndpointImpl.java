@@ -84,11 +84,18 @@ public class UserEndpointImpl implements UserEndpoint {
 
 	@Autowired
 	private UserDietRequestTransformer userDietRequestTransformer;
-
+	
+	/**
+	 * This method maps the WSDL operation "getUserById" with a GetUserByIdRequest input message
+	 * and a GetUserByIdResponse output message.
+	 * 
+	 * It returns the user by his id.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserByIdRequest")
 	@ResponsePayload
 	public JAXBElement<GetUserByIdResponse> getUserById(@RequestPayload JAXBElement<GetUserByIdRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		GetUserByIdResponse response = factory.createGetUserByIdResponse();
 
@@ -97,11 +104,18 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		return factory.createGetUserByIdResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "register" with a RegistrationRequest input message
+	 * and a RegistrationResponse output message.
+	 * 
+	 * It is used to register the user into the system.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "RegistrationRequest")
 	@ResponsePayload
 	public JAXBElement<RegistrationResponse> register(@RequestPayload JAXBElement<RegistrationRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		RegistrationResponse response = factory.createRegistrationResponse();
 		RegistrationRequest registrationRequest = request.getValue();
@@ -125,11 +139,18 @@ public class UserEndpointImpl implements UserEndpoint {
 		response.setUser(userWsdl);
 		return factory.createRegistrationResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "updateUser" with a UpdateUserRequest input message
+	 * and a UpdateUserResponse output message.
+	 * 
+	 * It updates the user with his new fields.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "UpdateUserRequest")
 	@ResponsePayload
 	public JAXBElement<UpdateUserResponse> updateUser(@RequestPayload JAXBElement<UpdateUserRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		UpdateUserResponse response = factory.createUpdateUserResponse();
 		UpdateUserRequest updateUserRequest = request.getValue();
@@ -137,6 +158,7 @@ public class UserEndpointImpl implements UserEndpoint {
 		com.stayfit.userservice.app.model.User userModel = userService.getUserById(updateUserRequest.getId());
 
 		userModel.setUsername(updateUserRequest.getUsername().trim());
+		// if the password is empty, do not update it
 		if (updateUserRequest.getPassword() != null && !updateUserRequest.getPassword().trim().isEmpty())
 			userModel.setPassword(userPasswordEncoder.encode(updateUserRequest.getPassword().trim()));
 		userModel.setEmail(updateUserRequest.getEmail().trim());
@@ -150,12 +172,19 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		return factory.createUpdateUserResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "getUserHistoryByUserId" with a GetUserHistoryByUserIdRequest input message
+	 * and a GetUserHistoryByUserIdResponse output message.
+	 * 
+	 * It returns all the user's histories by his user id.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserHistoryByUserIdRequest")
 	@ResponsePayload
 	public JAXBElement<GetUserHistoryByUserIdResponse> getUserHistoryByUserId(
 			@RequestPayload JAXBElement<GetUserHistoryByUserIdRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		GetUserHistoryByUserIdResponse response = factory.createGetUserHistoryByUserIdResponse();
 
@@ -168,12 +197,19 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		return factory.createGetUserHistoryByUserIdResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "getUserHistoryByDate" with a GetUserHistoryByDateRequest input message
+	 * and a GetUserHistoryByDateResponse output message.
+	 * 
+	 * It returns the user's history by history date.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserHistoryByDateRequest")
 	@ResponsePayload
 	public JAXBElement<GetUserHistoryByDateResponse> getUserHistoryByDate(
 			@RequestPayload JAXBElement<GetUserHistoryByDateRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		GetUserHistoryByDateResponse response = factory.createGetUserHistoryByDateResponse();
 
@@ -183,12 +219,19 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		return factory.createGetUserHistoryByDateResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "saveUserHistory" with a SaveUserHistoryRequest input message
+	 * and a SaveUserHistoryResponse output message.
+	 * 
+	 * It saves/updates the user's history into the system.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "SaveUserHistoryRequest")
 	@ResponsePayload
 	public JAXBElement<SaveUserHistoryResponse> saveUserHistory(
 			@RequestPayload JAXBElement<SaveUserHistoryRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		SaveUserHistoryResponse response = factory.createSaveUserHistoryResponse();
 
@@ -197,14 +240,17 @@ public class UserEndpointImpl implements UserEndpoint {
 		UserHistory userHistoryWsdl = request.getValue().getUserHistory();
 
 		try {
+			// get the user's history of today if it is already present into the system
 			userHistory = userService.getUserHistoryByDate(userHistoryWsdl.getUserId(),
 					userHistoryWsdl.getDate().toGregorianCalendar().getTime());
 			userHistoryTransformer.convertWsdl(userHistory, userHistoryWsdl);
 		} catch (ResourceNotFoundException ex) {
+			// otherwise create a new user's history of today
 			userHistory = new com.stayfit.userservice.app.model.UserHistory();
 			userHistoryTransformer.convertWsdl(userHistory, userHistoryWsdl);
 		}
-
+		
+		// update/save it into the system
 		userService.saveUserHistory(userHistory);
 
 		response.setUserHistory(userHistoryWsdl);
@@ -212,11 +258,19 @@ public class UserEndpointImpl implements UserEndpoint {
 		return factory.createSaveUserHistoryResponse(response);
 	}
 	
+	/**
+	 * This method maps the WSDL operation "getAllUserDietRequestNotCompleted" 
+	 * with a GetAllUserDietRequestNotCompletedRequest input message
+	 * and a GetAllUserDietRequestNotCompletedResponse output message.
+	 * 
+	 * It returns all of the user's diet requests that are not completed yet.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetAllUserDietRequestNotCompletedRequest")
 	@ResponsePayload
 	public JAXBElement<GetAllUserDietRequestNotCompletedResponse> getAllUserDietRequestNotCompleted(
 			@RequestPayload JAXBElement<GetAllUserDietRequestNotCompletedRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		GetAllUserDietRequestNotCompletedResponse response = factory
 				.createGetAllUserDietRequestNotCompletedResponse();
@@ -231,11 +285,19 @@ public class UserEndpointImpl implements UserEndpoint {
 		return factory.createGetAllUserDietRequestNotCompletedResponse(response);
 	}
 	
+	/**
+	 * This method maps the WSDL operation "getUserDietRequestNotCompletedByUserId" 
+	 * with a GetUserDietRequestNotCompletedByUserIdRequest input message
+	 * and a GetUserDietRequestNotCompletedByUserIdResponse output message.
+	 * 
+	 * It returns the user's diet request that is not completed yet.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserDietRequestNotCompletedByUserIdRequest")
 	@ResponsePayload
 	public JAXBElement<GetUserDietRequestNotCompletedByUserIdResponse> getUserDietRequestNotCompletedByUserId(
 			@RequestPayload JAXBElement<GetUserDietRequestNotCompletedByUserIdRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		GetUserDietRequestNotCompletedByUserIdResponse response = factory
 				.createGetUserDietRequestNotCompletedByUserIdResponse();
@@ -247,12 +309,19 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		return factory.createGetUserDietRequestNotCompletedByUserIdResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "saveUserDietRequest" with a SaveUserDietRequestRequest input message
+	 * and a SaveUserDietRequestResponse output message.
+	 * 
+	 * It saves/updates the user's diet request into the system.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "SaveUserDietRequestRequest")
 	@ResponsePayload
 	public JAXBElement<SaveUserDietRequestResponse> saveUserDietRequest(
 			@RequestPayload JAXBElement<SaveUserDietRequestRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		SaveUserDietRequestResponse response = factory.createSaveUserDietRequestResponse();
 
@@ -261,25 +330,36 @@ public class UserEndpointImpl implements UserEndpoint {
 		UserDietRequest userDietRequestWsdl = request.getValue().getUserDietRequest();
 
 		try {
+			// get the user's diet request if it is already present into the system
 			userDietRequest = userService.getUserDietRequestNotCompletedByUserId(userDietRequestWsdl.getUserId());
 			userDietRequestTransformer.convertWsdl(userDietRequest, userDietRequestWsdl);
 		} catch (ResourceNotFoundException ex) {
+			// otherwise create a new user's diet request
 			userDietRequest = new com.stayfit.userservice.app.model.UserDietRequest();
 			userDietRequestTransformer.convertWsdl(userDietRequest, userDietRequestWsdl);
 		}
-
+		
+		// update/save it into the system
 		userService.saveUserDietRequest(userDietRequest);
 
 		response.setUserDietRequest(userDietRequestWsdl);
 
 		return factory.createSaveUserDietRequestResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "getUserDietByUserId" 
+	 * with a GetUserDietByUserIdRequest input message
+	 * and a GetUserDietByUserIdResponse output message.
+	 * 
+	 * It returns the user's diet by his user id.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserDietByUserIdRequest")
 	@ResponsePayload
 	public JAXBElement<GetUserDietByUserIdResponse> getUserDietByUserId(
 			@RequestPayload JAXBElement<GetUserDietByUserIdRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		GetUserDietByUserIdResponse response = factory.createGetUserDietByUserIdResponse();
 
@@ -289,11 +369,18 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		return factory.createGetUserDietByUserIdResponse(response);
 	}
-
+	
+	/**
+	 * This method maps the WSDL operation "saveUserDiet" with a SaveUserDietRequest input message
+	 * and a SaveUserDietResponse output message.
+	 * 
+	 * It saves/updates the user's diet into the system.
+	 */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "SaveUserDietRequest")
 	@ResponsePayload
 	public JAXBElement<SaveUserDietResponse> saveUserDiet(@RequestPayload JAXBElement<SaveUserDietRequest> request) {
+		
 		ObjectFactory factory = new ObjectFactory();
 		SaveUserDietResponse response = factory.createSaveUserDietResponse();
 
@@ -303,21 +390,25 @@ public class UserEndpointImpl implements UserEndpoint {
 		UserDiet userDietWsdl = request.getValue().getUserDiet();
 		
 		try {
-			// check if a user's diet request exists
+			// check if a user's diet request already exists
 			userDietRequest = userService.getUserDietRequestNotCompletedByUserId(userDietWsdl.getUserId());
 		} catch (ResourceNotFoundException ex) {}
 		
 		try {
+			// get the user's diet if it is already present into the system
 			userDiet = userService.getUserDietByUserId(userDietWsdl.getUserId());
 			userDietTransformer.convertWsdl(userDiet, userDietWsdl);
 		} catch (ResourceNotFoundException ex) {
+			// otherwise create a new user's diet
 			userDiet = new com.stayfit.userservice.app.model.UserDiet();
 			userDietTransformer.convertWsdl(userDiet, userDietWsdl);
 		}
-
+		
+		// update/save it into the system
 		userService.saveUserDiet(userDiet);
 		
 		if (userDietRequest != null) {
+			// if a user's diet request exists
 			// set the user's diet request completed to true and 
 			// set the nutritionist id that made his diet
 			userDietRequest.setCompleted(true);

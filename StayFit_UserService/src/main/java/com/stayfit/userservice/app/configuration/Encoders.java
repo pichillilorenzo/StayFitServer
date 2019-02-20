@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author lorenzo
- *
+ * Encoders used to encode user's password and OAuth2 client's password
  */
 @Configuration
 public class Encoders {

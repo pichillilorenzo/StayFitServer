@@ -20,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author lorenzo
- *
+ * 
+ * This @Service is used by the OAuth2Config to get the user's information.
  */
 
 @Service
@@ -28,7 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
     @Autowired
     private UserRepository userRepository;
-
+    
+    /**
+     * Find the user by username.
+     */
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, ResourceNotFoundException {

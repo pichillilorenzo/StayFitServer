@@ -29,7 +29,8 @@ import lombok.*;
 
 /**
  * @author lorenzo
- *
+ * User model used by the OAuth2 server to get client's username and password.
+ * UserDetails Spring Security interface provides core user information.
  */
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -44,29 +45,29 @@ public class User implements UserDetails {
 	@JsonIgnore
 	private String password;
 	private boolean enabled;
-
+	
+	/**
+	 * We create here an empty Collection<GrantedAuthority>
+	 * because user's authorities will be set in the Resource server (the REST API server).
+	 */
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		return grantedAuthorities;
-		//return roles;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return enabled;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return enabled;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return enabled;
 	}
 }

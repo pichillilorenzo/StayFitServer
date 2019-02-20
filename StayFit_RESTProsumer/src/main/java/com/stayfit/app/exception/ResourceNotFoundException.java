@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author lorenzo
- *
+ * Exception used when a resource is not found.
  */
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
