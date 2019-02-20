@@ -11,6 +11,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +27,8 @@ import com.stayfit.userservice.app.util.UserTransformer;
 import com.stayfit.userservice.app.model.Role;
 import com.stayfit.userservice.app.configuration.Encoders;
 import com.stayfit.userservice.app.exception.ResourceNotFoundException;
+import com.stayfit.userservice.GetAllUserDietRequestNotCompletedRequest;
+import com.stayfit.userservice.GetAllUserDietRequestNotCompletedResponse;
 import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
 import com.stayfit.userservice.GetUserDietByUserIdRequest;
@@ -202,7 +205,25 @@ public class UserEndpoint {
 
 		return factory.createSaveUserHistoryResponse(response);
 	}
+	
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetAllUserDietRequestNotCompletedRequest")
+	@ResponsePayload
+	public JAXBElement<GetAllUserDietRequestNotCompletedResponse> getAllUserDietRequestNotCompleted(
+			@RequestPayload JAXBElement<GetAllUserDietRequestNotCompletedRequest> request) {
+		ObjectFactory factory = new ObjectFactory();
+		GetAllUserDietRequestNotCompletedResponse response = factory
+				.createGetAllUserDietRequestNotCompletedResponse();
+		
+		List<UserDietRequest> userDietRequestListWsdl = new ArrayList<UserDietRequest>();
+		userService.getAllUserDietRequestNotCompleted().forEach(userDietRequest -> {
+			userDietRequestListWsdl.add(userDietRequestTransformer.convert(userDietRequest));
+		});
+		
+		response.getUserDietRequest().addAll(userDietRequestListWsdl);
 
+		return factory.createGetAllUserDietRequestNotCompletedResponse(response);
+	}
+	
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserDietRequestNotCompletedByUserIdRequest")
 	@ResponsePayload
 	public JAXBElement<GetUserDietRequestNotCompletedByUserIdResponse> getUserDietRequestNotCompletedByUserId(

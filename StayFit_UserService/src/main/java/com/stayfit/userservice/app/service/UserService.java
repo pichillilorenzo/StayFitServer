@@ -90,6 +90,12 @@ public class UserService {
     }
     
     @Transactional(readOnly = true)
+    public List<UserDietRequest> getAllUserDietRequestNotCompleted() throws ResourceNotFoundException {
+        return userDietRequestRepository.findAllNotCompleted()
+        		.orElseThrow(() -> new ResourceNotFoundException("List<UserDietRequest>", "", null));
+    }
+    
+    @Transactional(readOnly = true)
     public UserDietRequest getUserDietRequestNotCompletedByUserId(Long userId) throws ResourceNotFoundException {
         return userDietRequestRepository.findNotCompletedByUserId(userId)
         		.orElseThrow(() -> new ResourceNotFoundException("UserDietRequest", "userId", userId));

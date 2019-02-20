@@ -142,6 +142,17 @@
 				</xsd:sequence>
 			</xsd:complexType>
 			
+			<xsd:complexType name="GetAllUserDietRequestNotCompletedRequest">
+				<xsd:sequence>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetAllUserDietRequestNotCompletedResponse">
+				<xsd:sequence>
+					<xsd:element name="userDietRequest" type="tns:UserDietRequest" minOccurs="0" maxOccurs="unbounded" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+			
 			<xsd:complexType name="GetUserDietRequestNotCompletedByUserIdRequest">
 				<xsd:sequence>
 					<xsd:element name="userId" type="xsd:long" nillable="false" />
@@ -335,6 +346,11 @@
 			<xsd:element name="SaveUserDietResponse"
 				type="tns:SaveUserDietResponse" />
 			
+			<xsd:element name="GetAllUserDietRequestNotCompletedRequest"
+				type="tns:GetAllUserDietRequestNotCompletedRequest" />
+			<xsd:element name="GetAllUserDietRequestNotCompletedResponse"
+				type="tns:GetAllUserDietRequestNotCompletedResponse" />
+				
 			<xsd:element name="GetUserDietRequestNotCompletedByUserIdRequest"
 				type="tns:GetUserDietRequestNotCompletedByUserIdRequest" />
 			<xsd:element name="GetUserDietRequestNotCompletedByUserIdResponse"
@@ -428,6 +444,16 @@
 			element="tns:SaveUserDietResponse" />
 	</wsdl:message>
 	
+	<wsdl:message name="GetAllUserDietRequestNotCompletedRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetAllUserDietRequestNotCompletedRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetAllUserDietRequestNotCompletedResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetAllUserDietRequestNotCompletedResponse" />
+	</wsdl:message>
+	
 	<wsdl:message name="GetUserDietRequestNotCompletedByUserIdRequest">
 		<wsdl:part name="parameters"
 			element="tns:GetUserDietRequestNotCompletedByUserIdRequest" />
@@ -503,6 +529,13 @@
 				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequest" />
 			<wsdl:output message="tns:SaveUserDietResponse"
 				wsam:Action="http://stayfit.com/userservice/SaveUserDietResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="getAllUserDietRequestNotCompleted">
+			<wsdl:input message="tns:GetAllUserDietRequestNotCompletedRequest"
+				wsam:Action="http://stayfit.com/userservice/GetAllUserDietRequestNotCompletedRequest" />
+			<wsdl:output message="tns:GetAllUserDietRequestNotCompletedResponse"
+				wsam:Action="http://stayfit.com/userservice/GetAllUserDietRequestNotCompletedResponse" />
 		</wsdl:operation>
 		
 		<wsdl:operation name="getUserDietRequestNotCompletedByUserId">
@@ -595,6 +628,16 @@
 		</wsdl:operation>
 		
 		<wsdl:operation name="saveUserDiet">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getAllUserDietRequestNotCompleted">
 			<soap:operation soapAction="" />
 			<wsdl:input>
 				<soap:body use="literal" />
