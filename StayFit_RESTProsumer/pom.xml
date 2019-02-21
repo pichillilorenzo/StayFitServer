@@ -126,12 +126,18 @@
 									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user.wsdl</wsdl>
 									<wsdlLocation>classpath:wsdl/clients/user.wsdl</wsdlLocation>
 								</wsdlOption>
-			
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user_history.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/user_history.wsdl</wsdlLocation>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user_diet.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/user_diet.wsdl</wsdlLocation>
+								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/amazon.wsdl</wsdl>
 									<wsdlLocation>classpath:wsdl/clients/amazon.wsdl</wsdlLocation>
 								</wsdlOption>
-								
 							</wsdlOptions>
 						</configuration>
 						<goals>

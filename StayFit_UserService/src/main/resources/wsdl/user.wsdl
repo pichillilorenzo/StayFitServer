@@ -14,14 +14,6 @@
 	<wsdl:types>
 		<xsd:schema
 			targetNamespace="http://stayfit.com/userservice" version="1.0">
-			
-			<xsd:simpleType name="JobKind">
-			    <xsd:restriction base="xsd:string">
-			      <xsd:enumeration value="SEDENTARY"/>
-			      <xsd:enumeration value="NORMAL"/>
-			      <xsd:enumeration value="HARD"/>
-			    </xsd:restriction>
-			  </xsd:simpleType>
 			  
 			<xsd:complexType name="GetUserByIdRequest">
 				<xsd:sequence>
@@ -76,108 +68,6 @@
 				</xsd:sequence>
 			</xsd:complexType>
 			
-			<xsd:complexType name="GetUserHistoryByUserIdRequest">
-				<xsd:sequence>
-					<xsd:element name="userId" type="xsd:long" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="GetUserHistoryByUserIdResponse">
-				<xsd:sequence>
-					<xsd:element name="userHistories" type="tns:UserHistory" minOccurs="0"
-						maxOccurs="unbounded" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="GetUserHistoryByDateRequest">
-				<xsd:sequence>
-					<xsd:element name="userId" type="xsd:long" nillable="false" />
-					<xsd:element name="date" type="xsd:date" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="GetUserHistoryByDateResponse">
-				<xsd:sequence>
-					<xsd:element name="userHistory" type="tns:UserHistory" minOccurs="0"
-						nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="SaveUserHistoryRequest">
-				<xsd:sequence>
-					<xsd:element name="userHistory" type="tns:UserHistory" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SaveUserHistoryResponse">
-				<xsd:sequence>
-					<xsd:element name="userHistory" type="tns:UserHistory" minOccurs="0"
-						nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="GetUserDietByUserIdRequest">
-				<xsd:sequence>
-					<xsd:element name="userId" type="xsd:long" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="GetUserDietByUserIdResponse">
-				<xsd:sequence>
-					<xsd:element name="userDiet" type="tns:UserDiet" minOccurs="0"
-						nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="SaveUserDietRequest">
-				<xsd:sequence>
-					<xsd:element name="userDiet" type="tns:UserDiet" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SaveUserDietResponse">
-				<xsd:sequence>
-					<xsd:element name="userDiet" type="tns:UserDiet" minOccurs="0"
-						nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="GetAllUserDietRequestNotCompletedRequest">
-				<xsd:sequence>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="GetAllUserDietRequestNotCompletedResponse">
-				<xsd:sequence>
-					<xsd:element name="userDietRequest" type="tns:UserDietRequest" minOccurs="0" maxOccurs="unbounded" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="GetUserDietRequestNotCompletedByUserIdRequest">
-				<xsd:sequence>
-					<xsd:element name="userId" type="xsd:long" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="GetUserDietRequestNotCompletedByUserIdResponse">
-				<xsd:sequence>
-					<xsd:element name="userDietRequest" type="tns:UserDietRequest" minOccurs="0" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="SaveUserDietRequestRequest">
-				<xsd:sequence>
-					<xsd:element name="userDietRequest" type="tns:UserDietRequest" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SaveUserDietRequestResponse">
-				<xsd:sequence>
-					<xsd:element name="userDietRequest" type="tns:UserDietRequest" minOccurs="0"
-						nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-
 			<xsd:complexType name="User">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:long" minOccurs="0"
@@ -199,113 +89,6 @@
 				</xsd:sequence>
 			</xsd:complexType>
 			
-			<xsd:complexType name="UserHistory">
-				<xsd:sequence>
-					<xsd:element name="userId" type="xsd:long"
-						minOccurs="0" nillable="false" />
-					<xsd:element name="date" type="xsd:date"
-						minOccurs="0" nillable="false" />
-					<xsd:element name="breakfast" type="tns:Breakfast"
-						minOccurs="0" maxOccurs="unbounded" nillable="false" />
-					<xsd:element name="lunch" type="tns:Lunch"
-						minOccurs="0" maxOccurs="unbounded" nillable="false" />
-					<xsd:element name="dinner" type="tns:Dinner" minOccurs="0"
-						maxOccurs="unbounded" nillable="false" />
-					<xsd:element name="other" type="tns:Other"
-						minOccurs="0" maxOccurs="unbounded" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="UserDiet">
-				<xsd:sequence>
-					<xsd:element name="userId" type="xsd:long"
-						nillable="false" />
-					<xsd:element name="nutritionistId" type="xsd:long"
-						nillable="false" />
-					<xsd:element name="week" type="tns:DietDay"
-						minOccurs="0" maxOccurs="7" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="UserDietRequest">
-				<xsd:sequence>
-					<xsd:element name="bodyFatPerc" type="xsd:float"
-						nillable="false" />
-					<xsd:element name="targetWeight" type="xsd:float"
-						nillable="false" />
-					<xsd:element name="numTrainingDays" type="xsd:int"
-						nillable="false" />
-					<xsd:element name="jobKind" type="tns:JobKind"
-						nillable="false" />
-					<xsd:element name="note" type="xsd:string" minOccurs="0" />
-					<xsd:element name="completed" type="xsd:boolean"
-						nillable="false" />
-					<xsd:element name="userId" type="xsd:long"
-						nillable="false" />
-					<xsd:element name="nutritionistId" type="xsd:long" minOccurs="0" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="DietDay">
-				<xsd:sequence>
-					<xsd:element name="breakfast" type="tns:Breakfast"
-						minOccurs="0" maxOccurs="unbounded" nillable="false" />
-					<xsd:element name="lunch" type="tns:Lunch"
-						minOccurs="0" maxOccurs="unbounded" nillable="false" />
-					<xsd:element name="dinner" type="tns:Dinner" minOccurs="0"
-						maxOccurs="unbounded" nillable="false" />
-					<xsd:element name="other" type="tns:Other"
-						minOccurs="0" maxOccurs="unbounded" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="Meal">
-				<xsd:sequence>
-					<xsd:element name="foodId" type="xsd:long" minOccurs="0"
-						nillable="false" />
-					<xsd:element name="amount" type="xsd:float"
-						minOccurs="0" nillable="false" />
-					<xsd:element name="unit" type="xsd:string"
-						minOccurs="0" nillable="false" />
-				</xsd:sequence>
-			</xsd:complexType>
-			
-			<xsd:complexType name="Breakfast">
-				<xsd:complexContent>
-					<xsd:extension base="tns:Meal">
-						<xsd:sequence>
-						</xsd:sequence>
-					</xsd:extension>
-				</xsd:complexContent>
-			</xsd:complexType>
-			
-			<xsd:complexType name="Lunch">
-				<xsd:complexContent>
-					<xsd:extension base="tns:Meal">
-						<xsd:sequence>
-						</xsd:sequence>
-					</xsd:extension>
-				</xsd:complexContent>
-			</xsd:complexType>
-			
-			<xsd:complexType name="Dinner">
-				<xsd:complexContent>
-					<xsd:extension base="tns:Meal">
-						<xsd:sequence>
-						</xsd:sequence>
-					</xsd:extension>
-				</xsd:complexContent>
-			</xsd:complexType>
-			
-			<xsd:complexType name="Other">
-				<xsd:complexContent>
-					<xsd:extension base="tns:Meal">
-						<xsd:sequence>
-						</xsd:sequence>
-					</xsd:extension>
-				</xsd:complexContent>
-			</xsd:complexType>
-
 			<xsd:element name="GetUserByIdRequest"
 				type="tns:GetUserByIdRequest" />
 			<xsd:element name="GetUserByIdResponse"
@@ -316,51 +99,11 @@
 			<xsd:element name="RegistrationResponse"
 				type="tns:RegistrationResponse" />
 				
-			<xsd:element name="GetUserHistoryByUserIdRequest"
-				type="tns:GetUserHistoryByUserIdRequest" />
-			<xsd:element name="GetUserHistoryByUserIdResponse"
-				type="tns:GetUserHistoryByUserIdResponse" />
-				
-			<xsd:element name="GetUserHistoryByDateRequest"
-				type="tns:GetUserHistoryByDateRequest" />
-			<xsd:element name="GetUserHistoryByDateResponse"
-				type="tns:GetUserHistoryByDateResponse" />
-			
-			<xsd:element name="SaveUserHistoryRequest"
-				type="tns:SaveUserHistoryRequest" />
-			<xsd:element name="SaveUserHistoryResponse"
-				type="tns:SaveUserHistoryResponse" />
-				
 			<xsd:element name="UpdateUserRequest"
 				type="tns:UpdateUserRequest" />
 			<xsd:element name="UpdateUserResponse"
 				type="tns:UpdateUserResponse" />
 				
-			<xsd:element name="GetUserDietByUserIdRequest"
-				type="tns:GetUserDietByUserIdRequest" />
-			<xsd:element name="GetUserDietByUserIdResponse"
-				type="tns:GetUserDietByUserIdResponse" />
-			
-			<xsd:element name="SaveUserDietRequest"
-				type="tns:SaveUserDietRequest" />
-			<xsd:element name="SaveUserDietResponse"
-				type="tns:SaveUserDietResponse" />
-			
-			<xsd:element name="GetAllUserDietRequestNotCompletedRequest"
-				type="tns:GetAllUserDietRequestNotCompletedRequest" />
-			<xsd:element name="GetAllUserDietRequestNotCompletedResponse"
-				type="tns:GetAllUserDietRequestNotCompletedResponse" />
-				
-			<xsd:element name="GetUserDietRequestNotCompletedByUserIdRequest"
-				type="tns:GetUserDietRequestNotCompletedByUserIdRequest" />
-			<xsd:element name="GetUserDietRequestNotCompletedByUserIdResponse"
-				type="tns:GetUserDietRequestNotCompletedByUserIdResponse" />
-			
-			<xsd:element name="SaveUserDietRequestRequest"
-				type="tns:SaveUserDietRequestRequest" />
-			<xsd:element name="SaveUserDietRequestResponse"
-				type="tns:SaveUserDietRequestResponse" />
-			
 		</xsd:schema>
 	</wsdl:types>
 
@@ -384,36 +127,6 @@
 			element="tns:RegistrationResponse" />
 	</wsdl:message>
 	
-	<wsdl:message name="GetUserHistoryByUserIdRequest">
-		<wsdl:part name="parameters"
-			element="tns:GetUserHistoryByUserIdRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="GetUserHistoryByUserIdResponse">
-		<wsdl:part name="parameters"
-			element="tns:GetUserHistoryByUserIdResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="GetUserHistoryByDateRequest">
-		<wsdl:part name="parameters"
-			element="tns:GetUserHistoryByDateRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="GetUserHistoryByDateResponse">
-		<wsdl:part name="parameters"
-			element="tns:GetUserHistoryByDateResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="SaveUserHistoryRequest">
-		<wsdl:part name="parameters"
-			element="tns:SaveUserHistoryRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="SaveUserHistoryResponse">
-		<wsdl:part name="parameters"
-			element="tns:SaveUserHistoryResponse" />
-	</wsdl:message>
-	
 	<wsdl:message name="UpdateUserRequest">
 		<wsdl:part name="parameters"
 			element="tns:UpdateUserRequest" />
@@ -422,56 +135,6 @@
 	<wsdl:message name="UpdateUserResponse">
 		<wsdl:part name="parameters"
 			element="tns:UpdateUserResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="GetUserDietByUserIdRequest">
-		<wsdl:part name="parameters"
-			element="tns:GetUserDietByUserIdRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="GetUserDietByUserIdResponse">
-		<wsdl:part name="parameters"
-			element="tns:GetUserDietByUserIdResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="SaveUserDietRequest">
-		<wsdl:part name="parameters"
-			element="tns:SaveUserDietRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="SaveUserDietResponse">
-		<wsdl:part name="parameters"
-			element="tns:SaveUserDietResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="GetAllUserDietRequestNotCompletedRequest">
-		<wsdl:part name="parameters"
-			element="tns:GetAllUserDietRequestNotCompletedRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="GetAllUserDietRequestNotCompletedResponse">
-		<wsdl:part name="parameters"
-			element="tns:GetAllUserDietRequestNotCompletedResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="GetUserDietRequestNotCompletedByUserIdRequest">
-		<wsdl:part name="parameters"
-			element="tns:GetUserDietRequestNotCompletedByUserIdRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="GetUserDietRequestNotCompletedByUserIdResponse">
-		<wsdl:part name="parameters"
-			element="tns:GetUserDietRequestNotCompletedByUserIdResponse" />
-	</wsdl:message>
-	
-	<wsdl:message name="SaveUserDietRequestRequest">
-		<wsdl:part name="parameters"
-			element="tns:SaveUserDietRequestRequest" />
-	</wsdl:message>
-
-	<wsdl:message name="SaveUserDietRequestResponse">
-		<wsdl:part name="parameters"
-			element="tns:SaveUserDietRequestResponse" />
 	</wsdl:message>
 	
 	<wsdl:portType name="UserServicePortType">
@@ -489,27 +152,6 @@
 				wsam:Action="http://stayfit.com/userservice/RegistrationResponse" />
 		</wsdl:operation>
 		
-		<wsdl:operation name="getUserHistoryByUserId">
-			<wsdl:input message="tns:GetUserHistoryByUserIdRequest"
-				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByUserIdRequest" />
-			<wsdl:output message="tns:GetUserHistoryByUserIdResponse"
-				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByUserIdResponse" />
-		</wsdl:operation>
-		
-		<wsdl:operation name="getUserHistoryByDate">
-			<wsdl:input message="tns:GetUserHistoryByDateRequest"
-				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByDateRequest" />
-			<wsdl:output message="tns:GetUserHistoryByDateResponse"
-				wsam:Action="http://stayfit.com/userservice/GetUserHistoryByDateResponse" />
-		</wsdl:operation>
-		
-		<wsdl:operation name="saveUserHistory">
-			<wsdl:input message="tns:SaveUserHistoryRequest"
-				wsam:Action="http://stayfit.com/userservice/SaveUserHistoryRequest" />
-			<wsdl:output message="tns:SaveUserHistoryResponse"
-				wsam:Action="http://stayfit.com/userservice/SaveUserHistoryResponse" />
-		</wsdl:operation>
-		
 		<wsdl:operation name="updateUser">
 			<wsdl:input message="tns:UpdateUserRequest"
 				wsam:Action="http://stayfit.com/userservice/UpdateUserRequest" />
@@ -517,40 +159,6 @@
 				wsam:Action="http://stayfit.com/userservice/UpdateUserResponse" />
 		</wsdl:operation>
 		
-		<wsdl:operation name="getUserDietByUserId">
-			<wsdl:input message="tns:GetUserDietByUserIdRequest"
-				wsam:Action="http://stayfit.com/userservice/GetUserDietByUserIdRequest" />
-			<wsdl:output message="tns:GetUserDietByUserIdResponse"
-				wsam:Action="http://stayfit.com/userservice/GetUserDietByUserIdResponse" />
-		</wsdl:operation>
-		
-		<wsdl:operation name="saveUserDiet">
-			<wsdl:input message="tns:SaveUserDietRequest"
-				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequest" />
-			<wsdl:output message="tns:SaveUserDietResponse"
-				wsam:Action="http://stayfit.com/userservice/SaveUserDietResponse" />
-		</wsdl:operation>
-		
-		<wsdl:operation name="getAllUserDietRequestNotCompleted">
-			<wsdl:input message="tns:GetAllUserDietRequestNotCompletedRequest"
-				wsam:Action="http://stayfit.com/userservice/GetAllUserDietRequestNotCompletedRequest" />
-			<wsdl:output message="tns:GetAllUserDietRequestNotCompletedResponse"
-				wsam:Action="http://stayfit.com/userservice/GetAllUserDietRequestNotCompletedResponse" />
-		</wsdl:operation>
-		
-		<wsdl:operation name="getUserDietRequestNotCompletedByUserId">
-			<wsdl:input message="tns:GetUserDietRequestNotCompletedByUserIdRequest"
-				wsam:Action="http://stayfit.com/userservice/GetUserDietRequestNotCompletedByUserIdRequest" />
-			<wsdl:output message="tns:GetUserDietRequestNotCompletedByUserIdResponse"
-				wsam:Action="http://stayfit.com/userservice/GetUserDietRequestNotCompletedByUserIdResponse" />
-		</wsdl:operation>
-		
-		<wsdl:operation name="saveUserDietRequest">
-			<wsdl:input message="tns:SaveUserDietRequestRequest"
-				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequestRequest" />
-			<wsdl:output message="tns:SaveUserDietRequestResponse"
-				wsam:Action="http://stayfit.com/userservice/SaveUserDietRequestResponse" />
-		</wsdl:operation>
 	</wsdl:portType>
 
 	<wsdl:binding name="UserServiceSoapBinding"
@@ -577,36 +185,6 @@
 			</wsdl:output>
 		</wsdl:operation>
 		
-		<wsdl:operation name="getUserHistoryByUserId">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
-		<wsdl:operation name="getUserHistoryByDate">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
-		<wsdl:operation name="saveUserHistory">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
 		<wsdl:operation name="updateUser">
 			<soap:operation soapAction="" />
 			<wsdl:input>
@@ -617,55 +195,6 @@
 			</wsdl:output>
 		</wsdl:operation>
 		
-		<wsdl:operation name="getUserDietByUserId">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
-		<wsdl:operation name="saveUserDiet">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
-		<wsdl:operation name="getAllUserDietRequestNotCompleted">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
-		<wsdl:operation name="getUserDietRequestNotCompletedByUserId">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		
-		<wsdl:operation name="saveUserDietRequest">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
 	</wsdl:binding>
 
 	<wsdl:service name="UserService">

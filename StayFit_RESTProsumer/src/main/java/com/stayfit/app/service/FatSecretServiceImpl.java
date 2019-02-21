@@ -23,80 +23,71 @@ import java.util.regex.Pattern;
  */
 
 @Service
-public class FatSecretServiceImpl implements FatSecretService  {
-	
-	/* we will need to initialize Fatsecret Service with our Fatsecret Application 
+public class FatSecretServiceImpl implements FatSecretService {
+
+	/*
+	 * we will need to initialize Fatsecret Service with our Fatsecret Application
 	 * Consumer Key and associated Consumer Secret.
 	 */
 	String key = "b81048f4a42a486a86e9dd9cf1b920e9";
 	String secret = "dccaedac974841ebacfce130397d15f3";
 	final FatsecretService service = new FatsecretService(key, secret);
 
-	
-    /* (non-Javadoc)
-	 * @see com.stayfit.app.service.FatSecretService#getFoodById(java.lang.Long)
-	 */
-    @Override
-	public com.fatsecret.platform.model.Food getFoodById(Long id) throws ResourceNotFoundException {
+	@Override
+	public Food getFoodById(Long id) throws ResourceNotFoundException {
 
 		Food food = service.getFood(id);
 
 		if (food != null) {
-            return food;
-        }
+			return food;
+		}
 
-        throw new ResourceNotFoundException("Food", "id", id);
-    }
-    
+		throw new ResourceNotFoundException("Food", "id", id);
+	}
 
-    /* (non-Javadoc)
-	 * @see com.stayfit.app.service.FatSecretService#search(java.util.Map)
-	 */
-    @Override
-	public List<CompactFood> search(@RequestBody Map<String, Object> payload)
-            throws Exception {
-		
-        String name = payload.get("name").toString();
-        Integer kcal = Integer.parseInt(payload.get("kcal").toString());
-        String barcode = payload.get("barcode").toString();
-        
-        // we control if the user insert the barcode 
-        if (barcode != "") {
-        	BarcodeService barcode_impl = new BarcodeServiceImpl();
-            name = barcode_impl.getNameByBarcode(barcode);
-            
-        }
-        Response<CompactFood> response = service.searchFoods(name);
-        List<CompactFood> foods = response.getResults();
+	@Override
+	public List<CompactFood> search(@RequestBody Map<String, Object> payload) throws Exception {
 
+		String name = payload.get("name").toString();
+		Integer kcal = Integer.parseInt(payload.get("kcal").toString());
+		String barcode = payload.get("barcode").toString();
 
-        List<CompactFood> items = new ArrayList<>();
-        // we control if the user insert the Kcal 
-        if (kcal != 0) {
-        	foods.forEach(listItem -> {
-            	//we use the regular expressions for filter for take the Kcal parametar from the desciprion of product
-                Pattern pattern = Pattern.compile("Calories: ([\\d]+)kcal");
-                Matcher matcher = pattern.matcher(listItem.getDescription().toString());
-                if (matcher.find()) {
-                	//we transform the parameter in integer
-                    Integer kilocalories = Integer.parseInt(matcher.group(1).toString());
-                    if (kilocalories <= kcal) {
-                    	//add the product in a list 
-                        items.add(listItem);
+		// we check if the user inserts the barcode
+		if (barcode != "") {
+			BarcodeService barcode_impl = new BarcodeServiceImpl();
+			name = barcode_impl.getNameByBarcode(barcode);
 
-                    }
+		}
+		Response<CompactFood> response = service.searchFoods(name);
+		List<CompactFood> foods = response.getResults();
 
-                }
-            });
-            // we add the list of product filtered
-            return items;
-            
+		List<CompactFood> items = new ArrayList<>();
+		// we check if the user inserts the Kcal
+		if (kcal != 0) {
+			foods.forEach(listItem -> {
+				// we use the regular expressions for filter for take the Kcal parametar from
+				// the description of product
+				Pattern pattern = Pattern.compile("Calories: ([\\d]+)kcal");
+				Matcher matcher = pattern.matcher(listItem.getDescription().toString());
+				if (matcher.find()) {
+					// we transform the parameter in integer
+					Integer kilocalories = Integer.parseInt(matcher.group(1).toString());
+					if (kilocalories <= kcal) {
+						// add the product in a list
+						items.add(listItem);
 
-        } else {
+					}
 
-            return foods;
-        }
+				}
+			});
+			// we add the list of product filtered
+			return items;
 
-    }
+		} else {
+
+			return foods;
+		}
+
+	}
 
 }

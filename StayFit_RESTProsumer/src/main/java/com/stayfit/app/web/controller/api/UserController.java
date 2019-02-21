@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stayfit.app.service.UserService;
 import com.stayfit.userservice.User;
-import com.stayfit.userservice.UserDiet;
-import com.stayfit.userservice.UserDietRequest;
-import com.stayfit.userservice.UserHistory;
+import com.stayfit.userdietservice.UserDiet;
+import com.stayfit.userdietservice.UserDietRequest;
+import com.stayfit.userhistoryservice.UserHistory;
 
 /**
  * @author lorenzo
