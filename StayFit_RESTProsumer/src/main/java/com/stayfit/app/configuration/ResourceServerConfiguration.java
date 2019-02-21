@@ -39,7 +39,15 @@ import com.stayfit.app.repository.UserRepository;
 
 /**
  * @author lorenzo
- *
+ * 
+ * The Resource Server is responsible for protecting resources, 
+ * capable of accepting responding to protected resource requests using access tokens.
+ * 
+ * Spring OAuth2 provides an authentication filter that handles protection. 
+ * The @EnableResourceServer annotation enables a Spring Security filter 
+ * that authenticates requests via an incoming OAuth2 token.
+ * 
+ * To secure access to the protected resources, we will use the @PreAuthorize annotation.
  */
 
 @Configuration
@@ -79,6 +87,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 		add("Content-Type");
 	}};
     
+	/**
+     * Here we define the TokenStore bean to let Spring know to use the database for token operations.
+     */
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
@@ -90,6 +101,13 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         resources.tokenStore(tokenStore());
     }
     
+    /**
+     * The configure(HttpSecurity http) method configures the access rules and request matchers (path) 
+     * for protected resources using the HttpSecurity class. 
+     * We secure the URL paths SECURED_PATTERN. 
+     * To invoke any POST method request, the ‘write’ scope is needed.
+     * Also, we enable Cross-Origin Resource Sharing (CORS support).
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().requestMatchers()
@@ -98,6 +116,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .anyRequest().access(SECURED_READ_SCOPE);
     }
     
+    /**
+     * This method provides CORS configuration.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
@@ -114,6 +135,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         return source;
     }
     
+    /**
+     * With this methods we are updating the authentication principal at resource server 
+     * with custom user's authorities by getting the authentication information from the user's access token.
+     */
     @Bean
     public AccessTokenConverter accessTokenConverter() {
     	DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
@@ -125,6 +150,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     	        User user = userRepository.findByUsername(map.get("user_name").toString());
     	        
+    	        // here we set the user's authorities
+    	        // for granting access to protected resources
     	        Collection<GrantedAuthority> userAuthorities = new ArrayList<GrantedAuthority>();
     	        Collection<Role> roles = user.getAuthorities();
     	        userAuthorities.addAll(roles);
@@ -141,6 +168,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     	return tokenConverter;
     }
     
+    /**
+     * RemoteTokenServices queries the /check_token endpoint of OAuth2 Server to obtain the contents of an access token.
+     */
     @Bean
     public RemoteTokenServices remoteTokenServices() {
         RemoteTokenServices tokenServices = new RemoteTokenServices();

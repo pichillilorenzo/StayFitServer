@@ -9,9 +9,13 @@ import java.util.Date;
 /**
  * @author lorenzo
  *
+ * This class provides some date utility methods.
  */
 public final class DateUtil {
 	
+	/**
+	 * It returns the start time of a date
+	 */
 	public static Date getStartOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -21,7 +25,10 @@ public final class DateUtil {
 		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTime();
 	}
-
+	
+	/**
+	 * It returns the end time of a date
+	 */
 	public static Date getEndOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);

@@ -21,7 +21,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author lorenzo
- *
+ * 
+ * @Entity declares the class as an entity.
+ * @Id declares the identifier property of this entity.
+ * @Table defines the table for this entity.
+ * 
+ * This class represents an user's diet request.
+ * Nutritionists will take care of these requests.
  */
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor

@@ -27,7 +27,13 @@ import lombok.*;
 
 /**
  * @author lorenzo
- *
+ * 
+ * @Entity declares the class as an entity.
+ * @Id declares the identifier property of this entity.
+ * @Table defines the table for this entity.
+ * 
+ * This class represents an user of the system.
+ * Each user could have one or more system roles.
  */
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor

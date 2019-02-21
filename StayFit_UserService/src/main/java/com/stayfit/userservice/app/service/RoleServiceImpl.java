@@ -21,8 +21,9 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
     private RoleRepository roleRepository;
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.userservice.app.service.RoleService#getRoleByName(java.lang.String)
+	/**
+     * 
+	 * It returns the role by its name.
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -36,8 +37,9 @@ public class RoleServiceImpl implements RoleService {
         throw new ResourceNotFoundException("Role", "name", name);
     }
     
-    /* (non-Javadoc)
-	 * @see com.stayfit.userservice.app.service.RoleService#getRoleById(java.lang.Long)
+	/**
+     * 
+	 * It returns the role by its id.
 	 */
     @Override
 	@Transactional(readOnly = true)

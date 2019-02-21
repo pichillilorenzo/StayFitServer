@@ -19,6 +19,7 @@ import com.stayfit.userservice.app.model.DietDay;
 /**
  * @author lorenzo
  *
+ * This utility class is used to covert an user's diet model to a WSDL request and vice-versa.
  */
 @Component
 public class UserDietTransformer {

@@ -10,7 +10,8 @@ import com.stayfit.userservice.app.model.UserDietRequest;
 
 /**
  * @author lorenzo
- *
+ * 
+ * This utility class is used to covert an user's diet request model to a WSDL request and vice-versa.
  */
 @Component
 public class UserDietRequestTransformer {

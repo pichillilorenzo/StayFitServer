@@ -26,7 +26,7 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 /**
  * @author lorenzo
  * 
- * The authorization server is responsible for the verification of user identity and providing the tokens.
+ * The Authorization Server is responsible for the verification of user identity and providing the tokens.
  * 
  * Spring Security handles the Authentication and Spring Security OAuth2 handles the Authorization. 
  * To configure and enable the OAuth 2.0 Authorization Server we have to use @EnableAuthorizationServer annotation.

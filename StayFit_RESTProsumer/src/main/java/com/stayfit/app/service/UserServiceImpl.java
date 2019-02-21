@@ -57,7 +57,8 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 /**
  * @author lorenzo
- *
+ * 
+ * This Spring Service will use the SOAP User Web Service to exchange data.
  */
 
 @Service
@@ -66,6 +67,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	private com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
 	private UserServicePortType userPort = userService.getUserPort();
     
+	/**
+	 * 
+	 * It returns the user by his id.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('USER_READ')")
     public com.stayfit.userservice.User getUserById(Long id) throws ResourceNotFoundException {
@@ -84,6 +89,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		}
     }
 	
+	/**
+	 * 
+	 * It is used to register the user into the system.
+	 */
     @Override
 	public com.stayfit.userservice.User registerUser(Map<String, Object> payload) {
 
@@ -116,6 +125,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     	return userResponse;
     }
 	
+    /**
+	 * 
+	 * It updates the user with his new fields.
+	 */
     @Override
 	@PreAuthorize("hasAuthority('USER_UPDATE')")
     public com.stayfit.userservice.User updateUser(Long id, Map<String, Object> payload) throws ResourceNotFoundException {
@@ -160,6 +173,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * It returns the user's history by history date.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('USER_HISTORY_READ')")
 	public com.stayfit.userservice.UserHistory getUserHistoryByDate(Long id, String date) throws ResourceNotFoundException {
@@ -192,6 +209,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     	
 	}
 	
+	/**
+	 * 
+	 * It saves/updates the user's history into the system.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('USER_HISTORY_CREATE')")
 	public UserHistory saveUserHistory(Long id, String date, Map<String, Object> payload) {
@@ -268,6 +289,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     	
 	}
 	
+	/**
+	 * 
+	 * It returns all of the user's diet requests that are not completed yet.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
 	public List<UserDietRequest> getAllUserDietRequestNotCompleted() {
@@ -278,6 +303,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return response.getUserDietRequest();
 	}
 	
+	/**
+	 * 
+	 * It returns the user's diet request that is not completed yet.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
 	public UserDietRequest getUserDietRequestNotCompletedByUserId(Long id) {
@@ -292,6 +321,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		
 	}
 	
+	/**
+	 * 
+	 * It saves/updates the user's diet request into the system.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_CREATE')")
 	public UserDietRequest saveUserDietRequest(Long id, Map<String, Object> payload) {
@@ -313,6 +346,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return response.getUserDietRequest();
 	}
 	
+	/**
+	 * 
+	 * It returns the user's diet by his user id.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_READ')")
 	public UserDiet getUserDiet(Long id) {
@@ -326,6 +363,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return response.getUserDiet();
 	}
 	
+	/**
+	 * 
+	 * It saves/updates the user's diet into the system.
+	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_CREATE')")
 	public UserDiet saveUserDiet(Long id, Map<String, Object> payload) {

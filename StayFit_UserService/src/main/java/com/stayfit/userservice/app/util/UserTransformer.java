@@ -16,6 +16,7 @@ import com.stayfit.userservice.app.model.User;
 /**
  * @author lorenzo
  *
+ * This utility class is used to covert an user model to a WSDL request.
  */
 @Component
 public class UserTransformer {

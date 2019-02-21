@@ -23,7 +23,12 @@ import lombok.*;
 
 /**
  * @author lorenzo
- *
+ * 
+ * @Entity declares the class as an entity.
+ * @Id declares the identifier property of this entity.
+ * @Table defines the table for this entity.
+ * 
+ * This class represents a system role (authority) related to different users and system privileges.
  */
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor

@@ -16,7 +16,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author lorenzo
- *
+ * 
+ * @Document declares the class as a collection.
+ * @Id declares the identifier property of this collection.
+ * 
+ * This class represents an user's diet.
+ * - nutritionistId is the id of the nutritionist that made this diet
+ * - week represents the list of the different days of the week containing the diet foods
  */
 @Data
 @NoArgsConstructor
