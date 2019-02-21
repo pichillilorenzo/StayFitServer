@@ -35,6 +35,9 @@ import java.util.regex.Pattern;
 @Service
 public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretService {
 	
+	
+	//This method call the Fat-Secret SOAP service and return returns the 
+	//product by its id.
 	@Override
 	@PreAuthorize("hasAuthority('FOOD_READ')")
     public Food getFoodById(Long id) throws ResourceNotFoundException {
@@ -55,15 +58,21 @@ public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretSe
         throw new ResourceNotFoundException("Food", "id", id);
     }
 	
+	
+	
+	
+	//This function call the Amazon and Barcode SOAP service and returns the 
+	//list of products filtered by product name or Kcal and Name or barcode and Name or Barcode.
 	@Override
 	@PreAuthorize("hasAuthority('FOOD_SEARCH')")
     public Foods search(@RequestBody Map<String, Object> payload)
             throws ResourceNotFoundException {
-
+		
         String name = payload.get("name").toString();
         Integer kcal = Integer.parseInt(payload.get("kcal").toString());
         String barcode = payload.get("barcode").toString();
-        System.out.println(barcode);
+        
+        // we control if the user insert the barcode 
         if (barcode != "") {
             BarcodeService barcode_Service = new BarcodeService();
             BarcodeServicePortType barcode_port = barcode_Service.getBarcodePort();
@@ -73,7 +82,7 @@ public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretSe
             GetNameByBarcodeResponse response_barcode = barcode_port.getNameByBarcode(request_barcode);
 
             name = response_barcode.getName();
-            System.out.println(name);
+            
         }
 
         FatSecretService Service = new FatSecretService();
@@ -87,21 +96,24 @@ public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretSe
         Foods foods = new Foods();
 
         List<com.stayfit.fatsecretservice.Item> items = new ArrayList<>();
-
+        // we control if the user insert the Kcal 
         if (kcal != 0) {
             response.getFoods().getFood().forEach(listItem -> {
+            	//we use the regular expressions for filter for take the Kcal parametar from the desciprion of product
                 Pattern pattern = Pattern.compile("Calories: ([\\d]+)kcal");
                 Matcher matcher = pattern.matcher(listItem.getDescription().toString());
                 if (matcher.find()) {
+                	//we transform the parameter in integer
                     Integer kilocalories = Integer.parseInt(matcher.group(1).toString());
                     if (kilocalories <= kcal) {
+                    	//add the product in a list 
                         items.add(listItem);
 
                     }
 
                 }
             });
-
+            // we add the list of product filtered
             foods.getFood().addAll(items);
 
         } else {

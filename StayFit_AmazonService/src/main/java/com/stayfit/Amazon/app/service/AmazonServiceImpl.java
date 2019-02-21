@@ -35,13 +35,18 @@ public class AmazonServiceImpl implements AmazonService {
 	@Autowired
 	private AmazonUtils Utils;
 
-	/* (non-Javadoc)
-	 * @see com.stayfit.Amazon.app.service.AmazonService#getFoodByName(java.lang.String)
-	 */
+	
+	/**
+	  * 
+	  * Return the list of products filtered by product name in a XML Document.
+	  * 
+	  */
+	
 	@Override
 	@Transactional(readOnly = true)
 	public Document getFoodByName(String name) throws Exception {
 		
+		// In this portion of code we fix the SSL error for MacOS
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 
 			public java.security.cert.X509Certificate[] getAcceptedIssuers() {

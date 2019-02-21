@@ -39,13 +39,16 @@ public class FatSecretEndpointImpl implements FatSecretEndpoint {
 	private FatSecretTransformer fatsecrettransformer;
 	
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.fatsecretservice.app.endpoint.FatSecretEndpoint#getUserById(javax.xml.bind.JAXBElement)
-	 */
+	/**
+	  * This method maps the WSDL operation "getFoodById" with a GetfoodByIdRequest input message
+	  * and a GetfoodByIdResponse output message.
+	  * 
+	  * It returns the product by its id.
+	  */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetfoodByIdRequest")
 	@ResponsePayload
-	public JAXBElement<GetfoodByIdResponse> getUserById(@RequestPayload JAXBElement<GetfoodByIdRequest> request) {
+	public JAXBElement<GetfoodByIdResponse> getFoodById(@RequestPayload JAXBElement<GetfoodByIdRequest> request) {
     
 		ObjectFactory factory = new ObjectFactory();
 		GetfoodByIdResponse response = factory.createGetfoodByIdResponse();
@@ -56,13 +59,17 @@ public class FatSecretEndpointImpl implements FatSecretEndpoint {
 	
 	
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.fatsecretservice.app.endpoint.FatSecretEndpoint#getUserByName(javax.xml.bind.JAXBElement)
-	 */
+	/**
+	  * This method maps the WSDL operation "getFoodByName" with a GetfoodByNameRequest input message
+	  * and a GetfoodByNameResponse output message.
+	  * 
+	  * Return the list of products, through the rest Api of Fat-Secret, filtered by the name that 
+	  * the user inserts as a parameter.
+	  */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetfoodByNameRequest")
 	@ResponsePayload
-	public JAXBElement<GetfoodByNameResponse> getUserByName(@RequestPayload JAXBElement<GetfoodByNameRequest> request) {
+	public JAXBElement<GetfoodByNameResponse> getFoodByName(@RequestPayload JAXBElement<GetfoodByNameRequest> request) {
 		ObjectFactory factory = new ObjectFactory();
 		GetfoodByNameResponse response = factory.createGetfoodByNameResponse();
 		com.stayfit.fatsecretservice.Foods foods =fatsecrettransformer.convertbyname(fatsecret.getFoodByName((request.getValue().getName())));

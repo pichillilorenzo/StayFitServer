@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AmazonServiceImpl implements com.stayfit.app.service.AmazonService {
 	
+	//This method call the Amazon SOAP service and return returns the 
+	//list of products filtered by product name.
+	
 	@Override
 	@PreAuthorize("hasAuthority('AMAZON_SEARCH')")
 	public com.stayfit.amazonservice.Products getListFood(String name) throws ResourceNotFoundException {

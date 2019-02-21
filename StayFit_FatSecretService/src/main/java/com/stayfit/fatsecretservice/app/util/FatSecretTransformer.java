@@ -19,6 +19,12 @@ import com.fatsecret.platform.model.Food;
 public class FatSecretTransformer {
 	
 	
+	/**
+	  * This function maps the Food response of Fat-Secret API with Model of Food created  
+	  * into WSDL file.
+	  * 
+	  */
+	
 	public com.stayfit.fatsecretservice.Food convert(Food food) {
 		com.stayfit.fatsecretservice.Food foodWsdl = new com.stayfit.fatsecretservice.Food();
         BeanUtils.copyProperties(food, foodWsdl);
@@ -30,7 +36,11 @@ public class FatSecretTransformer {
         return foodWsdl;
     }
 	
-	
+	/**
+	  * This function maps the "List<CompactFood>" response of Fat-Secret API with Model of Foods created  
+	  * into WSDL file.
+	  * 
+	  */
 	public com.stayfit.fatsecretservice.Foods convertbyname(List<CompactFood> food) {
 		com.stayfit.fatsecretservice.Foods foodsWsdl = new com.stayfit.fatsecretservice.Foods();
  

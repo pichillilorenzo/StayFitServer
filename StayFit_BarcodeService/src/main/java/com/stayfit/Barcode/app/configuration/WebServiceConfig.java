@@ -17,6 +17,12 @@ import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 /**
  * @author Matteo
  *
+ * @EnableWs Enables SOAP Web Service features in this Spring Boot application.
+ * Using the ServletRegistrationBean we register the MessageDispatcherServlet with Spring Boot. 
+ * During this registration, the servlet mapping URI pattern is set to the SOAP Service address. 
+ * Using this address, the web container will map incoming HTTP requests to the MessageDispatcherServlet. 
+ * The DefaultWsdl11Definition exposes a standard WSDL 1.1 using the specified WSDL file. 
+ * MessageDispatcherServlet also automatically detects any WsdlDefinition defined in its application context.
  */
 @EnableWs
 @Configuration
