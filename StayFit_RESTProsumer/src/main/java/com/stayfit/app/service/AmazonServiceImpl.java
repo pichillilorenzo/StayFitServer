@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AmazonServiceImpl implements com.stayfit.app.service.AmazonService {
 	
-	//This method call the Amazon SOAP service and return returns the 
+	//This method call the Amazon SOAP service and returns the 
 	//list of products filtered by product name.
 	
 	@Override
