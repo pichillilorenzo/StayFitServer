@@ -24,13 +24,14 @@ import org.json.JSONObject;
 @Service
 public class BarcodeServiceImpl implements BarcodeService {
 
-	/* (non-Javadoc)
-	 * @see com.stayfit.Barcode.app.service.BarcodeService#getNameByBarcode(java.lang.String)
+	/*
+	 * Return the Name of the product filtered by barcode 
 	 */
 	@Override
 	@Transactional(readOnly = true)
 	public String getNameByBarcode(String barcode) throws Exception {
 
+		// In this portion of code we fix the SSL error for MacOS
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 
 			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -85,7 +86,9 @@ public class BarcodeServiceImpl implements BarcodeService {
 				if (c != null) {
 					c.disconnect();
 				}
+				// We transorm the result of Rest API into JSON Format
 				JSONObject obj = new JSONObject(sb);
+				//we take the name of product 
 				String name = obj.getString("name");
 				return name;
 

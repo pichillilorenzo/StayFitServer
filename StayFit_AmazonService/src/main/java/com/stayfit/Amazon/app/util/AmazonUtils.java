@@ -30,6 +30,13 @@ import org.w3c.dom.Element;
 @Component
 public class AmazonUtils {
 	
+	/**
+	  * This function maps the XML response of amazon API with Model of Product created  
+	  * into WSDL file.
+	  * 
+	  */
+	
+	
 	public Products convert( Document doc) {
 		Products prod = new Products();
 		
@@ -64,7 +71,9 @@ public class AmazonUtils {
 		return prod;
 	}
 	
-	
+	/**
+	  * This Function convert a string into XML Document
+	  */
 	public Document convertStringToDocument(String xmlStr) {
 
 		

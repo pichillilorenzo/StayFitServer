@@ -20,12 +20,15 @@ import java.util.List;
 @Service
 public class FatSecretServiceImpl implements FatSecretService {
 	
+	/* we will need to initialize Fatsecret Service with our Fatsecret Application 
+	 * Consumer Key and associated Consumer Secret.
+	 */
 	String key = "b81048f4a42a486a86e9dd9cf1b920e9";
 	String secret = "dccaedac974841ebacfce130397d15f3";
 	FatsecretService service = new FatsecretService(key, secret);
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.fatsecretservice.app.service.FatSecretService#getFoodById(java.lang.Long)
+	/* we use getFood method from FatsecretService in order to get 
+	 * detailed information of the food item by its id.
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -34,8 +37,9 @@ public class FatSecretServiceImpl implements FatSecretService {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.fatsecretservice.app.service.FatSecretService#getFoodByName(java.lang.String)
+	/*
+	 * we  use searchFoods method from FatsecretService in order to get 
+	 * a list of food items by the name that the user insert 
 	 */
 	@Override
 	@Transactional(readOnly = true)

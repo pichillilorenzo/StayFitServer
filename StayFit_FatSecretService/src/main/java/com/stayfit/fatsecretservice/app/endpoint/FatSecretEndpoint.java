@@ -13,8 +13,8 @@ import com.stayfit.fatsecretservice.GetfoodByNameResponse;
 
 public interface FatSecretEndpoint {
 
-	JAXBElement<GetfoodByIdResponse> getUserById(JAXBElement<GetfoodByIdRequest> request);
+	JAXBElement<GetfoodByIdResponse> getFoodById(JAXBElement<GetfoodByIdRequest> request);
 
-	JAXBElement<GetfoodByNameResponse> getUserByName(JAXBElement<GetfoodByNameRequest> request);
+	JAXBElement<GetfoodByNameResponse> getFoodByName(JAXBElement<GetfoodByNameRequest> request);
 
 }

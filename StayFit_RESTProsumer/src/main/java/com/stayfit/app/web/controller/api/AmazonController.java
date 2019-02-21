@@ -19,14 +19,25 @@ import com.stayfit.app.service.AmazonServiceImpl;
 
 /**
  * @author Matteo
- *
+ * 
+ * @RestController annotation is used to create RESTful web services.
+ * This Rest Controller manages the users of the system.
  */
+
 @RestController
 @RequestMapping("/api/v1/amazon")
 public class AmazonController {
 	
 	@Autowired
     private AmazonServiceImpl amazon;
+	
+	
+	/**
+	  * This method maps the HTTP GET requests incoming on the route "/api/v1/amazon/{name}"
+	  * and produces an application/json response.
+	  * 
+	  * It returns the list of products filtered by product name
+	  */
 	
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)

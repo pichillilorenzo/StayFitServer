@@ -31,9 +31,13 @@ public class BarcodeEndpointImpl implements BarcodeEndpoint {
 	@Autowired
 	private BarcodeService barcode;
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.Barcode.app.endpoint.BarcodeEndpoint#GetProductByName(javax.xml.bind.JAXBElement)
-	 */
+	/**
+	  * This method maps the WSDL operation "GetProductByName" with a GetNameByBarcodeRequest input message
+	  * and a GetNameByBarcodeResponse output message.
+	  * 
+	  * Return the product with the barcode that entered the user 
+	  */
+	
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetNameByBarcodeRequest")
 	@ResponsePayload

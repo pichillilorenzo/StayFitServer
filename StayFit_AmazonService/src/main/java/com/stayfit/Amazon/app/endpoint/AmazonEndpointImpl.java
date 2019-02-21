@@ -35,9 +35,14 @@ public class AmazonEndpointImpl implements AmazonEndpoint {
 	@Autowired
 	private AmazonUtils amazontransformer;
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.Amazon.app.endpoint.AmazonEndpoint#GetProductByName(javax.xml.bind.JAXBElement)
-	 */
+	
+	/**
+	  * This method maps the WSDL operation "GetProductByName" with a GetProductByNameRequest input message
+	  * and a GetProductByNameResponse output message.
+	  * 
+	  * Return the list of products, through the rest Api of Amazon, filtered by the name that 
+	  * the user inserts as a parameter.
+	  */
 	@Override
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetProductByNameRequest")
 	@ResponsePayload
