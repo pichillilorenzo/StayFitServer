@@ -3,21 +3,11 @@
  */
 package com.stayfit.app.service;
 
+import com.fatsecret.platform.services.FatsecretService;
+import com.fatsecret.platform.services.Response;
+import com.fatsecret.platform.model.CompactFood;
+import com.fatsecret.platform.model.Food;
 import com.stayfit.app.exception.ResourceNotFoundException;
-import com.stayfit.barcodeservice.BarcodeService;
-import com.stayfit.barcodeservice.BarcodeServicePortType;
-import com.stayfit.barcodeservice.GetNameByBarcodeRequest;
-import com.stayfit.barcodeservice.GetNameByBarcodeResponse;
-import com.stayfit.fatsecretservice.FatSecretService;
-import com.stayfit.fatsecretservice.FatSecretServicePortType;
-import com.stayfit.fatsecretservice.GetfoodByIdRequest;
-import com.stayfit.fatsecretservice.GetfoodByIdResponse;
-import com.stayfit.fatsecretservice.GetfoodByNameRequest;
-import com.stayfit.fatsecretservice.GetfoodByNameResponse;
-import com.stayfit.fatsecretservice.Food;
-import com.stayfit.fatsecretservice.Foods;
-
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -33,40 +23,38 @@ import java.util.regex.Pattern;
  */
 
 @Service
-public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretService {
+public class FatSecretServiceImpl implements FatSecretService  {
 	
+	/* we will need to initialize Fatsecret Service with our Fatsecret Application 
+	 * Consumer Key and associated Consumer Secret.
+	 */
+	String key = "b81048f4a42a486a86e9dd9cf1b920e9";
+	String secret = "dccaedac974841ebacfce130397d15f3";
+	final FatsecretService service = new FatsecretService(key, secret);
+
 	
-	//This method call the Fat-Secret SOAP service and return returns the 
-	//product by its id.
-	@Override
-	@PreAuthorize("hasAuthority('FOOD_READ')")
-    public Food getFoodById(Long id) throws ResourceNotFoundException {
+    /* (non-Javadoc)
+	 * @see com.stayfit.app.service.FatSecretService#getFoodById(java.lang.Long)
+	 */
+    @Override
+	public com.fatsecret.platform.model.Food getFoodById(Long id) throws ResourceNotFoundException {
 
-        FatSecretService Service = new FatSecretService();
-        FatSecretServicePortType fatsecretPort = Service.getFatSecretPort();
+		Food food = service.getFood(id);
 
-        GetfoodByIdRequest request = new GetfoodByIdRequest();
-        request.setId(id);
-
-        GetfoodByIdResponse response = fatsecretPort.getFoodById(request);
-
-        Food food = response.getFood();
-        if (food != null) {
+		if (food != null) {
             return food;
         }
 
         throw new ResourceNotFoundException("Food", "id", id);
     }
-	
-	
-	
-	
-	//This function call the Amazon and Barcode SOAP service and returns the 
-	//list of products filtered by product name or Kcal and Name or barcode and Name or Barcode.
-	@Override
-	@PreAuthorize("hasAuthority('FOOD_SEARCH')")
-    public Foods search(@RequestBody Map<String, Object> payload)
-            throws ResourceNotFoundException {
+    
+
+    /* (non-Javadoc)
+	 * @see com.stayfit.app.service.FatSecretService#search(java.util.Map)
+	 */
+    @Override
+	public List<CompactFood> search(@RequestBody Map<String, Object> payload)
+            throws Exception {
 		
         String name = payload.get("name").toString();
         Integer kcal = Integer.parseInt(payload.get("kcal").toString());
@@ -74,31 +62,18 @@ public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretSe
         
         // we control if the user insert the barcode 
         if (barcode != "") {
-            BarcodeService barcode_Service = new BarcodeService();
-            BarcodeServicePortType barcode_port = barcode_Service.getBarcodePort();
-
-            GetNameByBarcodeRequest request_barcode = new GetNameByBarcodeRequest();
-            request_barcode.setBarcode(barcode);
-            GetNameByBarcodeResponse response_barcode = barcode_port.getNameByBarcode(request_barcode);
-
-            name = response_barcode.getName();
+        	BarcodeService barcode_impl = new BarcodeServiceImpl();
+            name = barcode_impl.getNameByBarcode(barcode);
             
         }
+        Response<CompactFood> response = service.searchFoods(name);
+        List<CompactFood> foods = response.getResults();
 
-        FatSecretService Service = new FatSecretService();
-        FatSecretServicePortType fatsecretPort = Service.getFatSecretPort();
 
-        GetfoodByNameRequest request = new GetfoodByNameRequest();
-        request.setName(name);
-
-        GetfoodByNameResponse response = fatsecretPort.getFoodByName(request);
-
-        Foods foods = new Foods();
-
-        List<com.stayfit.fatsecretservice.Item> items = new ArrayList<>();
+        List<CompactFood> items = new ArrayList<>();
         // we control if the user insert the Kcal 
         if (kcal != 0) {
-            response.getFoods().getFood().forEach(listItem -> {
+        	foods.forEach(listItem -> {
             	//we use the regular expressions for filter for take the Kcal parametar from the desciprion of product
                 Pattern pattern = Pattern.compile("Calories: ([\\d]+)kcal");
                 Matcher matcher = pattern.matcher(listItem.getDescription().toString());
@@ -114,14 +89,13 @@ public class FatSecretServiceImpl implements com.stayfit.app.service.FatSecretSe
                 }
             });
             // we add the list of product filtered
-            foods.getFood().addAll(items);
+            return items;
+            
 
         } else {
 
-            foods = response.getFoods();
+            return foods;
         }
-
-        return foods;
 
     }
 

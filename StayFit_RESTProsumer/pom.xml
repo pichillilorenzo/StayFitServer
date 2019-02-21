@@ -89,6 +89,12 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<dependency>
+	      <groupId>com.fatsecret4j</groupId>
+	      <artifactId>fatsecret-platform</artifactId>
+	      <version>2.0</version>
+         </dependency>
+		
 		<!-- cxf -->
 	    <dependency>
 	      <groupId>org.apache.cxf</groupId>
@@ -120,19 +126,10 @@
 									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user.wsdl</wsdl>
 									<wsdlLocation>classpath:wsdl/clients/user.wsdl</wsdlLocation>
 								</wsdlOption>
-								<wsdlOption>
-									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/fatsecret.wsdl</wsdl>
-									<wsdlLocation>classpath:wsdl/clients/fatsecret.wsdl</wsdlLocation>
-								</wsdlOption>
-								
+			
 								<wsdlOption>
 									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/amazon.wsdl</wsdl>
 									<wsdlLocation>classpath:wsdl/clients/amazon.wsdl</wsdlLocation>
-								</wsdlOption>
-								
-								<wsdlOption>
-									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/barcode.wsdl</wsdl>
-									<wsdlLocation>classpath:wsdl/clients/barcode.wsdl</wsdlLocation>
 								</wsdlOption>
 								
 							</wsdlOptions>

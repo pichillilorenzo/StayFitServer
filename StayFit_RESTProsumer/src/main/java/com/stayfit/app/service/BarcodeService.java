@@ -1,4 +1,4 @@
-package com.stayfit.Barcode.app.service;
+package com.stayfit.app.service;
 
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,31 +1,25 @@
-/**
- * 
- */
-package com.stayfit.Barcode.app.service;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+package com.stayfit.app.service;
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.InputStreamReader;
 
-import java.net.URL;
 import org.json.JSONObject;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * @author Matteo
- *
- */
-
-@Service
 public class BarcodeServiceImpl implements BarcodeService {
-
+	
 	/*
 	 * Return the Name of the product filtered by barcode 
+	 */
+
+	/* (non-Javadoc)
+	 * @see com.stayfit.app.service.BarcodeService#getNameByBarcode(java.lang.String)
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -104,5 +98,6 @@ public class BarcodeServiceImpl implements BarcodeService {
 			throw new Exception(e);
 		}
 	}
+
 
 }

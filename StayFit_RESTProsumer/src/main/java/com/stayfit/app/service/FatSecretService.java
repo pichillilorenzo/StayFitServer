@@ -1,15 +1,17 @@
 package com.stayfit.app.service;
 
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.fatsecret.platform.model.CompactFood;
 import com.stayfit.app.exception.ResourceNotFoundException;
-import com.stayfit.fatsecretservice.Food;
-import com.stayfit.fatsecretservice.Foods;
 
 public interface FatSecretService {
 
-	Food getFoodById(Long id) throws ResourceNotFoundException;
+	com.fatsecret.platform.model.Food getFoodById(Long id) throws ResourceNotFoundException;
 
-	Foods search(Map<String, Object> payload) throws ResourceNotFoundException;
+	List<CompactFood> search(Map<String, Object> payload) throws Exception;
 
 }
