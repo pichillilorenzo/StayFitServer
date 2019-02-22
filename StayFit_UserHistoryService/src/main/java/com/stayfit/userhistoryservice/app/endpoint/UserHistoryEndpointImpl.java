@@ -26,7 +26,7 @@ import com.stayfit.userhistoryservice.app.service.UserHistoryService;
 import com.stayfit.userhistoryservice.app.util.UserHistoryTransformer;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This Endpoint provide access to the User History Service to manage user's history of the system.
  * An endpoint interprets the XML request message and uses that input to invoke a method on the business service. 

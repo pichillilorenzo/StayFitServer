@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author lorenzo
+ * 
  * 
  * @Document declares the class as a collection.
  * @Id declares the identifier property of this collection.

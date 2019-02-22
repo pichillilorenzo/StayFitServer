@@ -20,7 +20,7 @@ import com.stayfit.userhistoryservice.app.model.Other;
 import com.stayfit.userhistoryservice.app.model.UserHistory;
 
 /**
- * @author lorenzo
+ * 
  *
  * This utility class is used to covert an user's history model to a WSDL request and vice-versa.
  */

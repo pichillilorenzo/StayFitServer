@@ -4,7 +4,7 @@
 package com.stayfit.userdietservice.app.util;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This Enumeration represents kind of jobs used in a user's diet request.
  */

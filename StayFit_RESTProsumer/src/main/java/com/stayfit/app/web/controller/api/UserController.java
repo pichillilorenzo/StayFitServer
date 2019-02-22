@@ -28,7 +28,7 @@ import com.stayfit.userdietservice.UserDietRequest;
 import com.stayfit.userhistoryservice.UserHistory;
 
 /**
- * @author lorenzo
+ * 
  * 
  * @RestController annotation is used to create RESTful web services.
  * This Rest Controller manages the users of the system.

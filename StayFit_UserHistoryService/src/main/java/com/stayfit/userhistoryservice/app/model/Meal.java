@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This class represents a Meal of a user.
  * - foodId is the id of the food.

@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author lorenzo
+ * 
  *
  * This class provides some date utility methods.
  */

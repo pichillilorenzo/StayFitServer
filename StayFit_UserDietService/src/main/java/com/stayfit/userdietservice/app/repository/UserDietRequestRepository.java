@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 import com.stayfit.userdietservice.app.model.UserDietRequest;
 
 /**
- * @author lorenzo
+ * 
  *
  */
 public interface UserDietRequestRepository extends JpaRepository<UserDietRequest, Long>  {

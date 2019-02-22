@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * @author lorenzo
  * Exception used when a resource is not found.
  */
 

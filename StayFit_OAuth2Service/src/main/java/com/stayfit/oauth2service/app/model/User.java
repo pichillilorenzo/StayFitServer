@@ -28,7 +28,7 @@ import javax.persistence.JoinColumn;
 import lombok.*;
 
 /**
- * @author lorenzo
+ * 
  * User model used by the OAuth2 server to get client's username and password.
  * UserDetails Spring Security interface provides core user information.
  */

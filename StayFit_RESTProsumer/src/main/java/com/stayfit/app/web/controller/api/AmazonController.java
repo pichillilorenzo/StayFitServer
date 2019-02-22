@@ -18,7 +18,7 @@ import com.stayfit.amazonservice.Products;
 import com.stayfit.app.service.AmazonServiceImpl;
 
 /**
- * @author Matteo
+ * 
  * 
  * @RestController annotation is used to create RESTful web services.
  * This Rest Controller manages the users of the system.

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * @author lorenzo
+ * 
  * Encoders used to encode user's password and OAuth2 client's password
  */
 @Configuration

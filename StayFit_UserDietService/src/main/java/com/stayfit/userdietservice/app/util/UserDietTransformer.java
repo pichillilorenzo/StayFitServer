@@ -17,7 +17,7 @@ import com.stayfit.userdietservice.app.model.Other;
 import com.stayfit.userdietservice.app.model.UserDiet;
 
 /**
- * @author lorenzo
+ * 
  *
  * This utility class is used to covert an user's diet model to a WSDL request and vice-versa.
  */

@@ -20,7 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author lorenzo
+ * 
  * 
  * @Entity declares the class as an entity.
  * @Id declares the identifier property of this entity.

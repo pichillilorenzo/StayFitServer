@@ -1,42 +1,76 @@
 #!/usr/bin/env bash
 
+function split_string() { 
+  echo $1 | cut -d$2 -f$3
+}
+
 trap ctrl_c INT
 
 BASEDIR=$(pwd)
 
-if [ "$1" = "-b" ]
+STAYFIT_SERVER="localhost:8080"
+OAUTH2_SERVICE_ENDPOINT="localhost:8081"
+USER_SERVICE_ENDPOINT="localhost:8082"
+USER_HISTORY_SERVICE_ENDPOINT="localhost:8083"
+USER_DIET_SERVICE_ENDPOINT="localhost:8084"
+
+for arg in "$@"
+do
+  if [ "$arg" = "-b" ]
+  then
+    cd $BASEDIR/StayFit_UserService
+    mvn clean package &
+
+    cd $BASEDIR/StayFit_UserHistoryService
+    mvn clean package &
+
+    cd $BASEDIR/StayFit_UserDietService
+    mvn clean package &
+
+    cd $BASEDIR/StayFit_OAuth2Service
+    mvn clean package &
+
+    cd $BASEDIR/StayFit_RESTProsumer
+    mvn clean package &
+
+    cd $BASEDIR
+
+    wait
+  else
+    STAYFIT_SERVER=$(split_string $arg "," "1")
+    USER_SERVICE_ENDPOINT=$(split_string $arg "," "2")
+    USER_HISTORY_SERVICE_ENDPOINT=$(split_string $arg "," "3")
+    USER_DIET_SERVICE_ENDPOINT=$(split_string $arg "," "4")
+    OAUTH2_SERVICE_ENDPOINT=$(split_string $arg "," "5")
+  fi
+
+done
+
+if [ $(split_string $USER_SERVICE_ENDPOINT ":" "1") = "localhost" ]
 then
-
-  cd $BASEDIR/StayFit_UserService
-  mvn clean package &
-
-  cd $BASEDIR/StayFit_UserHistoryService
-  mvn clean package &
-
-  cd $BASEDIR/StayFit_UserDietService
-  mvn clean package &
-
-  cd $BASEDIR/StayFit_OAuth2Service
-  mvn clean package &
-
-  cd $BASEDIR/StayFit_RESTProsumer
-  mvn clean package &
-
-  cd $BASEDIR
-
-  wait
-
+  java -jar $BASEDIR/StayFit_UserService/target/StayFitUserService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_SERVICE_ENDPOINT ":" "2") &
+  pid1=$!
 fi
 
-java -jar $BASEDIR/StayFit_UserService/target/StayFitUserService-0.0.1-SNAPSHOT.jar &
-pid1=$!
-java -jar $BASEDIR/StayFit_UserHistoryService/target/StayFitUserHistoryService-0.0.1-SNAPSHOT.jar &
-pid2=$!
-java -jar $BASEDIR/StayFit_UserDietService/target/StayFitUserDietService-0.0.1-SNAPSHOT.jar &
-pid3=$!
-java -jar $BASEDIR/StayFit_OAuth2Service/target/StayFit_OAuth2Service-0.0.1-SNAPSHOT.jar &
-pid4=$!
-java -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar &
+if [ $(split_string $USER_HISTORY_SERVICE_ENDPOINT ":" "1") = "localhost" ]
+then
+  java -jar $BASEDIR/StayFit_UserHistoryService/target/StayFitUserHistoryService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_HISTORY_SERVICE_ENDPOINT ":" "2") &
+  pid2=$!
+fi
+
+if [ $(split_string $USER_DIET_SERVICE_ENDPOINT ":" "1") = "localhost" ]
+then
+  java -jar $BASEDIR/StayFit_UserDietService/target/StayFitUserDietService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_DIET_SERVICE_ENDPOINT ":" "2") &
+  pid3=$!
+fi
+
+if [ $(split_string $OAUTH2_SERVICE_ENDPOINT ":" "1") = "localhost" ]
+then
+  java -jar $BASEDIR/StayFit_OAuth2Service/target/StayFit_OAuth2Service-0.0.1-SNAPSHOT.jar --server.port=$(split_string $OAUTH2_SERVICE_ENDPOINT ":" "2") &
+  pid4=$!
+fi
+
+java -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER ":" "2") $USER_SERVICE_ENDPOINT $USER_HISTORY_SERVICE_ENDPOINT $USER_DIET_SERVICE_ENDPOINT $OAUTH2_SERVICE_ENDPOINT &
 pid5=$!
 
 node $BASEDIR/Server_Amazon/server.js &

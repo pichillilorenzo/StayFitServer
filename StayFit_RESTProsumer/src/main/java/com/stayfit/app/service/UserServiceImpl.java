@@ -3,6 +3,7 @@
  */
 package com.stayfit.app.service;
 
+import com.stayfit.app.configuration.ServicesConfiguration;
 import com.stayfit.app.exception.ResourceNotFoundException;
 
 import java.text.DateFormat;
@@ -16,6 +17,7 @@ import java.util.Map;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,7 +60,7 @@ import com.stayfit.userhistoryservice.UserHistoryServicePortType;
 import javax.xml.ws.soap.SOAPFaultException;
 
 /**
- * @author lorenzo
+ * 
  * 
  *         This Spring Service will use the SOAP User Web Service to exchange
  *         data.
@@ -67,12 +69,14 @@ import javax.xml.ws.soap.SOAPFaultException;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-	private com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
-	private UserServicePortType userPort = userService.getUserPort();
-	private com.stayfit.userdietservice.UserDietService userDietService = new com.stayfit.userdietservice.UserDietService();
-	private UserDietServicePortType userDietPort = userDietService.getUserDietPort();
-	private com.stayfit.userhistoryservice.UserHistoryService userHistoryService = new com.stayfit.userhistoryservice.UserHistoryService();
-	private UserHistoryServicePortType userHistoryPort = userHistoryService.getUserHistoryPort();
+	private UserServicePortType userPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
+			.getBean(UserServicePortType.class);
+	
+	private UserDietServicePortType userDietPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
+			.getBean(UserDietServicePortType.class);
+	
+	private UserHistoryServicePortType userHistoryPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
+			.getBean(UserHistoryServicePortType.class);
 
 	/**
 	 * 

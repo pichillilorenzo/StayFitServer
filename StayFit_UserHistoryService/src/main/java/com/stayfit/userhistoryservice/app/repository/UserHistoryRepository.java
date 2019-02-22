@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.stayfit.userhistoryservice.app.model.UserHistory;
 /**
- * @author lorenzo
+ * 
  *
  */
 public interface UserHistoryRepository extends MongoRepository<UserHistory, Long> {

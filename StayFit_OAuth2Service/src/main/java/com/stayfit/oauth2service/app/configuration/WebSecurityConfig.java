@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.stayfit.oauth2service.app.service.UserDetailsServiceImpl;
 
 /**
- * @author lorenzo
+ * 
  * 
  * The @EnableWebSecurity It allows Spring to find and automatically apply the class to the global WebSecurity.
  * The @EnableWebSecurity annotation and WebSecurityConfigurerAdapter work together to provide security to the application. 

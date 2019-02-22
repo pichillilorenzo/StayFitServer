@@ -31,7 +31,7 @@ import com.stayfit.userservice.UpdateUserResponse;
 import com.stayfit.userservice.User;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This Endpoint provide access to the User Service to manage users of the system.
  * An endpoint interprets the XML request message and uses that input to invoke a method on the business service. 

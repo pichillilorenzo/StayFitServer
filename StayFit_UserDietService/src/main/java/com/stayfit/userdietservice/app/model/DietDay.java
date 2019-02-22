@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This class represents a whole day of a user, where
  * there are listed all of the foods that he ate.

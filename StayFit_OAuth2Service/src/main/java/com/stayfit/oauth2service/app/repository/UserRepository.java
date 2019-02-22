@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.stayfit.oauth2service.app.model.User;
 
 /**
- * @author lorenzo
+ * 
  * 
  */
 public interface UserRepository extends JpaRepository<User, Long> {

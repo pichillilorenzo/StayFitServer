@@ -33,7 +33,7 @@ import com.stayfit.userdietservice.app.util.UserDietRequestTransformer;
 import com.stayfit.userdietservice.app.util.UserDietTransformer;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This Endpoint provide access to the User Diet Service to manage user's diets of the system.
  * An endpoint interprets the XML request message and uses that input to invoke a method on the business service. 

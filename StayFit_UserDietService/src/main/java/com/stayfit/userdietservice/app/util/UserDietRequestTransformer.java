@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.stayfit.userdietservice.app.model.UserDietRequest;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This utility class is used to covert an user's diet request model to a WSDL request and vice-versa.
  */

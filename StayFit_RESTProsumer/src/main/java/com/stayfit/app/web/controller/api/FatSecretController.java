@@ -23,7 +23,7 @@ import java.util.List;
 
 
 /**
- * @author Matteo
+ * 
  * 
  * @RestController annotation is used to create RESTful web services.
  * This Rest Controller manages the users of the system.

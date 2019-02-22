@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 /**
- * @author lorenzo
  * 
  * @Entity declares the class as an entity.
  * @Id declares the identifier property of this entity.

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author lorenzo
+ * 
  * 
  * This @Service is used by the OAuth2Config to get the user's information.
  */

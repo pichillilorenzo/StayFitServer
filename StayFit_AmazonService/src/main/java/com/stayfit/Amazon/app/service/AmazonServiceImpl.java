@@ -25,7 +25,7 @@ import javax.net.ssl.X509TrustManager;
 import com.stayfit.Amazon.app.util.AmazonUtils;
 
 /**
- * @author Matteo
+ * 
  *
  */
 

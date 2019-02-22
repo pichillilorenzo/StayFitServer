@@ -12,7 +12,7 @@ import com.stayfit.userservice.app.model.Role;
 import com.stayfit.userservice.app.repository.RoleRepository;
 
 /**
- * @author lorenzo
+ * 
  *
  */
 @Service

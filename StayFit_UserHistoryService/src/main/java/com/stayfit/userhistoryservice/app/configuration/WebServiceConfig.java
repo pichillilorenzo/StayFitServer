@@ -15,7 +15,7 @@ import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 
 /**
- * @author lorenzo
+ * 
  *
  * @EnableWs Enables SOAP Web Service features in this Spring Boot application.
  * Using the ServletRegistrationBean we register the MessageDispatcherServlet with Spring Boot. 

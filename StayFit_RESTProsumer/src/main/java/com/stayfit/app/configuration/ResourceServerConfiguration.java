@@ -38,7 +38,6 @@ import com.stayfit.app.model.User;
 import com.stayfit.app.repository.UserRepository;
 
 /**
- * @author lorenzo
  * 
  * The Resource Server is responsible for protecting resources, 
  * capable of accepting responding to protected resource requests using access tokens.
@@ -176,7 +175,14 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         RemoteTokenServices tokenServices = new RemoteTokenServices();
         tokenServices.setClientId("spring-security-oauth2-read-write-client");
         tokenServices.setClientSecret("spring-security-oauth2-read-write-client-password1234");
-        tokenServices.setCheckTokenEndpointUrl("http://localhost:8081/oauth/check_token");
+        
+        String host = ServicesConfiguration.OAUTH2_SERVICE_ENDPOINT_IP;
+        host = (host != null && !host.isEmpty()) ? host : "localhost";
+        
+        String port = ServicesConfiguration.OAUTH2_SERVICE_ENDPOINT_PORT;
+        port = (port != null && !port.isEmpty()) ? port : "8081";
+        
+        tokenServices.setCheckTokenEndpointUrl("http://" + host + ":" + port + "/oauth/check_token");
         tokenServices.setAccessTokenConverter(accessTokenConverter());
         return tokenServices;
     }

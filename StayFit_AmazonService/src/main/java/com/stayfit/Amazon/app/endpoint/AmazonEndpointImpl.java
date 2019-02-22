@@ -21,7 +21,7 @@ import com.stayfit.amazonservice.ObjectFactory;
 import com.stayfit.amazonservice.Products;
 
 /**
- * @author Matteo
+ * 
  *
  */
 @Endpoint
