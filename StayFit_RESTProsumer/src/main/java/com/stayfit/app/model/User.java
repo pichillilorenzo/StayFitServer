@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,8 +53,7 @@ public class User implements UserDetails {
         joinColumns = @JoinColumn(
           name = "user_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
-          name = "role_id", referencedColumnName = "id")) 
-	@OrderBy
+          name = "role_id", referencedColumnName = "id"))
 	@JsonIgnoreProperties("users")
     private Collection<Role> roles;
 

@@ -7,6 +7,9 @@ import com.stayfit.userservice.app.exception.ResourceNotFoundException;
 import com.stayfit.userservice.app.model.User;
 import com.stayfit.userservice.app.repository.UserRepository;
 
+import java.util.Optional;
+
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

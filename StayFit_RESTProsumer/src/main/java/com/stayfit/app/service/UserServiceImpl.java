@@ -61,9 +61,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 /**
  * 
- * 
- *         This Spring Service will use the SOAP User Web Service to exchange
- *         data.
+ * This Spring Service will use the SOAP User Web Service to exchange data.
  */
 
 @Service

@@ -6,6 +6,7 @@ package com.stayfit.userservice.app.endpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -32,12 +33,12 @@ import com.stayfit.userservice.User;
 
 /**
  * 
- * 
  * This Endpoint provide access to the User Service to manage users of the system.
  * An endpoint interprets the XML request message and uses that input to invoke a method on the business service. 
  * The result of that service invocation is represented as a response message.
  */
 @Endpoint
+@Transactional
 @Import(Encoders.class)
 public class UserEndpointImpl implements UserEndpoint {
 	private static final String NAMESPACE_URI = "http://stayfit.com/userservice";
@@ -67,8 +68,9 @@ public class UserEndpointImpl implements UserEndpoint {
 		
 		ObjectFactory factory = new ObjectFactory();
 		GetUserByIdResponse response = factory.createGetUserByIdResponse();
-
+		
 		User userWsdl = userTransformer.convert(userService.getUserById(request.getValue().getId()));
+		
 		response.setUser(userWsdl);
 
 		return factory.createGetUserByIdResponse(response);

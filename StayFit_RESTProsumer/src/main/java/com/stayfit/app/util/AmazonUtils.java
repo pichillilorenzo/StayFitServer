@@ -1,4 +1,4 @@
-package com.stayfit.app.Utils;
+package com.stayfit.app.util;
 
 import java.io.StringReader;
 

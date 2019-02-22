@@ -4,6 +4,7 @@
 package com.stayfit.app.service;
 
 import com.stayfit.app.model.ListProducts;
+import com.stayfit.app.util.AmazonUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,7 +19,6 @@ import javax.net.ssl.X509TrustManager;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import com.stayfit.app.Utils.AmazonUtils;
 import org.w3c.dom.Document;
 /**
  * ;

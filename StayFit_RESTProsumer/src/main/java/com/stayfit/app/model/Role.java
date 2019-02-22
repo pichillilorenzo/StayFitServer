@@ -12,13 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.JoinColumn;
 
@@ -42,9 +38,6 @@ public class Role implements GrantedAuthority {
     private Long id;
  
     private String name;
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnoreProperties("roles")
-    private Collection<User> users;
  
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -53,8 +46,6 @@ public class Role implements GrantedAuthority {
           name = "role_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
           name = "privilege_id", referencedColumnName = "id"))
-    @OrderBy
-    @JsonManagedReference 
     private Collection<Privilege> privileges;
 
 	@Override

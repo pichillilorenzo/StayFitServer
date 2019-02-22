@@ -10,12 +10,13 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.stayfit.userservice.Role;
 import com.stayfit.userservice.app.model.User;
 
 /**
  * 
- *
  * This utility class is used to covert an user model to a WSDL request.
  */
 @Component
@@ -32,6 +33,12 @@ public class UserTransformer {
 		} catch (DatatypeConfigurationException e) {
 			e.printStackTrace();
 		}
+        
+        user.getRoles().forEach(role -> {
+        	Role roleWsdl = new Role();
+        	BeanUtils.copyProperties(role, roleWsdl);
+        	userWsdl.getRoles().add(roleWsdl);
+        });
         
         return userWsdl;
     }
