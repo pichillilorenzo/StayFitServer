@@ -1,9 +1,9 @@
 package com.stayfit.app.service;
 
-import com.stayfit.app.exception.ResourceNotFoundException;
+import com.stayfit.app.model.ListProducts;
 
 public interface AmazonService {
 
-	com.stayfit.amazonservice.Products getListFood(String name) throws ResourceNotFoundException;
+	ListProducts getListFood(String name) throws Exception;
 
 }

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stayfit.amazonservice.Products;
-import com.stayfit.app.service.AmazonServiceImpl;
+import com.stayfit.app.model.ListProducts;
+import com.stayfit.app.service.AmazonService;
 
 /**
  * 
@@ -29,7 +29,7 @@ import com.stayfit.app.service.AmazonServiceImpl;
 public class AmazonController {
 	
 	@Autowired
-    private AmazonServiceImpl amazon;
+    private AmazonService amazon;
 	
 	
 	/**
@@ -37,12 +37,13 @@ public class AmazonController {
 	  * and produces an application/json response.
 	  * 
 	  * It returns the list of products filtered by product name
+	 * @throws Exception 
 	  */
 	
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Products getListFood(@PathVariable("name") String name) {
+    ListProducts getListFood(@PathVariable("name") String name) throws Exception {
         return amazon.getListFood(name);
     }
 	
