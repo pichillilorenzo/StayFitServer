@@ -3,11 +3,17 @@
  */
 package com.stayfit.app.model;
 
+import java.util.Collection;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Matteo
  *
  */
+@Data @NoArgsConstructor @AllArgsConstructor
 public class ItemAttributes {
 	
 	    protected String title;
@@ -15,38 +21,5 @@ public class ItemAttributes {
 	    protected String img;
 	    protected ListPrice listPrice;
 	    
-	    public String getTitle() {
-	        return title;
-	    }
-
-	    public void setTitle(String value) {
-	        this.title = value;
-	    }
-	    
-	    public String getBrand() {
-	        return brand;
-	    }
-
-	    public void setBrand(String value) {
-	        this.brand = value;
-	    }
-
- 
-	    public String getImg() {
-	        return img;
-	    }
-
-
-	    public void setImg(String value) {
-	        this.img = value;
-	    }
-
-	    public ListPrice getListPrice() {
-	        return listPrice;
-	    }
-
-	    public void setListPrice(ListPrice value) {
-	        this.listPrice = value;
-	    }
 
 }

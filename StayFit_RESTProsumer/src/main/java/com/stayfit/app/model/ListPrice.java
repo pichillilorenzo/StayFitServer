@@ -1,29 +1,17 @@
 package com.stayfit.app.model;
 
+import java.util.Collection;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data @NoArgsConstructor @AllArgsConstructor
 public class ListPrice {
 	
 	
     protected String amount;
     protected String currency;
-
-    public String getAmount() {
-        return amount;
-    }
-
-
-    public void setAmount(String value) {
-        this.amount = value;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-
-    public void setCurrency(String value) {
-        this.currency = value;
-    }
 
 
 }
