@@ -17,6 +17,8 @@ USER_DIET_SERVICE_ENDPOINT="localhost:8084"
 MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/stayfit?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
 MONGODB_DATABASE_URL="localhost:27017"
 
+RUN_NODE_AMAZON_SERVER=false
+
 for arg in "$@"
 do
   if [ "$arg" = "-b" ]
@@ -46,6 +48,9 @@ do
   elif [[ "$arg" = "--mongodb="* ]]
   then
     MONGODB_DATABASE_URL=$(echo $arg | cut -c11-)
+  elif [[ "$arg" = "--node" ]]
+  then
+    RUN_NODE_AMAZON_SERVER=true
   else
     STAYFIT_SERVER=$(split_string $arg "," "1")
     USER_SERVICE_ENDPOINT=$(split_string $arg "," "2")
@@ -83,8 +88,11 @@ fi
 java -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL $USER_SERVICE_ENDPOINT $USER_HISTORY_SERVICE_ENDPOINT $USER_DIET_SERVICE_ENDPOINT $OAUTH2_SERVICE_ENDPOINT &
 pid5=$!
 
-node $BASEDIR/Server_Amazon/server.js &
-pid6=$!
+if [ $RUN_NODE_AMAZON_SERVER = true ]
+then
+  node $BASEDIR/Server_Amazon/server.js &
+  pid6=$!
+fi
 
 function ctrl_c() {
   kill -9 $pid1
@@ -92,7 +100,10 @@ function ctrl_c() {
   kill -9 $pid3
   kill -9 $pid4
   kill -9 $pid5
-  kill -9 $pid6
+  if [ $RUN_NODE_AMAZON_SERVER = true ]
+  then
+    kill -9 $pid6
+  fi
 }
 
 wait
