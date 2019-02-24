@@ -10,7 +10,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONObject;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 public class BarcodeServiceImpl implements BarcodeService {
 	
@@ -18,11 +18,8 @@ public class BarcodeServiceImpl implements BarcodeService {
 	 * Return the Name of the product filtered by barcode 
 	 */
 
-	/* (non-Javadoc)
-	 * @see com.stayfit.app.service.BarcodeService#getNameByBarcode(java.lang.String)
-	 */
 	@Override
-	@Transactional(readOnly = true)
+	@PreAuthorize("hasAuthority('FOOD_SEARCH')")
 	public String getNameByBarcode(String barcode) throws Exception {
 
 		// In this portion of code we fix the SSL error for MacOS

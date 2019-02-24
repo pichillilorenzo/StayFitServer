@@ -20,18 +20,17 @@ import javax.net.ssl.X509TrustManager;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
-/**
- * ;
- *
- */
+
 
 @Service
 public class AmazonServiceImpl implements AmazonService {
 	
-	/* (non-Javadoc)
-	 * @see com.stayfit.app.service.AmazonService#getListFood(java.lang.String)
+	/**
+	 * this method returns the list of amazon products filtered by name
+	 *
 	 */
 	@Override
+	@PreAuthorize("hasAuthority('AMAZON_SEARCH')")
 	public ListProducts getListFood(String name) throws Exception {
 		// In this portion of code we fix the SSL error for MacOS
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {

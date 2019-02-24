@@ -8,6 +8,8 @@ import com.fatsecret.platform.services.Response;
 import com.fatsecret.platform.model.CompactFood;
 import com.fatsecret.platform.model.Food;
 import com.stayfit.app.exception.ResourceNotFoundException;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -34,6 +36,7 @@ public class FatSecretServiceImpl implements FatSecretService {
 	final FatsecretService service = new FatsecretService(key, secret);
 
 	@Override
+	@PreAuthorize("hasAuthority('FOOD_READ')")
 	public Food getFoodById(Long id) throws ResourceNotFoundException {
 
 		Food food = service.getFood(id);
@@ -46,6 +49,7 @@ public class FatSecretServiceImpl implements FatSecretService {
 	}
 
 	@Override
+	@PreAuthorize("hasAuthority('FOOD_SEARCH')")
 	public List<CompactFood> search(@RequestBody Map<String, Object> payload) throws Exception {
 
 		String name = payload.get("name").toString();

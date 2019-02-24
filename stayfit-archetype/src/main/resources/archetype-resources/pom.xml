@@ -108,5 +108,47 @@
 	      <version>${cxf.version}</version>
 	    </dependency>
     </dependencies>
+    <build>
+		<plugins>
+			<!-- spring-boot-maven-plugin -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- cxf-codegen-plugin -->
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<version>${cxf.version}</version>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/user.wsdl</wsdlLocation>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user_history.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/user_history.wsdl</wsdlLocation>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${project.basedir}/src/main/resources/wsdl/clients/user_diet.wsdl</wsdl>
+									<wsdlLocation>classpath:wsdl/clients/user_diet.wsdl</wsdlLocation>
+								</wsdlOption>
+				
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

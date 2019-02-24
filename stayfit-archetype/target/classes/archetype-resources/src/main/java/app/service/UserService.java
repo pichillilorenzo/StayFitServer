@@ -9,12 +9,18 @@ import ${package}.userdietservice.UserDietRequest;
 import ${package}.userhistoryservice.UserHistory;
 
 public interface UserService {
-
+	
 	/**
 	 * 
 	 * It returns the user by his id.
 	 */
 	${package}.userservice.User getUserById(Long id) throws ResourceNotFoundException;
+	
+	/**
+	 * 
+	 * It returns the user by his username.
+	 */
+	${package}.userservice.User getUserByUsername(String username) throws ResourceNotFoundException;
 
 	/**
 	 * 
