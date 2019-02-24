@@ -27,32 +27,33 @@ import com.stayfit.userhistoryservice.UserHistory;
 
 /**
  * 
- * @RestController annotation is used to create RESTful web services.
- * This Rest Controller manages the users of the system.
+ * @RestController annotation is used to create RESTful web services. This Rest
+ * Controller manages the users of the system.
  */
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	/**
-	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/oauth/me"
-	 * and produces an application/json response.
+	 * This method maps the HTTP GET requests incoming on the route
+	 * "/api/v1/users/oauth/me" and produces an application/json response.
 	 * 
 	 * It returns the user by his username through the access token.
 	 */
 	@RequestMapping(value = "/oauth/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody com.stayfit.userservice.User getUserByUsername(Principal principal) throws ResourceNotFoundException {
+	public @ResponseBody com.stayfit.userservice.User getUserByUsername(Principal principal)
+			throws ResourceNotFoundException {
 		String username = principal.getName();
 		return userService.getUserByUsername(username);
 	}
-	
+
 	/**
-	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/{id}"
-	 * and produces an application/json response.
+	 * This method maps the HTTP GET requests incoming on the route
+	 * "/api/v1/users/{id}" and produces an application/json response.
 	 * 
 	 * It returns the user by his id.
 	 */
@@ -61,22 +62,24 @@ public class UserController {
 	public @ResponseBody User getUserById(@PathVariable("id") Long id) {
 		return userService.getUserById(id);
 	}
-	
+
 	/**
-	 * This method maps the HTTP POST requests incoming on the route "/api/v1/users".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP POST requests incoming on the route
+	 * "/api/v1/users". It consumes an application/json request and produces an
+	 * application/json response.
 	 * 
 	 * It is used to register the user into the system.
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody User registerUser(@RequestBody Map<String, Object> payload) {
+	public @ResponseBody User registerUser(@RequestBody Map<String, Object> payload) throws Exception {
 		return userService.registerUser(payload);
 	}
-	
+
 	/**
-	 * This method maps the HTTP PUT requests incoming on the route "/api/v1/users/{id}".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP PUT requests incoming on the route
+	 * "/api/v1/users/{id}". It consumes an application/json request and produces an
+	 * application/json response.
 	 * 
 	 * It updates the user with his new fields.
 	 */
@@ -85,10 +88,11 @@ public class UserController {
 	public @ResponseBody User updateUser(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
 		return userService.updateUser(id, payload);
 	}
-	
+
 	/**
-	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/{id}/history/{date}".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP GET requests incoming on the route
+	 * "/api/v1/users/{id}/history/{date}". It consumes an application/json request
+	 * and produces an application/json response.
 	 * 
 	 * It returns the user's history by history date.
 	 */
@@ -98,77 +102,86 @@ public class UserController {
 			@PathVariable("date") String date) {
 		return userService.getUserHistoryByDate(id, date);
 	}
-	
+
 	/**
-	 * This method maps the HTTP POST requests incoming on the route "/api/v1/users/{id}/history/{date}".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP POST requests incoming on the route
+	 * "/api/v1/users/{id}/history/{date}". It consumes an application/json request
+	 * and produces an application/json response.
 	 * 
 	 * It saves/updates the user's history into the system.
 	 */
 	@RequestMapping(value = "/{id}/history/{date}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody UserHistory saveUserHistory(@PathVariable("id") Long id, @PathVariable("date") String date,
-			@RequestBody Map<String, Object> payload) {
+			@RequestBody Map<String, Object> payload) throws Exception {
 		return userService.saveUserHistory(id, date, payload);
 	}
-	
+
 	/**
-	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/diet-requests".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP GET requests incoming on the route
+	 * "/api/v1/users/diet-requests". It consumes an application/json request and
+	 * produces an application/json response.
 	 * 
 	 * It returns all of the user's diet requests that are not completed yet.
 	 */
 	@RequestMapping(value = "/diet-requests", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody List<UserDietRequest> getAllUserDietRequestNotCompleted() {
+	public @ResponseBody List<UserDietRequest> getAllUserDietRequestNotCompleted() throws Exception {
 		return userService.getAllUserDietRequestNotCompleted();
 	}
-	
+
 	/**
-	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/{id}/diet-requests".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP GET requests incoming on the route
+	 * "/api/v1/users/{id}/diet-requests". It consumes an application/json request
+	 * and produces an application/json response.
 	 * 
 	 * It returns the user's diet request that is not completed yet.
 	 */
 	@RequestMapping(value = "/{id}/diet-request", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody UserDietRequest getUserDietRequestNotCompletedByUserId(@PathVariable("id") Long id) {
+	public @ResponseBody UserDietRequest getUserDietRequestNotCompletedByUserId(@PathVariable("id") Long id)
+			throws Exception {
 		return userService.getUserDietRequestNotCompletedByUserId(id);
 	}
-	
+
 	/**
-	 * This method maps the HTTP POST requests incoming on the route "/api/v1/users/{id}/diet-requests".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP POST requests incoming on the route
+	 * "/api/v1/users/{id}/diet-requests". It consumes an application/json request
+	 * and produces an application/json response.
 	 * 
 	 * It saves/updates the user's diet request into the system.
 	 */
 	@RequestMapping(value = "/{id}/diet-request", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody UserDietRequest saveUserDietRequest(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
+	public @ResponseBody UserDietRequest saveUserDietRequest(@PathVariable("id") Long id,
+			@RequestBody Map<String, Object> payload) throws Exception {
 		return userService.saveUserDietRequest(id, payload);
 	}
-	
+
 	/**
-	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/{id}/diet".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP GET requests incoming on the route
+	 * "/api/v1/users/{id}/diet". It consumes an application/json request and
+	 * produces an application/json response.
 	 * 
 	 * It returns the user's diet by his user id.
 	 */
 	@RequestMapping(value = "/{id}/diet", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody UserDiet getUserDiet(@PathVariable("id") Long id) {
+	public @ResponseBody UserDiet getUserDiet(@PathVariable("id") Long id) throws Exception {
 		return userService.getUserDiet(id);
 	}
-	
+
 	/**
-	 * This method maps the HTTP POST requests incoming on the route "/api/v1/users/{id}/diet".
-	 * It consumes an application/json request and produces an application/json response.
+	 * This method maps the HTTP POST requests incoming on the route
+	 * "/api/v1/users/{id}/diet". It consumes an application/json request and
+	 * produces an application/json response.
 	 * 
 	 * It saves/updates the user's diet into the system.
 	 */
 	@RequestMapping(value = "/{id}/diet", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody UserDiet saveUserDiet(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload) {
+	public @ResponseBody UserDiet saveUserDiet(@PathVariable("id") Long id, @RequestBody Map<String, Object> payload)
+			throws Exception {
 		return userService.saveUserDiet(id, payload);
 	}
 }

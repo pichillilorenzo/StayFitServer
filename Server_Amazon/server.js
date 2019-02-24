@@ -14,6 +14,6 @@ app.get('/onca/xml',async function (req, res) {
   res.send(await api(browser,find))
 });
 
-app.listen(3000, function () {
-  console.log('Api Amazon ready!');
+app.listen(process.env.PORT, function () {
+  console.log('Api Amazon ready! Port ' + process.env.PORT);
 });

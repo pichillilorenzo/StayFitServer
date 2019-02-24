@@ -1,67 +1,86 @@
 const http = require('http');
 const request = require('request');
-const os = require('os');
 const path = require("path");
-const service = require("./service");
 
 const ABS_PATH = path.dirname(__dirname);
 
+let userServiceHosts = [{pm2: "http://localhost:8071", java: "http://localhost:8082"}, {pm2: "http://localhost:8072", java: "http://localhost:8092"}];
+let userHistoryServiceHosts = [{pm2: "http://localhost:8073", java: "http://localhost:8083"}, {pm2: "http://localhost:8074", java: "http://localhost:8093"}];
+let userDietServiceHosts = [{pm2: "http://localhost:8075", java: "http://localhost:8084"}, {pm2: "http://localhost:8076", java: "http://localhost:8094"}];
+
+// wrap a request in an promise
+function requestUrl(url) {
+  return new Promise((resolve, reject) => {
+      request(url, (error, response, body) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          if (response.statusCode != 200) {
+            reject('Invalid status code <' + response.statusCode + '>');
+            return;
+          }
+          resolve(body);
+      });
+  });
+}
+
 function calcWeightedRes(cpu, memory) {
-  return cpu * 0.80 + (memory/os.totalmem()*100) * 0.20;
+  return (cpu * 0.20) + (memory * 0.80);
 }
 
-http.createServer(function (req, res) {
-  if (service.getProcesses().stayfitServer1Process != null && service.getProcesses().stayfitServer2Process != null) {
-    
-    let server = service.servers[0];
-    let res1 = calcWeightedRes(service.getProcesses().stayfitServer1Process.monit.cpu, service.getProcesses().stayfitServer1Process.monit.memory);
-    let res2 = calcWeightedRes(service.getProcesses().stayfitServer2Process.monit.cpu, service.getProcesses().stayfitServer2Process.monit.memory);
-    
-    console.log(res1, res2)
+http.createServer(async function (req, res) {
+  let resources = [];
 
-    if (res1 > res2) {
-      server = service.servers[1];
-      console.log("SECOND SERVER")
+  try {
+    switch(req.url) {
+      case "/userservice":
+        for(let i = 0; i < userServiceHosts.length; i++)
+          resources[i] = JSON.parse(await requestUrl(userServiceHosts[i].pm2));
+        break;
+      case "/userhistoryservice":
+        for(let i = 0; i < userHistoryServiceHosts.length; i++)
+          resources[i] = JSON.parse(await requestUrl(userHistoryServiceHosts[i].pm2));
+        break;
+      case "/userdietservice":
+        for(let i = 0; i < userDietServiceHosts.length; i++)
+          resources[i] = JSON.parse(await requestUrl(userDietServiceHosts[i].pm2));
+        break;
     }
-    else {
-      console.log("FIRST SERVER")
-    }
-    
-    let forwardRequest = request({ url: server + req.url });
-    forwardRequest.on('error', (e) => {
-      console.error(`problem with request: ${e.message}`);
-    });
-
-    req.pipe(forwardRequest).pipe(res);
-  }
-  else {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.write('pm2 is not working!');
+  } catch (error) {
+    console.log(error)
+    res.writeHead(500, {"Content-Type": "text/plain"});
+    res.write(error.toString());
     res.end();
+    return;
   }
-}).listen(8070);
-
-function exitHandler(options) {
-  if (service.getProcesses().stayfitServer1Process != null) service.getPM2().stop(service.getProcesses().stayfitServer1Process.pm_id);
-  if (service.getProcesses().SOAPServices1Process != null) service.getPM2().stop(service.getProcesses().SOAPServices1Process.pm_id);
-  if (service.getProcesses().stayfitServer2Process != null) service.getPM2().stop(service.getProcesses().stayfitServer2Process.pm_id);
-  if (service.getProcesses().SOAPServices2Process != null) service.getPM2().stop(service.getProcesses().SOAPServices2Process.pm_id);
   
-  setTimeout(() => {
-    if (options.exit) 
-      process.exit();
-  }, 2000);
-}
+  let weighetRes = [];
 
-process.stdin.resume();
+  for(let i = 0; i < resources.length; i++) {
+    weighetRes.push(calcWeightedRes(resources[i].cpu, resources[i].memory));
+  }
+  
+  let index = weighetRes.indexOf(Math.min(...weighetRes));
 
-//do something when app is closing
-process.on('exit', exitHandler.bind(null, {}));
+  res.writeHead(200, {"Content-Type": "text/plain"});
 
-//catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+  if (index >= 0) {
+    switch(req.url) {
+      case "/userservice":
+        res.write(userServiceHosts[index].java.replace("http://", ""));
+        break;
+      case "/userhistoryservice":
+        res.write(userHistoryServiceHosts[index].java.replace("http://", ""));
+        break;
+      case "/userdietservice":
+        res.write(userDietServiceHosts[index].java.replace("http://", ""));
+        break;
+    }
+  }
 
-process.on('uncaughtException', (e) => {
-  console.log('[uncaughtException] app will be terminated: ', e.stack);
-  exitHandler({exit:true});
+  res.end()
+
+}).listen(process.env.PORT, function(){
+  console.log("Listening on port " + process.env.PORT)
 });

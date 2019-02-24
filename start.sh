@@ -8,18 +8,20 @@ trap ctrl_c INT
 
 BASEDIR="$(cd "$(dirname "$0")" && pwd)"
 
-STAYFIT_SERVER="localhost:8080"
-OAUTH2_SERVICE_ENDPOINT="localhost:8081"
-USER_SERVICE_ENDPOINT="localhost:8082"
-USER_HISTORY_SERVICE_ENDPOINT="localhost:8083"
-USER_DIET_SERVICE_ENDPOINT="localhost:8084"
+STAYFIT_SERVER_HOST="localhost:8080"
+OAUTH2_SERVICE_HOST="localhost:8081"
+LOAD_BALANCER_HOST="localhost:8070"
+
+USER_SERVICE_HOST_1="localhost:8082"
+USER_HISTORY_SERVICE_HOST_1="localhost:8083"
+USER_DIET_SERVICE_HOST_1="localhost:8084"
+
+USER_SERVICE_HOST_2="localhost:8092"
+USER_HISTORY_SERVICE_HOST_2="localhost:8093"
+USER_DIET_SERVICE_HOST_2="localhost:8094"
 
 MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/stayfit?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
 MONGODB_DATABASE_URL="localhost:27017"
-
-RUN_NODE_AMAZON_SERVER=false
-
-START_STAYFIT_SERVER=false
 
 for arg in "$@"
 do
@@ -50,71 +52,68 @@ do
   elif [[ "$arg" = "--mongodb="* ]]
   then
     MONGODB_DATABASE_URL=$(echo $arg | cut -c11-)
-  elif [[ "$arg" = "--node" ]]
-  then
-    RUN_NODE_AMAZON_SERVER=true
-  elif [[ "$arg" = "--stayfit-server" ]]
-  then
-    START_STAYFIT_SERVER=true
-  else
-    STAYFIT_SERVER=$(split_string $arg "," "1")
-    USER_SERVICE_ENDPOINT=$(split_string $arg "," "2")
-    USER_HISTORY_SERVICE_ENDPOINT=$(split_string $arg "," "3")
-    USER_DIET_SERVICE_ENDPOINT=$(split_string $arg "," "4")
-    OAUTH2_SERVICE_ENDPOINT=$(split_string $arg "," "5")
   fi
 
 done
 
-if [ $(split_string $USER_SERVICE_ENDPOINT ":" "1") = "localhost" ]
-then
-  java -jar $BASEDIR/StayFit_UserService/target/StayFitUserService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_SERVICE_ENDPOINT ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL &
-  pid1=$!
-fi
+# USER SERVICE
+export PORT=8071
+node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_UserService/target/StayFitUserService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_SERVICE_HOST_1 ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL &
+pid1=$!
 
-if [ $(split_string $USER_HISTORY_SERVICE_ENDPOINT ":" "1") = "localhost" ]
-then
-  java -jar $BASEDIR/StayFit_UserHistoryService/target/StayFitUserHistoryService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_HISTORY_SERVICE_ENDPOINT ":" "2") --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
-  pid2=$!
-fi
+export PORT=8072
+node $BASEDIR/Load_Balancer/service.js 2 -jar $BASEDIR/StayFit_UserService/target/StayFitUserService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_SERVICE_HOST_2 ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL &
+pid2=$!
 
-if [ $(split_string $USER_DIET_SERVICE_ENDPOINT ":" "1") = "localhost" ]
-then
-  java -jar $BASEDIR/StayFit_UserDietService/target/StayFitUserDietService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_DIET_SERVICE_ENDPOINT ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
-  pid3=$!
-fi
+# USER HISTORY SERVICE
+export PORT=8073
+node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_UserHistoryService/target/StayFitUserHistoryService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_HISTORY_SERVICE_HOST_1 ":" "2") --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
+pid3=$!
 
-if [ $(split_string $OAUTH2_SERVICE_ENDPOINT ":" "1") = "localhost" ]
-then
-  java -jar $BASEDIR/StayFit_OAuth2Service/target/StayFit_OAuth2Service-0.0.1-SNAPSHOT.jar --server.port=$(split_string $OAUTH2_SERVICE_ENDPOINT ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL &
-  pid4=$!
-fi
+export PORT=8074
+node $BASEDIR/Load_Balancer/service.js 2 -jar $BASEDIR/StayFit_UserHistoryService/target/StayFitUserHistoryService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_HISTORY_SERVICE_HOST_2 ":" "2") --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
+pid4=$!
 
-if [ $START_STAYFIT_SERVER = true ]
-then
-  java -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL $USER_SERVICE_ENDPOINT $USER_HISTORY_SERVICE_ENDPOINT $USER_DIET_SERVICE_ENDPOINT $OAUTH2_SERVICE_ENDPOINT &
-  pid5=$!
-fi
+# USER DIET SERVICE
+export PORT=8075
+node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_UserDietService/target/StayFitUserDietService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_DIET_SERVICE_HOST_1 ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
+pid5=$!
 
-if [ $RUN_NODE_AMAZON_SERVER = true ]
-then
-  node $BASEDIR/Server_Amazon/server.js &
-  pid6=$!
-fi
+export PORT=8076
+node $BASEDIR/Load_Balancer/service.js 2 -jar $BASEDIR/StayFit_UserDietService/target/StayFitUserDietService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_DIET_SERVICE_HOST_2 ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
+pid5=$!
+
+# OAUTH2 SERVICE
+export PORT=8077
+node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_OAuth2Service/target/StayFit_OAuth2Service-0.0.1-SNAPSHOT.jar --server.port=$(split_string $OAUTH2_SERVICE_HOST ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL &
+pid6=$!
+
+# AMAZON API
+export PORT=3000
+node $BASEDIR/Server_Amazon/server.js &
+pid7=$!
+
+# LOAD BALANCER
+export PORT=$(split_string $LOAD_BALANCER_HOST ":" "2") 
+node $BASEDIR/Load_Balancer/index.js &
+pid8=$!
+
+# PROSUMER
+export PORT=8078
+node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER_HOST ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --loadbalancer.host=$(split_string $LOAD_BALANCER_HOST ":" "1") --loadbalancer.port=$(split_string $LOAD_BALANCER_HOST ":" "2") &
+pid9=$!
 
 function ctrl_c() {
   kill -9 $pid1
   kill -9 $pid2
   kill -9 $pid3
   kill -9 $pid4
-  if [ $START_STAYFIT_SERVER = true ]
-  then
-    kill -9 $pid5
-  fi
-  if [ $RUN_NODE_AMAZON_SERVER = true ]
-  then
-    kill -9 $pid6
-  fi
+  kill -9 $pid5
+  kill -9 $pid6
+  kill -9 $pid7
+  kill -9 $pid8
+  kill -9 $pid9
+  pm2 stop all
 }
 
 wait

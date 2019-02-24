@@ -3,7 +3,6 @@
  */
 package com.stayfit.app.service;
 
-import com.stayfit.app.configuration.ServicesConfiguration;
 import com.stayfit.app.exception.ResourceNotFoundException;
 
 import java.math.BigDecimal;
@@ -18,14 +17,13 @@ import java.util.Map;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.stayfit.userservice.UserServicePortType;
 import com.stayfit.userdietservice.Breakfast;
 import com.stayfit.userdietservice.Dinner;
 import com.stayfit.userdietservice.Lunch;
@@ -56,11 +54,7 @@ import com.stayfit.userservice.UpdateUserRequest;
 import com.stayfit.userservice.UpdateUserResponse;
 import com.stayfit.userdietservice.UserDiet;
 import com.stayfit.userdietservice.UserDietRequest;
-import com.stayfit.userdietservice.UserDietServicePortType;
 import com.stayfit.userhistoryservice.UserHistory;
-import com.stayfit.userhistoryservice.UserHistoryServicePortType;
-
-import javax.xml.ws.soap.SOAPFaultException;
 
 /**
  * 
@@ -69,15 +63,9 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
-
-	private UserServicePortType userPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
-			.getBean(UserServicePortType.class);
 	
-	private UserDietServicePortType userDietPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
-			.getBean(UserDietServicePortType.class);
-	
-	private UserHistoryServicePortType userHistoryPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
-			.getBean(UserHistoryServicePortType.class);
+	@Autowired
+	private LoadBalancerServiceImpl loadBalancerService;
 	
 	/**
 	 * 
@@ -89,13 +77,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 		GetUserByIdRequest request = new GetUserByIdRequest();
 		request.setId(id);
-
+		
 		try {
-			GetUserByIdResponse response = userPort.getUserById(request);
+			GetUserByIdResponse response = loadBalancerService.getUserService().getUserById(request);
 			com.stayfit.userservice.User user = response.getUser();
 
 			return user;
-		} catch (SOAPFaultException ex) {
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new ResourceNotFoundException("User", "id", id);
 		}
 	}
@@ -111,11 +100,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		request.setUsername(username);
 
 		try {
-			GetUserByUsernameResponse response = userPort.getUserByUsername(request);
+			GetUserByUsernameResponse response = loadBalancerService.getUserService().getUserByUsername(request);
 			com.stayfit.userservice.User user = response.getUser();
 
 			return user;
-		} catch (SOAPFaultException ex) {
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new ResourceNotFoundException("User", "username", username);
 		}
 	}
@@ -125,7 +115,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 * It is used to register the user into the system.
 	 */
 	@Override
-	public com.stayfit.userservice.User registerUser(Map<String, Object> payload) {
+	public com.stayfit.userservice.User registerUser(Map<String, Object> payload) throws Exception {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		GregorianCalendar gregDate = new GregorianCalendar();
@@ -150,7 +140,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			e.printStackTrace();
 		}
 
-		RegistrationResponse response = userPort.register(request);
+		RegistrationResponse response = loadBalancerService.getUserService().register(request);
 		com.stayfit.userservice.User userResponse = response.getUser();
 
 		return userResponse;
@@ -189,11 +179,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		}
 
 		try {
-			UpdateUserResponse response = userPort.updateUser(request);
+			UpdateUserResponse response = loadBalancerService.getUserService().updateUser(request);
 			com.stayfit.userservice.User userResponse = response.getUser();
 
 			return userResponse;
-		} catch (SOAPFaultException ex) {
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new ResourceNotFoundException("User", "id", id);
 		}
 	}
@@ -230,10 +221,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		}
 
 		try {
-			GetUserHistoryByDateResponse response = userHistoryPort.getUserHistoryByDate(request);
+			GetUserHistoryByDateResponse response = loadBalancerService.getUserHistoryService().getUserHistoryByDate(request);
 			com.stayfit.userhistoryservice.UserHistory userHistoryResponse = response.getUserHistory();
 			return userHistoryResponse;
-		} catch (SOAPFaultException ex) {
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new ResourceNotFoundException("UserHistory", "date", date);
 		}
 
@@ -245,7 +237,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 */
 	@Override
 	@PreAuthorize("hasAuthority('USER_HISTORY_CREATE')")
-	public UserHistory saveUserHistory(Long id, String date, Map<String, Object> payload) {
+	public UserHistory saveUserHistory(Long id, String date, Map<String, Object> payload) throws Exception {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		GregorianCalendar gregDate = new GregorianCalendar();
@@ -321,7 +313,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		SaveUserHistoryRequest request = new SaveUserHistoryRequest();
 		request.setUserHistory(userHistory);
 
-		SaveUserHistoryResponse response = userHistoryPort.saveUserHistory(request);
+		SaveUserHistoryResponse response = loadBalancerService.getUserHistoryService().saveUserHistory(request);
 		return response.getUserHistory();
 
 	}
@@ -332,10 +324,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
-	public List<UserDietRequest> getAllUserDietRequestNotCompleted() {
+	public List<UserDietRequest> getAllUserDietRequestNotCompleted() throws Exception {
 
 		GetAllUserDietRequestNotCompletedRequest request = new GetAllUserDietRequestNotCompletedRequest();
-		GetAllUserDietRequestNotCompletedResponse response = userDietPort.getAllUserDietRequestNotCompleted(request);
+		GetAllUserDietRequestNotCompletedResponse response = loadBalancerService.getUserDietService().getAllUserDietRequestNotCompleted(request);
 
 		return response.getUserDietRequest();
 	}
@@ -346,13 +338,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_READ')")
-	public UserDietRequest getUserDietRequestNotCompletedByUserId(Long id) {
+	public UserDietRequest getUserDietRequestNotCompletedByUserId(Long id) throws Exception {
 
 		GetUserDietRequestNotCompletedByUserIdRequest request = new GetUserDietRequestNotCompletedByUserIdRequest();
 
 		request.setUserId(id);
 
-		GetUserDietRequestNotCompletedByUserIdResponse response = userDietPort
+		GetUserDietRequestNotCompletedByUserIdResponse response = loadBalancerService.getUserDietService()
 				.getUserDietRequestNotCompletedByUserId(request);
 
 		return response.getUserDietRequest();
@@ -365,7 +357,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_REQUEST_CREATE')")
-	public UserDietRequest saveUserDietRequest(Long id, Map<String, Object> payload) {
+	public UserDietRequest saveUserDietRequest(Long id, Map<String, Object> payload) throws Exception {
 
 		SaveUserDietRequestRequest request = new SaveUserDietRequestRequest();
 
@@ -379,7 +371,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		userDietRequest.setCompleted(false);
 		request.setUserDietRequest(userDietRequest);
 
-		SaveUserDietRequestResponse response = userDietPort.saveUserDietRequest(request);
+		SaveUserDietRequestResponse response = loadBalancerService.getUserDietService().saveUserDietRequest(request);
 
 		return response.getUserDietRequest();
 	}
@@ -390,13 +382,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_READ')")
-	public UserDiet getUserDiet(Long id) {
+	public UserDiet getUserDiet(Long id) throws Exception {
 
 		GetUserDietByUserIdRequest request = new GetUserDietByUserIdRequest();
 
 		request.setUserId(id);
 
-		GetUserDietByUserIdResponse response = userDietPort.getUserDietByUserId(request);
+		GetUserDietByUserIdResponse response = loadBalancerService.getUserDietService().getUserDietByUserId(request);
 
 		return response.getUserDiet();
 	}
@@ -407,7 +399,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	 */
 	@Override
 	@PreAuthorize("hasAuthority('DIET_CREATE')")
-	public UserDiet saveUserDiet(Long id, Map<String, Object> payload) {
+	public UserDiet saveUserDiet(Long id, Map<String, Object> payload) throws Exception {
 
 		SaveUserDietRequest request = new SaveUserDietRequest();
 
@@ -477,7 +469,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 		request.setUserDiet(userDiet);
 
-		SaveUserDietResponse response = userDietPort.saveUserDiet(request);
+		SaveUserDietResponse response = loadBalancerService.getUserDietService().saveUserDiet(request);
 
 		return response.getUserDiet();
 	}

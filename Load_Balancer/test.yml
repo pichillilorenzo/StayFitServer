@@ -1,16 +1,16 @@
 config:
-  target: 'http://localhost:8070'
+  target: 'http://localhost:8080'
   phases:
     - duration: 10
       arrivalRate: 10
       rampTo: 50
       name: "Warm up the application"
     - duration: 20
-      arrivalRate: 50
+      arrivalRate: 35
       name: "Sustained max load"
   defaults:
     headers:
-      Authorization: 'Bearer 02b08268-fb64-4e3b-a4b5-d0ad10aaebb7'
+      Authorization: 'Bearer 49c8f67b-147e-4d2d-941b-4ea60d997d18'
 scenarios:
   - flow:
     - get:
