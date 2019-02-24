@@ -21,8 +21,7 @@ import com.stayfit.app.model.ListProducts;
 public class AmazonUtils {
 	
 	/**
-	  * This function maps the XML response of amazon API with Model of Product created  
-	  * into WSDL file.
+	  * This function maps the XML response of amazon API with Model ListProduct 
 	  * 
 	  */
 	
