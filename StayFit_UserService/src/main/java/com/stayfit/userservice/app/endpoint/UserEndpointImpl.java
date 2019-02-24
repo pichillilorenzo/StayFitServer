@@ -24,6 +24,8 @@ import com.stayfit.userservice.app.model.Role;
 import com.stayfit.userservice.app.configuration.Encoders;
 import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
+import com.stayfit.userservice.GetUserByUsernameRequest;
+import com.stayfit.userservice.GetUserByUsernameResponse;
 import com.stayfit.userservice.ObjectFactory;
 import com.stayfit.userservice.RegistrationRequest;
 import com.stayfit.userservice.RegistrationResponse;
@@ -74,6 +76,27 @@ public class UserEndpointImpl implements UserEndpoint {
 		response.setUser(userWsdl);
 
 		return factory.createGetUserByIdResponse(response);
+	}
+	
+	/**
+	 * This method maps the WSDL operation "getUserByUsername" with a GetUserByUsernameRequest input message
+	 * and a GetUserByUsernameResponse output message.
+	 * 
+	 * It returns the user by his username.
+	 */
+	@Override
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetUserByUsernameRequest")
+	@ResponsePayload
+	public JAXBElement<GetUserByUsernameResponse> getUserByUsername(@RequestPayload JAXBElement<GetUserByUsernameRequest> request) {
+		
+		ObjectFactory factory = new ObjectFactory();
+		GetUserByUsernameResponse response = factory.createGetUserByUsernameResponse();
+		
+		User userWsdl = userTransformer.convert(userService.getUserByUsername(request.getValue().getUsername()));
+		
+		response.setUser(userWsdl);
+
+		return factory.createGetUserByUsernameResponse(response);
 	}
 	
 	/**

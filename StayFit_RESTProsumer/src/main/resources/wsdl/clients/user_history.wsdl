@@ -76,6 +76,10 @@
 				<xsd:sequence>
 					<xsd:element name="foodId" type="xsd:long" minOccurs="0"
 						nillable="false" />
+					<xsd:element name="name" type="xsd:string"
+						minOccurs="0" nillable="false" />
+					<xsd:element name="calories" type="xsd:decimal"
+						minOccurs="0" nillable="false" />
 					<xsd:element name="amount" type="xsd:float"
 						minOccurs="0" nillable="false" />
 					<xsd:element name="unit" type="xsd:string"

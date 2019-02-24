@@ -3,6 +3,8 @@
  */
 package com.stayfit.userhistoryservice.app.model;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +25,10 @@ import lombok.NoArgsConstructor;
 public class Meal {
 	
 	@Field("food_id")
-	private long foodId;
-	private float amount;
-	String unit;
+	private Long foodId;
+	@Field("food_name")
+	private String name;
+	private BigDecimal calories;
+	private Float amount;
+	private String unit;
 }

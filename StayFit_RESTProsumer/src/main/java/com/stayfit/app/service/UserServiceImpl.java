@@ -6,6 +6,7 @@ package com.stayfit.app.service;
 import com.stayfit.app.configuration.ServicesConfiguration;
 import com.stayfit.app.exception.ResourceNotFoundException;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +35,8 @@ import com.stayfit.userdietservice.GetAllUserDietRequestNotCompletedRequest;
 import com.stayfit.userdietservice.GetAllUserDietRequestNotCompletedResponse;
 import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
+import com.stayfit.userservice.GetUserByUsernameRequest;
+import com.stayfit.userservice.GetUserByUsernameResponse;
 import com.stayfit.userdietservice.GetUserDietByUserIdRequest;
 import com.stayfit.userdietservice.GetUserDietByUserIdResponse;
 import com.stayfit.userdietservice.GetUserDietRequestNotCompletedByUserIdRequest;
@@ -75,7 +78,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	private UserHistoryServicePortType userHistoryPort = (new AnnotationConfigApplicationContext(ServicesConfiguration.class))
 			.getBean(UserHistoryServicePortType.class);
-
+	
 	/**
 	 * 
 	 * It returns the user by his id.
@@ -94,6 +97,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			return user;
 		} catch (SOAPFaultException ex) {
 			throw new ResourceNotFoundException("User", "id", id);
+		}
+	}
+	
+	/**
+	 * 
+	 * It returns the user by his username.
+	 */
+	@Override
+	public com.stayfit.userservice.User getUserByUsername(String username) throws ResourceNotFoundException {
+
+		GetUserByUsernameRequest request = new GetUserByUsernameRequest();
+		request.setUsername(username);
+
+		try {
+			GetUserByUsernameResponse response = userPort.getUserByUsername(request);
+			com.stayfit.userservice.User user = response.getUser();
+
+			return user;
+		} catch (SOAPFaultException ex) {
+			throw new ResourceNotFoundException("User", "username", username);
 		}
 	}
 
@@ -250,6 +273,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		((ArrayList<Map<String, Object>>) payload.get("breakfast")).forEach(breakfastMap -> {
 			com.stayfit.userhistoryservice.Breakfast breakfast = new com.stayfit.userhistoryservice.Breakfast();
 			breakfast.setFoodId(Long.parseLong(breakfastMap.get("foodId").toString()));
+			breakfast.setName(breakfastMap.get("name").toString());
+			breakfast.setCalories(BigDecimal.valueOf(Double.parseDouble(breakfastMap.get("calories").toString())));
 			breakfast.setAmount(Float.parseFloat(breakfastMap.get("amount").toString()));
 			breakfast.setUnit(breakfastMap.get("unit").toString());
 			breakfastList.add(breakfast);
@@ -260,6 +285,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		((ArrayList<Map<String, Object>>) payload.get("lunch")).forEach(lunchMap -> {
 			com.stayfit.userhistoryservice.Lunch lunch = new com.stayfit.userhistoryservice.Lunch();
 			lunch.setFoodId(Long.parseLong(lunchMap.get("foodId").toString()));
+			lunch.setName(lunchMap.get("name").toString());
+			lunch.setCalories(BigDecimal.valueOf(Double.parseDouble(lunchMap.get("calories").toString())));
 			lunch.setAmount(Float.parseFloat(lunchMap.get("amount").toString()));
 			lunch.setUnit(lunchMap.get("unit").toString());
 			lunchList.add(lunch);
@@ -270,6 +297,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		((ArrayList<Map<String, Object>>) payload.get("dinner")).forEach(dinnerMap -> {
 			com.stayfit.userhistoryservice.Dinner dinner = new com.stayfit.userhistoryservice.Dinner();
 			dinner.setFoodId(Long.parseLong(dinnerMap.get("foodId").toString()));
+			dinner.setName(dinnerMap.get("name").toString());
+			dinner.setCalories(BigDecimal.valueOf(Double.parseDouble(dinnerMap.get("calories").toString())));
 			dinner.setAmount(Float.parseFloat(dinnerMap.get("amount").toString()));
 			dinner.setUnit(dinnerMap.get("unit").toString());
 			dinnerList.add(dinner);
@@ -280,6 +309,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		((ArrayList<Map<String, Object>>) payload.get("other")).forEach(otherMap -> {
 			com.stayfit.userhistoryservice.Other other = new com.stayfit.userhistoryservice.Other();
 			other.setFoodId(Long.parseLong(otherMap.get("foodId").toString()));
+			other.setName(otherMap.get("name").toString());
+			other.setCalories(BigDecimal.valueOf(Double.parseDouble(otherMap.get("calories").toString())));
 			other.setAmount(Float.parseFloat(otherMap.get("amount").toString()));
 			other.setUnit(otherMap.get("unit").toString());
 			otherList.add(other);
@@ -397,6 +428,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			((ArrayList<Map<String, Object>>) dietDayMap.get("breakfast")).forEach(breakfastMap -> {
 				Breakfast breakfast = new Breakfast();
 				breakfast.setFoodId(Long.parseLong(breakfastMap.get("foodId").toString()));
+				breakfast.setName(breakfastMap.get("name").toString());
+				breakfast.setCalories(BigDecimal.valueOf(Double.parseDouble(breakfastMap.get("calories").toString())));
 				breakfast.setAmount(Float.parseFloat(breakfastMap.get("amount").toString()));
 				breakfast.setUnit(breakfastMap.get("unit").toString());
 				breakfastList.add(breakfast);
@@ -406,6 +439,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			((ArrayList<Map<String, Object>>) dietDayMap.get("lunch")).forEach(lunchMap -> {
 				Lunch lunch = new Lunch();
 				lunch.setFoodId(Long.parseLong(lunchMap.get("foodId").toString()));
+				lunch.setName(lunchMap.get("name").toString());
+				lunch.setCalories(BigDecimal.valueOf(Double.parseDouble(lunchMap.get("calories").toString())));
 				lunch.setAmount(Float.parseFloat(lunchMap.get("amount").toString()));
 				lunch.setUnit(lunchMap.get("unit").toString());
 				lunchList.add(lunch);
@@ -415,6 +450,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			((ArrayList<Map<String, Object>>) dietDayMap.get("dinner")).forEach(dinnerMap -> {
 				Dinner dinner = new Dinner();
 				dinner.setFoodId(Long.parseLong(dinnerMap.get("foodId").toString()));
+				dinner.setName(dinnerMap.get("name").toString());
+				dinner.setCalories(BigDecimal.valueOf(Double.parseDouble(dinnerMap.get("calories").toString())));
 				dinner.setAmount(Float.parseFloat(dinnerMap.get("amount").toString()));
 				dinner.setUnit(dinnerMap.get("unit").toString());
 				dinnerList.add(dinner);
@@ -424,6 +461,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			((ArrayList<Map<String, Object>>) dietDayMap.get("other")).forEach(otherMap -> {
 				Other other = new Other();
 				other.setFoodId(Long.parseLong(otherMap.get("foodId").toString()));
+				other.setName(otherMap.get("name").toString());
+				other.setCalories(BigDecimal.valueOf(Double.parseDouble(otherMap.get("calories").toString())));
 				other.setAmount(Float.parseFloat(otherMap.get("amount").toString()));
 				other.setUnit(otherMap.get("unit").toString());
 				otherList.add(other);

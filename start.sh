@@ -6,7 +6,7 @@ function split_string() {
 
 trap ctrl_c INT
 
-BASEDIR=$(pwd)
+BASEDIR="$(cd "$(dirname "$0")" && pwd)"
 
 STAYFIT_SERVER="localhost:8080"
 OAUTH2_SERVICE_ENDPOINT="localhost:8081"
@@ -18,6 +18,8 @@ MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/stayfit?useUnicode=true&useJDBCC
 MONGODB_DATABASE_URL="localhost:27017"
 
 RUN_NODE_AMAZON_SERVER=false
+
+START_STAYFIT_SERVER=false
 
 for arg in "$@"
 do
@@ -51,6 +53,9 @@ do
   elif [[ "$arg" = "--node" ]]
   then
     RUN_NODE_AMAZON_SERVER=true
+  elif [[ "$arg" = "--stayfit-server" ]]
+  then
+    START_STAYFIT_SERVER=true
   else
     STAYFIT_SERVER=$(split_string $arg "," "1")
     USER_SERVICE_ENDPOINT=$(split_string $arg "," "2")
@@ -85,8 +90,11 @@ then
   pid4=$!
 fi
 
-java -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL $USER_SERVICE_ENDPOINT $USER_HISTORY_SERVICE_ENDPOINT $USER_DIET_SERVICE_ENDPOINT $OAUTH2_SERVICE_ENDPOINT &
-pid5=$!
+if [ $START_STAYFIT_SERVER = true ]
+then
+  java -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL $USER_SERVICE_ENDPOINT $USER_HISTORY_SERVICE_ENDPOINT $USER_DIET_SERVICE_ENDPOINT $OAUTH2_SERVICE_ENDPOINT &
+  pid5=$!
+fi
 
 if [ $RUN_NODE_AMAZON_SERVER = true ]
 then
@@ -99,7 +107,10 @@ function ctrl_c() {
   kill -9 $pid2
   kill -9 $pid3
   kill -9 $pid4
-  kill -9 $pid5
+  if [ $START_STAYFIT_SERVER = true ]
+  then
+    kill -9 $pid5
+  fi
   if [ $RUN_NODE_AMAZON_SERVER = true ]
   then
     kill -9 $pid6

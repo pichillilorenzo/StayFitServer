@@ -27,6 +27,19 @@
 						maxOccurs="1" nillable="false" />
 				</xsd:sequence>
 			</xsd:complexType>
+			
+			<xsd:complexType name="GetUserByUsernameRequest">
+				<xsd:sequence>
+					<xsd:element name="username" type="xsd:string" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="GetUserByUsernameResponse">
+				<xsd:sequence>
+					<xsd:element name="user" type="tns:User" minOccurs="0"
+						maxOccurs="1" nillable="false" />
+				</xsd:sequence>
+			</xsd:complexType>
 
 			<xsd:complexType name="RegistrationRequest">
 				<xsd:sequence>
@@ -105,6 +118,11 @@
 			<xsd:element name="GetUserByIdResponse"
 				type="tns:GetUserByIdResponse" />
 				
+			<xsd:element name="GetUserByUsernameRequest"
+				type="tns:GetUserByUsernameRequest" />
+			<xsd:element name="GetUserByUsernameResponse"
+				type="tns:GetUserByUsernameResponse" />
+				
 			<xsd:element name="RegistrationRequest"
 				type="tns:RegistrationRequest" />
 			<xsd:element name="RegistrationResponse"
@@ -126,6 +144,16 @@
 	<wsdl:message name="GetUserByIdResponse">
 		<wsdl:part name="parameters"
 			element="tns:GetUserByIdResponse" />
+	</wsdl:message>
+	
+	<wsdl:message name="GetUserByUsernameRequest">
+		<wsdl:part name="parameters"
+			element="tns:GetUserByUsernameRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="GetUserByUsernameResponse">
+		<wsdl:part name="parameters"
+			element="tns:GetUserByUsernameResponse" />
 	</wsdl:message>
 	
 	<wsdl:message name="RegistrationRequest">
@@ -156,6 +184,13 @@
 				wsam:Action="http://stayfit.com/userservice/GetUserByIdResponse" />
 		</wsdl:operation>
 		
+		<wsdl:operation name="getUserByUsername">
+			<wsdl:input message="tns:GetUserByUsernameRequest"
+				wsam:Action="http://stayfit.com/userservice/GetUserByUsernameRequest" />
+			<wsdl:output message="tns:GetUserByUsernameResponse"
+				wsam:Action="http://stayfit.com/userservice/GetUserByUsernameResponse" />
+		</wsdl:operation>
+		
 		<wsdl:operation name="register">
 			<wsdl:input message="tns:RegistrationRequest"
 				wsam:Action="http://stayfit.com/userservice/RegistrationRequest" />
@@ -176,7 +211,18 @@
 		type="tns:UserServicePortType">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
+			
 		<wsdl:operation name="getUserById">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		<wsdl:operation name="getUserByUsername">
 			<soap:operation soapAction="" />
 			<wsdl:input>
 				<soap:body use="literal" />

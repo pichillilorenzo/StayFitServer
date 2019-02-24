@@ -4,6 +4,8 @@ import javax.xml.bind.JAXBElement;
 
 import com.stayfit.userservice.GetUserByIdRequest;
 import com.stayfit.userservice.GetUserByIdResponse;
+import com.stayfit.userservice.GetUserByUsernameRequest;
+import com.stayfit.userservice.GetUserByUsernameResponse;
 import com.stayfit.userservice.RegistrationRequest;
 import com.stayfit.userservice.RegistrationResponse;
 import com.stayfit.userservice.UpdateUserRequest;
@@ -18,6 +20,14 @@ public interface UserEndpoint {
 	 * It returns the user by his id.
 	 */
 	JAXBElement<GetUserByIdResponse> getUserById(JAXBElement<GetUserByIdRequest> request);
+	
+	/**
+	 * This method maps the WSDL operation "getUserByUsername" with a GetUserByUsernameRequest input message
+	 * and a GetUserByUsernameResponse output message.
+	 * 
+	 * It returns the user by his username.
+	 */
+	JAXBElement<GetUserByUsernameResponse> getUserByUsername(JAXBElement<GetUserByUsernameRequest> request);
 
 	/**
 	 * This method maps the WSDL operation "register" with a RegistrationRequest input message

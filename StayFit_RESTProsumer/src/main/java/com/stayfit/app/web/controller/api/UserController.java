@@ -3,6 +3,7 @@
  */
 package com.stayfit.app.web.controller.api;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stayfit.app.service.UserService;
+import com.stayfit.app.exception.ResourceNotFoundException;
 import com.stayfit.userservice.User;
 import com.stayfit.userdietservice.UserDiet;
 import com.stayfit.userdietservice.UserDietRequest;
@@ -31,9 +33,22 @@ import com.stayfit.userhistoryservice.UserHistory;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-
+	
 	@Autowired
 	private UserService userService;
+	
+	/**
+	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/oauth/me"
+	 * and produces an application/json response.
+	 * 
+	 * It returns the user by his username through the access token.
+	 */
+	@RequestMapping(value = "/oauth/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody com.stayfit.userservice.User getUserByUsername(Principal principal) throws ResourceNotFoundException {
+		String username = principal.getName();
+		return userService.getUserByUsername(username);
+	}
 	
 	/**
 	 * This method maps the HTTP GET requests incoming on the route "/api/v1/users/{id}"

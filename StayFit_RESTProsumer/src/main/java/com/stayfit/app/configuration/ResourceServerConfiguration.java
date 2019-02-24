@@ -33,6 +33,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.stayfit.app.exception.ResourceNotFoundException;
 import com.stayfit.app.model.Role;
 import com.stayfit.app.model.User;
 import com.stayfit.app.repository.UserRepository;
@@ -144,10 +145,13 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     	tokenConverter.setUserTokenConverter(new DefaultUserAuthenticationConverter() {
 
     	    @Override
-    	    public Authentication extractAuthentication(Map<String, ?> map) {
+    	    public Authentication extractAuthentication(Map<String, ?> map) throws ResourceNotFoundException {
     	        Authentication authentication = super.extractAuthentication(map);
-
-    	        User user = userRepository.findByUsername(map.get("user_name").toString());
+    	        
+    	        String username = map.get("user_name").toString();
+    	        
+    	        User user = userRepository.findByUsername(username)
+    	        				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     	        
     	        // here we set the user's authorities
     	        // for granting access to protected resources
