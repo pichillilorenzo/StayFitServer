@@ -57,6 +57,8 @@ local.properties
 
 .history/
 
+node_modules/
+
 RESTService1.err
 RESTService1.log
 RESTService2.err
