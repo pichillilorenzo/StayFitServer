@@ -57,10 +57,13 @@ public class FatSecretServiceImpl implements FatSecretService {
 		String barcode = payload.get("barcode").toString();
 
 		// we check if the user inserts the barcode
-		if (barcode != "") {
+		if (!barcode.isEmpty()) {
 			BarcodeService barcode_impl = new BarcodeServiceImpl();
 			name = barcode_impl.getNameByBarcode(barcode);
 
+		}
+		if(name.isEmpty()) {
+			return  new ArrayList<CompactFood>();
 		}
 		Response<CompactFood> response = service.searchFoods(name);
 		List<CompactFood> foods = response.getResults();
