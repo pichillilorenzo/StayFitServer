@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor name="basic">
+ 
+    <requiredProperties>
+    	 <requiredProperty key="target-namespace-user-diet" />
+    	 <requiredProperty key="target-namespace-user" />
+    	 <requiredProperty key="target-namespace-user-history" />
+   		 <requiredProperty key="project-database" />
+   		 <requiredProperty key="database-username" />
+   		 <requiredProperty key="database-password" />
+        <requiredProperty key="property-file-name">
+            <defaultValue>Resource-default</defaultValue>
+        </requiredProperty>
+ 
+        <!--JUnit version to use in generated project -->
+        <requiredProperty key="junit-version">
+            <defaultValue>4.10</defaultValue>
+        </requiredProperty>
+    </requiredProperties>
+ 
+    <!--Add new fileset for resources -->
+    <!--Set filtered="true" to process files in that directory as templates -->
+    <!--Set packaged="false" to remove package folder structure from resource
+        directory -->
+    <fileSets>
+        <fileSet filtered="true">
+            <directory>src/main/resources</directory>
+ 
+            <!--Filters example -->
+            <includes>
+                <include>*.properties</include>
+            </includes>
+ 
+
+        </fileSet>
+        
+       <fileSet filtered="true">
+            <directory>src/main/resources/wsdl/clients</directory>
+ 
+            <!--Filters example -->
+            <includes>
+                <include>*.wsdl</include>
+            </includes>
+ 
+
+        </fileSet>
+ 
+        <fileSet filtered="true" packaged="true">
+            <directory>src/main/java</directory>
+        </fileSet>
+        <fileSet filtered="true" packaged="true">
+            <directory>src/test/java</directory>
+        </fileSet>
+        
+    </fileSets>
+ 
+</archetype-descriptor>
