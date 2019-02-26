@@ -2,6 +2,7 @@
   "name": "test",
   "version": "0.0.1",
   "dependencies": {
+    "pidusage": "^2.0.17",
     "pm2": "^3.3.1",
     "request": "^2.88.0"
   }

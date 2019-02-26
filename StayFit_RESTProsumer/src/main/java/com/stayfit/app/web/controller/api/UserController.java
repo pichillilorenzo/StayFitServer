@@ -124,7 +124,7 @@ public class UserController {
 	 * 
 	 * It returns all of the user's diet requests that are not completed yet.
 	 */
-	@RequestMapping(value = "/diet-requests", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/diet-requests", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody List<UserDietRequest> getAllUserDietRequestNotCompleted() throws Exception {
 		return userService.getAllUserDietRequestNotCompleted();
@@ -137,7 +137,7 @@ public class UserController {
 	 * 
 	 * It returns the user's diet request that is not completed yet.
 	 */
-	@RequestMapping(value = "/{id}/diet-request", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{id}/diet-request", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody UserDietRequest getUserDietRequestNotCompletedByUserId(@PathVariable("id") Long id)
 			throws Exception {
@@ -165,7 +165,7 @@ public class UserController {
 	 * 
 	 * It returns the user's diet by his user id.
 	 */
-	@RequestMapping(value = "/{id}/diet", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{id}/diet", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody UserDiet getUserDiet(@PathVariable("id") Long id) throws Exception {
 		return userService.getUserDiet(id);

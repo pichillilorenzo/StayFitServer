@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -19,61 +21,96 @@ import com.stayfit.userdietservice.UserDietServicePortType;
 import com.stayfit.userhistoryservice.UserHistoryServicePortType;
 import com.stayfit.userservice.UserServicePortType;
 
+/**
+ * 
+ * This class communicates with a load balancer to decide where to redirect the current user request.
+ */
 @Service
 public class LoadBalancerServiceImpl implements LoadBalancerService {
 
-	@Value("${loadbalancer.host}")
-	private String host;
-
-	@Value("${loadbalancer.port}")
-	private String port;
-
+	@Value("${loadbalancer.url}")
+	private String loadBalancerUrl;
+	
+	private Map<String, UserServicePortType> cachedUserServicePort = new HashMap<>();
+	private Map<String, UserHistoryServicePortType> cachedUserHistoryServicePort = new HashMap<>();
+	private Map<String, UserDietServicePortType> cachedUserDietServicePort = new HashMap<>();
+	
+	/**
+	 * Gets the User SOAP Web Service Port.
+	 */
 	@Override
 	public UserServicePortType getUserService() throws Exception {
-		String[] hostPort = getHostPort("userservice");
-
+		String url = getServiceUrl("userservice");
+		
+		if (cachedUserServicePort.containsKey(url)) {
+			return cachedUserServicePort.get(url);
+		}
+		
 		com.stayfit.userservice.UserService userService = new com.stayfit.userservice.UserService();
 		UserServicePortType userPort = userService.getUserPort();
 
 		BindingProvider bp = (BindingProvider) userPort;
 		String currentEndpoint = bp.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY).toString();
-		String newUrl = createNewUrl(currentEndpoint, hostPort[0], hostPort[1]);
+		String newUrl = createNewUrl(currentEndpoint, url);
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, newUrl);
-
+		
+		cachedUserServicePort.put(url, userPort);
+		
 		return userPort;
 	}
-
+	
+	/**
+	 * Gets the User History SOAP Web Service Port.
+	 */
 	@Override
 	public UserHistoryServicePortType getUserHistoryService() throws Exception {
-		String[] hostPort = getHostPort("userhistoryservice");
+		String url = getServiceUrl("userhistoryservice");
+		
+		if (cachedUserHistoryServicePort.containsKey(url)) {
+			return cachedUserHistoryServicePort.get(url);
+		}
 
 		com.stayfit.userhistoryservice.UserHistoryService userHistoryService = new com.stayfit.userhistoryservice.UserHistoryService();
 		UserHistoryServicePortType userHistoryPort = userHistoryService.getUserHistoryPort();
 
 		BindingProvider bp = (BindingProvider) userHistoryPort;
 		String currentEndpoint = bp.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY).toString();
-		String newUrl = createNewUrl(currentEndpoint, hostPort[0], hostPort[1]);
+		String newUrl = createNewUrl(currentEndpoint, url);
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, newUrl);
-
+		
+		cachedUserHistoryServicePort.put(url, userHistoryPort);
+		
 		return userHistoryPort;
 	}
-
+	
+	/**
+	 * Gets the User Diet SOAP Web Service Port.
+	 */
 	@Override
 	public UserDietServicePortType getUserDietService() throws Exception {
-		String[] hostPort = getHostPort("userdietservice");
-
+		String url = getServiceUrl("userdietservice");
+		
+		if (cachedUserDietServicePort.containsKey(url)) {
+			return cachedUserDietServicePort.get(url);
+		}
+		
 		com.stayfit.userdietservice.UserDietService userDietService = new com.stayfit.userdietservice.UserDietService();
 		UserDietServicePortType userDietPort = userDietService.getUserDietPort();
 
 		BindingProvider bp = (BindingProvider) userDietPort;
 		String currentEndpoint = bp.getRequestContext().get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY).toString();
-		String newUrl = createNewUrl(currentEndpoint, hostPort[0], hostPort[1]);
+		String newUrl = createNewUrl(currentEndpoint, url);
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, newUrl);
-
+		
+		cachedUserDietServicePort.put(url, userDietPort);
+		
 		return userDietPort;
 	}
-
-	private String[] getHostPort(String serviceName) throws Exception {
+	
+	/**
+	 * Returns the host and port of the web service from the load balancer
+	 */
+	private String getServiceUrl(String serviceName) throws Exception {
 		// In this portion of code we fix the SSL error for MacOS
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 
@@ -103,7 +140,7 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
 		try {
 
 			// build the url
-			String url = "http://" + host + ":" + port + "/" + URLEncoder.encode(serviceName, "UTF-8");
+			String url = loadBalancerUrl + "/" + URLEncoder.encode(serviceName, "UTF-8");
 
 			// connect to url
 			HttpURLConnection c = null;
@@ -131,8 +168,9 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
 				if (c != null) {
 					c.disconnect();
 				}
-				System.out.println(sb);
-				return sb.split(":");
+				
+				System.out.println("Load Balancer redirects to: " + sb);
+				return sb;
 
 			default:
 				if (c != null) {
@@ -146,18 +184,16 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
 			throw new Exception(e);
 		}
 	}
-
-	private String createNewUrl(String url, String host, String port) {
-		String newUrl = "";
+	
+	/**
+	 * Utility to create a valid url with new host and port.
+	 */
+	private String createNewUrl(String oldUrl, String url) {
+		String newUrl = url;
 
 		try {
+			URL currentUrl = new URL(oldUrl);
 
-			URL currentUrl = new URL(url);
-
-			newUrl += currentUrl.getProtocol() + "://";
-			newUrl += (host != null && !host.isEmpty()) ? host : currentUrl.getHost();
-			newUrl += ":" + ((port != null && !port.isEmpty()) ? port
-					: ((currentUrl.getPort() != -1) ? currentUrl.getPort() : currentUrl.getDefaultPort()));
 			newUrl += (currentUrl.getPath() != null) ? currentUrl.getPath() : "";
 			newUrl += (currentUrl.getQuery() != null) ? currentUrl.getQuery() : "";
 

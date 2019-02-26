@@ -1,16 +1,16 @@
 config:
   target: 'http://localhost:8080'
   phases:
-    - duration: 10
-      arrivalRate: 10
-      rampTo: 50
-      name: "Warm up the application"
     - duration: 20
-      arrivalRate: 35
+      arrivalRate: 1
+      rampTo: 35
+      name: "Warm up the application"
+    - duration: 40
+      arrivalRate: 60
       name: "Sustained max load"
   defaults:
     headers:
-      Authorization: 'Bearer 49c8f67b-147e-4d2d-941b-4ea60d997d18'
+      Authorization: 'Bearer b50b6033-03ea-41d1-8219-9e3e1c1f089e'
 scenarios:
   - flow:
     - get:
@@ -18,3 +18,9 @@ scenarios:
   - flow:
     - get:
         url: "/api/v1/users/1/history/2019-02-20"
+  - flow:
+    - get:
+        url: "/api/v1/users/diet-requests"
+  - flow:
+    - get:
+        url: "/api/v1/users/1/diet"

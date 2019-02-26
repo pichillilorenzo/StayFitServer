@@ -4,57 +4,51 @@ const path = require("path");
 
 const ABS_PATH = path.dirname(__dirname);
 
-let userServiceHosts = [{pm2: "http://localhost:8071", java: "http://localhost:8082"}, {pm2: "http://localhost:8072", java: "http://localhost:8092"}];
-let userHistoryServiceHosts = [{pm2: "http://localhost:8073", java: "http://localhost:8083"}, {pm2: "http://localhost:8074", java: "http://localhost:8093"}];
-let userDietServiceHosts = [{pm2: "http://localhost:8075", java: "http://localhost:8084"}, {pm2: "http://localhost:8076", java: "http://localhost:8094"}];
-
-// wrap a request in an promise
-function requestUrl(url) {
-  return new Promise((resolve, reject) => {
-      request(url, (error, response, body) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          if (response.statusCode != 200) {
-            reject('Invalid status code <' + response.statusCode + '>');
-            return;
-          }
-          resolve(body);
-      });
-  });
+// available hosts
+let serviceHosts = {
+  userservice: [{pm2: "http://localhost:8071", java: "http://localhost:8082"}, {pm2: "http://localhost:8072", java: "http://localhost:8092"}],
+  userhistoryservice: [{pm2: "http://localhost:8073", java: "http://localhost:8083"}, {pm2: "http://localhost:8074", java: "http://localhost:8093"}],
+  userdietservice: [{pm2: "http://localhost:8075", java: "http://localhost:8084"}, {pm2: "http://localhost:8076", java: "http://localhost:8094"}]
 }
 
-function calcWeightedRes(cpu, memory) {
-  return (cpu * 0.20) + (memory * 0.80);
-}
+let cachedServiceResources = {
+  userservice: [],
+  userhistoryservice: [],
+  userdietservice: []
+};
 
-http.createServer(async function (req, res) {
-  let resources = [];
-
-  try {
-    switch(req.url) {
-      case "/userservice":
-        for(let i = 0; i < userServiceHosts.length; i++)
-          resources[i] = JSON.parse(await requestUrl(userServiceHosts[i].pm2));
-        break;
-      case "/userhistoryservice":
-        for(let i = 0; i < userHistoryServiceHosts.length; i++)
-          resources[i] = JSON.parse(await requestUrl(userHistoryServiceHosts[i].pm2));
-        break;
-      case "/userdietservice":
-        for(let i = 0; i < userDietServiceHosts.length; i++)
-          resources[i] = JSON.parse(await requestUrl(userDietServiceHosts[i].pm2));
-        break;
+// gets, every 2 seconds, information about CPU and Memory usage from web services
+setTimeout(() => {
+  let intervalId = setInterval(async () => {
+    for (let key of Object.keys(serviceHosts)) {
+      for(let i = 0; i < serviceHosts[key].length; i++) {
+        request(serviceHosts[key][i].pm2, (error, response, body) => {
+          if (error) 
+            console.log(error);
+          else if (response.statusCode == 200) {
+            try {
+              cachedServiceResources[key][i] = JSON.parse(body);
+            } catch (err) {
+              console.log(body, err);
+            }
+          }
+        });
+      }
     }
-  } catch (error) {
-    console.log(error)
-    res.writeHead(500, {"Content-Type": "text/plain"});
-    res.write(error.toString());
-    res.end();
-    return;
-  }
-  
+  }, 2000);
+}, 2000);
+
+// returns a value based on CPU and Memory usage 
+// to determine which web service is the best to serve the current user request
+function calcWeightedRes(cpu, memory) {
+  return (cpu * 0.80) + (memory * 0.20);
+}
+
+// create a server to accept requests from the Prosumer and return 
+// the best web service url based on its CPU and Memory usage 
+http.createServer(function (req, res) {
+  let hosts = serviceHosts[req.url.substr(1)];
+  let resources = cachedServiceResources[req.url.substr(1)];
   let weighetRes = [];
 
   for(let i = 0; i < resources.length; i++) {
@@ -62,25 +56,16 @@ http.createServer(async function (req, res) {
   }
   
   let index = weighetRes.indexOf(Math.min(...weighetRes));
+  index = (index < 0) ? 0 : index;
 
   res.writeHead(200, {"Content-Type": "text/plain"});
-
-  if (index >= 0) {
-    switch(req.url) {
-      case "/userservice":
-        res.write(userServiceHosts[index].java.replace("http://", ""));
-        break;
-      case "/userhistoryservice":
-        res.write(userHistoryServiceHosts[index].java.replace("http://", ""));
-        break;
-      case "/userdietservice":
-        res.write(userDietServiceHosts[index].java.replace("http://", ""));
-        break;
-    }
-  }
-
+  res.write(hosts[index].java);
   res.end()
 
 }).listen(process.env.PORT, function(){
   console.log("Listening on port " + process.env.PORT)
+});
+
+process.on('uncaughtException', (e) => {
+  console.log('[uncaughtException]: ', e.stack);
 });

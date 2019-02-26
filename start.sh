@@ -100,7 +100,7 @@ pid8=$!
 
 # PROSUMER
 export PORT=8078
-node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER_HOST ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --loadbalancer.host=$(split_string $LOAD_BALANCER_HOST ":" "1") --loadbalancer.port=$(split_string $LOAD_BALANCER_HOST ":" "2") &
+node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER_HOST ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --loadbalancer.url=http://$LOAD_BALANCER_HOST --oauth2service.url=http://$OAUTH2_SERVICE_HOST &
 pid9=$!
 
 function ctrl_c() {
