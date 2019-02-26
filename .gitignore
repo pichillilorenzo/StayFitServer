@@ -58,12 +58,3 @@ local.properties
 .history/
 
 node_modules/
-
-RESTService1.err
-RESTService1.log
-RESTService2.err
-RESTService2.log
-SOAPServices1.err
-SOAPServices1.log
-SOAPServices2.err
-SOAPServices2.log
