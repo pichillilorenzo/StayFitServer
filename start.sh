@@ -81,27 +81,27 @@ pid5=$!
 
 export PORT=8076
 node $BASEDIR/Load_Balancer/service.js 2 -jar $BASEDIR/StayFit_UserDietService/target/StayFitUserDietService-0.0.1-SNAPSHOT.jar --server.port=$(split_string $USER_DIET_SERVICE_HOST_2 ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --spring.data.mongodb.host=$(split_string $MONGODB_DATABASE_URL ":" "1") --spring.data.mongodb.port=$(split_string $MONGODB_DATABASE_URL ":" "2") &
-pid5=$!
+pid6=$!
 
 # OAUTH2 SERVICE
 export PORT=8077
 node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_OAuth2Service/target/StayFit_OAuth2Service-0.0.1-SNAPSHOT.jar --server.port=$(split_string $OAUTH2_SERVICE_HOST ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL &
-pid6=$!
+pid7=$!
 
 # AMAZON API
 export PORT=3000
 node $BASEDIR/Server_Amazon/server.js &
-pid7=$!
+pid8=$!
 
 # LOAD BALANCER
 export PORT=$(split_string $LOAD_BALANCER_HOST ":" "2") 
 node $BASEDIR/Load_Balancer/index.js &
-pid8=$!
+pid9=$!
 
 # PROSUMER
 export PORT=8078
 node $BASEDIR/Load_Balancer/service.js 1 -jar $BASEDIR/StayFit_RESTProsumer/target/StayFit-0.0.1-SNAPSHOT.jar --server.port=$(split_string $STAYFIT_SERVER_HOST ":" "2") --spring.datasource.url=$MYSQL_DATABASE_URL --loadbalancer.url=http://$LOAD_BALANCER_HOST --oauth2service.url=http://$OAUTH2_SERVICE_HOST &
-pid9=$!
+pid10=$!
 
 function ctrl_c() {
   kill -9 $pid1
@@ -113,6 +113,7 @@ function ctrl_c() {
   kill -9 $pid7
   kill -9 $pid8
   kill -9 $pid9
+  kill -9 $pid10
   pm2 stop all
 }
 
