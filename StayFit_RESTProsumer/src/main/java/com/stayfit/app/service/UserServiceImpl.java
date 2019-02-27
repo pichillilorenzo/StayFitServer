@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		request.setId(id);
 		
 		try {
-			GetUserByIdResponse response = loadBalancerService.getUserService().getUserById(request);
+			GetUserByIdResponse response = loadBalancerService.getUserServicePort().getUserById(request);
 			com.stayfit.userservice.User user = response.getUser();
 
 			return user;
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		request.setUsername(username);
 
 		try {
-			GetUserByUsernameResponse response = loadBalancerService.getUserService().getUserByUsername(request);
+			GetUserByUsernameResponse response = loadBalancerService.getUserServicePort().getUserByUsername(request);
 			com.stayfit.userservice.User user = response.getUser();
 
 			return user;
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			e.printStackTrace();
 		}
 
-		RegistrationResponse response = loadBalancerService.getUserService().register(request);
+		RegistrationResponse response = loadBalancerService.getUserServicePort().register(request);
 		com.stayfit.userservice.User userResponse = response.getUser();
 
 		return userResponse;
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		}
 
 		try {
-			UpdateUserResponse response = loadBalancerService.getUserService().updateUser(request);
+			UpdateUserResponse response = loadBalancerService.getUserServicePort().updateUser(request);
 			com.stayfit.userservice.User userResponse = response.getUser();
 
 			return userResponse;
@@ -221,7 +221,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		}
 
 		try {
-			GetUserHistoryByDateResponse response = loadBalancerService.getUserHistoryService().getUserHistoryByDate(request);
+			GetUserHistoryByDateResponse response = loadBalancerService.getUserHistoryServicePort().getUserHistoryByDate(request);
 			com.stayfit.userhistoryservice.UserHistory userHistoryResponse = response.getUserHistory();
 			return userHistoryResponse;
 		} catch (Exception ex) {
@@ -313,7 +313,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		SaveUserHistoryRequest request = new SaveUserHistoryRequest();
 		request.setUserHistory(userHistory);
 
-		SaveUserHistoryResponse response = loadBalancerService.getUserHistoryService().saveUserHistory(request);
+		SaveUserHistoryResponse response = loadBalancerService.getUserHistoryServicePort().saveUserHistory(request);
 		return response.getUserHistory();
 
 	}
@@ -327,7 +327,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	public List<UserDietRequest> getAllUserDietRequestNotCompleted() throws Exception {
 
 		GetAllUserDietRequestNotCompletedRequest request = new GetAllUserDietRequestNotCompletedRequest();
-		GetAllUserDietRequestNotCompletedResponse response = loadBalancerService.getUserDietService().getAllUserDietRequestNotCompleted(request);
+		GetAllUserDietRequestNotCompletedResponse response = loadBalancerService.getUserDietServicePort().getAllUserDietRequestNotCompleted(request);
 
 		return response.getUserDietRequest();
 	}
@@ -344,7 +344,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 		request.setUserId(id);
 
-		GetUserDietRequestNotCompletedByUserIdResponse response = loadBalancerService.getUserDietService()
+		GetUserDietRequestNotCompletedByUserIdResponse response = loadBalancerService.getUserDietServicePort()
 				.getUserDietRequestNotCompletedByUserId(request);
 
 		return response.getUserDietRequest();
@@ -371,7 +371,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		userDietRequest.setCompleted(false);
 		request.setUserDietRequest(userDietRequest);
 
-		SaveUserDietRequestResponse response = loadBalancerService.getUserDietService().saveUserDietRequest(request);
+		SaveUserDietRequestResponse response = loadBalancerService.getUserDietServicePort().saveUserDietRequest(request);
 
 		return response.getUserDietRequest();
 	}
@@ -388,7 +388,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 		request.setUserId(id);
 
-		GetUserDietByUserIdResponse response = loadBalancerService.getUserDietService().getUserDietByUserId(request);
+		GetUserDietByUserIdResponse response = loadBalancerService.getUserDietServicePort().getUserDietByUserId(request);
 
 		return response.getUserDiet();
 	}
@@ -469,7 +469,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 		request.setUserDiet(userDiet);
 
-		SaveUserDietResponse response = loadBalancerService.getUserDietService().saveUserDiet(request);
+		SaveUserDietResponse response = loadBalancerService.getUserDietServicePort().saveUserDiet(request);
 
 		return response.getUserDiet();
 	}
