@@ -1,15 +1,14 @@
-package${package}.app.service;
+package ${package}.app.service;
 
-import${package}.userdietservice.UserDietServicePortType;
-import${package}.userhistoryservice.UserHistoryServicePortType;
-import${package}.userservice.UserServicePortType;
+import java.net.MalformedURLException;
+
+import javax.annotation.PostConstruct;
 
 public interface LoadBalancerService {
 
-	UserServicePortType getUserService() throws Exception;
-
-	UserHistoryServicePortType getUserHistoryService() throws Exception;
-
-	UserDietServicePortType getUserDietService() throws Exception;
+	/**
+	 * Init all the SOAP Web Service Ports.
+	 */
+	void init() throws MalformedURLException;
 
 }
