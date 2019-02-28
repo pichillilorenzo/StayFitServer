@@ -11,10 +11,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.stayfit.app.model.ItemAttributes;
-import com.stayfit.app.model.ListPrice;
-import com.stayfit.app.model.ListProducts;
-import com.stayfit.app.model.Product;
+import ${package}.app.model.ItemAttributes;
+import ${package}.app.model.ListPrice;
+import ${package}.app.model.ListProducts;
+import ${package}.app.model.Product;
 
 import ${package}.app.model.ItemAttributes;
 import ${package}.app.model.ListPrice;

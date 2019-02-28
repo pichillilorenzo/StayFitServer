@@ -18,7 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
-import com.stayfit.app.model.ListProducts;
+import ${package}.app.model.ListProducts;
 /**
  * ;
  *

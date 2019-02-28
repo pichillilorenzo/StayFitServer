@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import com.fatsecret.platform.model.CompactFood;
-import com.stayfit.app.service.FatSecretService;
+import ${package}.app.service.FatSecretService;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

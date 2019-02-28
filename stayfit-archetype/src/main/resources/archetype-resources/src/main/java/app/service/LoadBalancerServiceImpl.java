@@ -37,7 +37,7 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
 	@PostConstruct
 	public void init() throws MalformedURLException{
 			return null;
-		}
 	}
-	
+
 }
+
