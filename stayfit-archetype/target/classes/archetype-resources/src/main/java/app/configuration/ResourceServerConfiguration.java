@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ${package}.app.configuration;
 
 import java.util.ArrayList;
@@ -12,6 +9,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,9 +36,17 @@ import ${package}.app.model.Role;
 import ${package}.app.model.User;
 import ${package}.app.repository.UserRepository;
 
-import ${package}.app.model.Role;
-import ${package}.app.model.User;
-import ${package}.app.repository.UserRepository;
+/**
+ * 
+ * The Resource Server is responsible for protecting resources, 
+ * capable of accepting responding to protected resource requests using access tokens.
+ * 
+ * Spring OAuth2 provides an authentication filter that handles protection. 
+ * The @EnableResourceServer annotation enables a Spring Security filter 
+ * that authenticates requests via an incoming OAuth2 token.
+ * 
+ * To secure access to the protected resources, we will use the @PreAuthorize annotation.
+ */
 
 @Configuration
 @EnableResourceServer
@@ -50,6 +56,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 	@Autowired
     @Qualifier("dataSource")
     private DataSource dataSource;
+	
+	@Value("${oauth2service.url}")
+	private String oauth2ServiceUrl;
 	
 	@Autowired
     private UserRepository userRepository;
@@ -171,7 +180,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         RemoteTokenServices tokenServices = new RemoteTokenServices();
         tokenServices.setClientId("spring-security-oauth2-read-write-client");
         tokenServices.setClientSecret("spring-security-oauth2-read-write-client-password1234");
-        tokenServices.setCheckTokenEndpointUrl("http://localhost:8081/oauth/check_token");
+        tokenServices.setCheckTokenEndpointUrl(oauth2ServiceUrl+"/oauth/check_token");
         tokenServices.setAccessTokenConverter(accessTokenConverter());
         return tokenServices;
     }

@@ -1,15 +1,9 @@
 package ${package}.app.service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.annotation.PostConstruct;
 import javax.xml.ws.BindingProvider;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,35 +13,31 @@ import ${package}.userdietservice.UserDietServicePortType;
 import ${package}.userhistoryservice.UserHistoryServicePortType;
 import ${package}.userservice.UserServicePortType;
 
+import lombok.Getter;
+
+/**
+ * 
+ * This class communicates with a load balancer to decide where to redirect the current user request.
+ */
 @Service
+@Getter
 public class LoadBalancerServiceImpl implements LoadBalancerService {
 
-	@Value("${loadbalancer.host}")
-	private String host;
-
-	@Value("${loadbalancer.port}")
-	private String port;
-
+	@Value("${loadbalancer.url}")
+	private String loadBalancerUrl;
+	
+	private UserServicePortType userServicePort;
+	private UserHistoryServicePortType userHistoryServicePort;
+	private UserDietServicePortType userDietServicePort;
+	
+	/**
+	 * Init all the SOAP Web Service Ports.
+	 */
 	@Override
-	public UserServicePortType getUserService() throws Exception {
-		return null;
+	@PostConstruct
+	public void init() throws MalformedURLException{
+			return null;
 	}
 
-	@Override
-	public UserHistoryServicePortType getUserHistoryService() throws Exception {
-		return null;
-	}
-
-	@Override
-	public UserDietServicePortType getUserDietService() throws Exception {
-		return null;
-	}
-
-	private String[] getHostPort(String serviceName) throws Exception {
-		return null;
-	}
-
-	private String createNewUrl(String url, String host, String port) {
-		return null;
-	}
 }
+

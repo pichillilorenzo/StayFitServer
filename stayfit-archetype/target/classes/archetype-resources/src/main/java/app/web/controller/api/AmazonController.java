@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stayfit.app.model.ListProducts;
+import ${package}.app.model.ListProducts;
 
 import ${package}.app.model.ListProducts;
 import ${package}.app.service.AmazonService;

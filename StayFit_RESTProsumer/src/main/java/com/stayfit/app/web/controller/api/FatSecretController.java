@@ -53,7 +53,7 @@ public class FatSecretController {
 	  * This method maps the HTTP POST requests incoming on the route "/api/v1/fatsecret/search".
 	  * It consumes an application/json request and produces an application/json response.
 	  * 
-	  * It is used to find the products with barcode or name or Kcal and barcode or name and Kcal .
+	  * It is used to find the products by barcode or name and, in case, also filtered by calories (kcal).
 	 * @throws Exception 
 	  */
 	@RequestMapping(value= "/search", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
