@@ -20,7 +20,7 @@ config:
       name: "Sustained max load (phase 2)"
   defaults:
     headers:
-      Authorization: 'Bearer 6e12bdf5-7221-42b5-863c-0f0fa689ee30'
+      Authorization: 'Bearer a2722351-8b9a-40ef-bd39-3fa6331a8cf1'
 scenarios:
   - flow:
     - get:
