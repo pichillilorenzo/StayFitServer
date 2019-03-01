@@ -120,7 +120,7 @@ To get an access token, we need to send a **POST** request to the `Authorization
 - Body (x-www-form-urlencoded):
   - `grant_type: password`
   - `username: admin`
-  - `passowrd: admin1234`
+  - `password: admin1234`
   - `cliend_id: spring-security-oauth2-read-write-client`
 
 Where `Authorization: Basic` uses these credentials base64 encoded:
