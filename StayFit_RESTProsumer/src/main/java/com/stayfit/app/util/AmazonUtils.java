@@ -42,9 +42,15 @@ public class AmazonUtils {
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				
 				Element eElement = (Element) nNode;
+		
 				productWsdl.setDetailPageURL(eElement.getElementsByTagName("DetailPageURL").item(0).getTextContent());
 				ItemAttributesWsdl.setTitle(eElement.getElementsByTagName("Title").item(0).getTextContent());
-				ItemAttributesWsdl.setBrand(eElement.getElementsByTagName("Brand").item(0).getTextContent());
+				NodeList brand = eElement.getElementsByTagName("Brand");
+				if (brand.getLength() > 0) {
+					ItemAttributesWsdl.setBrand(brand.item(0).getTextContent());
+				}else {
+					ItemAttributesWsdl.setBrand("Undefined");
+				}
 				ItemAttributesWsdl.setImg(eElement.getElementsByTagName("Img").item(0).getTextContent());
 				ListPrice.setAmount(eElement.getElementsByTagName("Amount").item(0).getTextContent());
 				ListPrice.setCurrency(eElement.getElementsByTagName("Currency").item(0).getTextContent());
