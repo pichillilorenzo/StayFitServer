@@ -70,6 +70,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private static final String SECURED_READ_SCOPE = "#oauth2.hasScope('read')";
     private static final String SECURED_WRITE_SCOPE = "#oauth2.hasScope('write')";
     private static final String SECURED_PATTERN = "/api/v1/**";
+    private static final String USER_REGISTRATION_PATTERN = "/api/v1/users";
     
     List<String> allowedOrigins = new ArrayList<String>() {{
 		add("*");
@@ -116,6 +117,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().requestMatchers()
                 .antMatchers(SECURED_PATTERN).and().authorizeRequests()
+                .antMatchers(HttpMethod.POST, USER_REGISTRATION_PATTERN).permitAll()
                 .antMatchers(HttpMethod.POST, SECURED_PATTERN).access(SECURED_WRITE_SCOPE)
                 .anyRequest().access(SECURED_READ_SCOPE);
     }
